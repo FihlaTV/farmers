@@ -10,7 +10,7 @@ var Vegetable = function (db) {
     var self = this;
 
     this.importCsvToDb = function (req, res, next) {
-        var csvFile = 'D:/Thinkmobiles/csvdata.csv';
+        var csvFile = 'csv/csvdata.csv';
 
         importCsv(csvFile, function (err, jsonData, attributes) {
             if (err) {
@@ -29,8 +29,8 @@ var Vegetable = function (db) {
 
     this.getList = function (req, res, next) {
 
-        Vegetable.find({}, {englishName:1, jewishNames:1}, function(err, docs){
-            if (err){
+        Vegetable.find({}, {englishName: 1, jewishNames: 1}, function (err, docs) {
+            if (err) {
                 return next(err);
             } else {
                 res.status(200).send(docs);
