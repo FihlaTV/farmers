@@ -9,7 +9,6 @@ module.exports = function (db) {
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var Vegetable = new Schema({
-        _id: Number,
         english_name: String,
         jewish_names: Array
     }, {
