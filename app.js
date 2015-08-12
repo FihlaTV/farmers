@@ -68,7 +68,7 @@ mainDb.once('open', function callback() {
     //scheduler.startMainCron();
 
     server.listen(8856, function () {
-        console.log('Server up successfully');
+        console.log('Server up successfully on port 8856');
     });
 });
 
