@@ -1,0 +1,108 @@
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:38:23 GMT+0300 (Финляндия (лето))
+path must be a string
+TypeError: path must be a string
+    at TypeError (native)
+    at Object.fs.open (fs.js:491:11)
+    at Object.fs.readFile (fs.js:262:6)
+    at parseCsvData (d:\Thinkmobiles\Farmers\helpers\import.js:11:8)
+    at Vegetable.importCsvToDb (d:\Thinkmobiles\Farmers\handlers\vegetables.js:15:9)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:312:13)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:40:19 GMT+0300 (Финляндия (лето))
+path must be a string
+TypeError: path must be a string
+    at TypeError (native)
+    at Object.fs.open (fs.js:491:11)
+    at Object.fs.readFile (fs.js:262:6)
+    at parseCsvData (d:\Thinkmobiles\Farmers\helpers\import.js:11:8)
+    at Vegetable.importCsvToDb (d:\Thinkmobiles\Farmers\handlers\vegetables.js:15:9)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:312:13)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:44:02 GMT+0300 (Финляндия (лето))
+Invalid opening quote at line 37
+Error: Invalid opening quote at line 37
+    at Error (native)
+    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
+    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
+    at Transform._read (_stream_transform.js:179:10)
+    at Transform._write (_stream_transform.js:167:12)
+    at doWrite (_stream_writable.js:301:12)
+    at writeOrBuffer (_stream_writable.js:288:5)
+    at Writable.write (_stream_writable.js:217:11)
+    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:52:23 GMT+0300 (Финляндия (лето))
+Invalid opening quote at line 37
+Error: Invalid opening quote at line 37
+    at Error (native)
+    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
+    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
+    at Transform._read (_stream_transform.js:179:10)
+    at Transform._write (_stream_transform.js:167:12)
+    at doWrite (_stream_writable.js:301:12)
+    at writeOrBuffer (_stream_writable.js:288:5)
+    at Writable.write (_stream_writable.js:217:11)
+    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:53:09 GMT+0300 (Финляндия (лето))
+Invalid opening quote at line 37
+Error: Invalid opening quote at line 37
+    at Error (native)
+    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
+    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
+    at Transform._read (_stream_transform.js:179:10)
+    at Transform._write (_stream_transform.js:167:12)
+    at doWrite (_stream_writable.js:301:12)
+    at writeOrBuffer (_stream_writable.js:288:5)
+    at Writable.write (_stream_writable.js:217:11)
+    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 14:53:26 GMT+0300 (Финляндия (лето))
+Invalid opening quote at line 37
+Error: Invalid opening quote at line 37
+    at Error (native)
+    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
+    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
+    at Transform._read (_stream_transform.js:179:10)
+    at Transform._write (_stream_transform.js:167:12)
+    at doWrite (_stream_writable.js:301:12)
+    at writeOrBuffer (_stream_writable.js:288:5)
+    at Writable.write (_stream_writable.js:217:11)
+    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 16:00:57 GMT+0300 (Финляндия (лето))
+ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
+Error: ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
+    at Error (native)
+---------------------------------------------------------------------------------------------------------

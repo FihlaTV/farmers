@@ -3,16 +3,17 @@
  */
 var csv = require('csv');
 var fs = require('fs');
+var _ = require('lodash');
 
 var  parseCsvData = function (csvFile, callback) {
 
     var attributes; //first row - header of csv data
 
-    fs.readFile(csvFile.path, 'utf8', function (err, stringFileData) {
+    fs.readFile(csvFile, 'utf8', function (err, stringFileData) {
         if (err) {
             callback(err);
         } else {
-            csv.parse(stringFileData,{delimiter: '|'}, function (err, parsedData) {
+            csv.parse(stringFileData,{delimiter: ',', relax:true}, function (err, parsedData) {
                 if (err) {
                     callback(err);
                 }
