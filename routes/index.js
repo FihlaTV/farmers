@@ -12,7 +12,7 @@ module.exports = function(app, db){
     });
 
     app.use('/getVegetables', vegetablesRouter);
-    app.use('/getPrice', pricesRouter);
+    app.use('/prices', pricesRouter);
 
 
 

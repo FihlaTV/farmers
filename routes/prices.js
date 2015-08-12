@@ -15,6 +15,7 @@ module.exports = function(db){
     //var schedule = new SchedulHandler(db);
 
     router.get('/', prices.getPriceById);
+    router.get('/getPrices', prices.syncVegetablePrices);
 
 
     return router;
