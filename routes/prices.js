@@ -16,6 +16,7 @@ module.exports = function(db){
 
     router.get('/', prices.getPriceById);
     router.get('/:date', prices.getPricesByDate);
+    router.get('/getPrices', prices.syncVegetablePrices);
 
 
     return router;
