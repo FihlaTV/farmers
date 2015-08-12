@@ -14,9 +14,18 @@ module.exports = function (db) {
             ref: 'Vegetable'
         },
         date: Date,
-        min_price: Number,
-        max_price: Number,
-        avg_price: Number
+        min_price: {
+            type: Number,
+            default: 0
+        },
+        max_price: {
+            type: Number,
+            default: 0
+        },
+        avg_price: {
+            type: Number,
+            default: 0
+        }
     }, {
         collection: 'Prices'
     });

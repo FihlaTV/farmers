@@ -106,3 +106,24 @@ ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
 Error: ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
     at Error (native)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 17:06:20 GMT+0300 (Финляндия (лето))
+function parse() { [native code] } is not a constructor
+TypeError: function parse() { [native code] } is not a constructor
+    at getPricesByDate (d:\Thinkmobiles\Farmers\handlers\prices.js:17:20)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:277:22
+    at param (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:349:14)
+    at param (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:410:3)
+    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
+---------------------------------------------------------------------------------------------------------
