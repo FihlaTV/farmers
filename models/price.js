@@ -9,10 +9,9 @@ module.exports = function (db) {
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var Price = new Schema({
-        _id: Number,
         _vegetable: {
             type: ObjectId,
-            ref: 'vegetable'
+            ref: 'Vegetable'
         },
         date: Date,
         min_price: Number,

@@ -13,7 +13,6 @@ var Vegetable = function ( db ) {
     this.getList = function (req,res,next){
 
     };
-
 };
 
 module.exports = Vegetable;
