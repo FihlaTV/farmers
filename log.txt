@@ -1,108 +1,210 @@
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:38:23 GMT+0300 (Финляндия (лето))
-path must be a string
-TypeError: path must be a string
-    at TypeError (native)
-    at Object.fs.open (fs.js:491:11)
-    at Object.fs.readFile (fs.js:262:6)
-    at parseCsvData (d:\Thinkmobiles\Farmers\helpers\import.js:11:8)
-    at Vegetable.importCsvToDb (d:\Thinkmobiles\Farmers\handlers\vegetables.js:15:9)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:131:13)
-    at Route.dispatch (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:112:3)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:277:22
-    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
-    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:271:10)
-    at Function.handle (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:176:3)
-    at router (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:46:12)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at trim_prefix (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:312:13)
+Wed Aug 12 2015 16:27:49 GMT+0300 (EEST)
+url is not defined
+ReferenceError: url is not defined
+    at async.parallel.cb.newVegetablesPrice (/home/john/_projects/Far/farmers/helpers/dataParser.js:49:30)
+    at /home/john/_projects/Far/farmers/node_modules/async/lib/async.js:567:21
+    at /home/john/_projects/Far/farmers/node_modules/async/lib/async.js:246:17
+    at /home/john/_projects/Far/farmers/node_modules/async/lib/async.js:122:13
+    at _each (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:46:13)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:121:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:245:13)
+    at Object.map (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:216:23)
+    at _parallel (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:565:20)
+    at Object.async.parallel (/home/john/_projects/Far/farmers/node_modules/async/lib/async.js:595:9)
+    at prepareData (/home/john/_projects/Far/farmers/helpers/dataParser.js:47:15)
+    at syncVegetablePrices (/home/john/_projects/Far/farmers/helpers/dataParser.js:81:13)
+    at syncVegetablePrices (/home/john/_projects/Far/farmers/handlers/prices.js:20:20)
+    at Layer.handle [as handle_request] (/home/john/_projects/Far/farmers/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/john/_projects/Far/farmers/node_modules/express/lib/router/route.js:131:13)
+    at Route.dispatch (/home/john/_projects/Far/farmers/node_modules/express/lib/router/route.js:112:3)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:40:19 GMT+0300 (Финляндия (лето))
-path must be a string
-TypeError: path must be a string
-    at TypeError (native)
-    at Object.fs.open (fs.js:491:11)
-    at Object.fs.readFile (fs.js:262:6)
-    at parseCsvData (d:\Thinkmobiles\Farmers\helpers\import.js:11:8)
-    at Vegetable.importCsvToDb (d:\Thinkmobiles\Farmers\handlers\vegetables.js:15:9)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:131:13)
-    at Route.dispatch (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\route.js:112:3)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:277:22
-    at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
-    at next (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:271:10)
-    at Function.handle (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:176:3)
-    at router (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:46:12)
-    at Layer.handle [as handle_request] (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\layer.js:95:5)
-    at trim_prefix (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:312:13)
+Wed Aug 12 2015 16:55:28 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at Model.create (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8)
+    at results (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17)
+    at async.each.callback (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13)
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.doParallel [as map] (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:44:02 GMT+0300 (Финляндия (лето))
-Invalid opening quote at line 37
-Error: Invalid opening quote at line 37
-    at Error (native)
-    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
-    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
-    at Transform._read (_stream_transform.js:179:10)
-    at Transform._write (_stream_transform.js:167:12)
-    at doWrite (_stream_writable.js:301:12)
-    at writeOrBuffer (_stream_writable.js:288:5)
-    at Writable.write (_stream_writable.js:217:11)
-    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
-    at process._tickCallback (node.js:355:11)
+Wed Aug 12 2015 16:57:33 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at Model.create (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8)
+    at results (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17)
+    at async.each.callback (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13)
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.doParallel [as map] (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:52:23 GMT+0300 (Финляндия (лето))
-Invalid opening quote at line 37
-Error: Invalid opening quote at line 37
-    at Error (native)
-    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
-    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
-    at Transform._read (_stream_transform.js:179:10)
-    at Transform._write (_stream_transform.js:167:12)
-    at doWrite (_stream_writable.js:301:12)
-    at writeOrBuffer (_stream_writable.js:288:5)
-    at Writable.write (_stream_writable.js:217:11)
-    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
-    at process._tickCallback (node.js:355:11)
+Wed Aug 12 2015 16:58:54 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at Model.create (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8)
+    at results (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17)
+    at async.each.callback (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13)
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.doParallel [as map] (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:53:09 GMT+0300 (Финляндия (лето))
-Invalid opening quote at line 37
-Error: Invalid opening quote at line 37
-    at Error (native)
-    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
-    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
-    at Transform._read (_stream_transform.js:179:10)
-    at Transform._write (_stream_transform.js:167:12)
-    at doWrite (_stream_writable.js:301:12)
-    at writeOrBuffer (_stream_writable.js:288:5)
-    at Writable.write (_stream_writable.js:217:11)
-    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
-    at process._tickCallback (node.js:355:11)
+Wed Aug 12 2015 17:01:45 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at Model.create (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8)
+    at results (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17)
+    at async.each.callback (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13)
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.doParallel [as map] (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 14:53:26 GMT+0300 (Финляндия (лето))
-Invalid opening quote at line 37
-Error: Invalid opening quote at line 37
-    at Error (native)
-    at Parser.__write (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:319:54)
-    at Parser._transform (d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:157:10)
-    at Transform._read (_stream_transform.js:179:10)
-    at Transform._write (_stream_transform.js:167:12)
-    at doWrite (_stream_writable.js:301:12)
-    at writeOrBuffer (_stream_writable.js:288:5)
-    at Writable.write (_stream_writable.js:217:11)
-    at d:\Thinkmobiles\Farmers\node_modules\csv\node_modules\csv-parse\lib\index.js:46:14
-    at process._tickCallback (node.js:355:11)
+Wed Aug 12 2015 17:07:21 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at Model.create (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8)
+    at results (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17)
+    at async.each.callback (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13)
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.doParallel [as map] (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
-Wed Aug 12 2015 16:00:57 GMT+0300 (Финляндия (лето))
-ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
-Error: ENOENT, open 'D:\Thinkmobiles\csvdata123.csv'
-    at Error (native)
+Wed Aug 12 2015 17:12:20 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.map (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 17:12:45 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.map (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 17:13:06 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.map (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Aug 12 2015 17:41:32 GMT+0300 (EEST)
+Price validation failed
+Error
+    at MongooseError.ValidationError (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/error/validation.js:22:16)
+    at model.Document.invalidate (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:1216:32)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:604:10)
+    at model.Document.set (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:499:18)
+    at model.Document (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/document.js:62:10)
+    at model.Model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:42:12)
+    at new model (/home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:2786:11)
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/lib/model.js:1615:8
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:570:21
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:249:17
+    at /home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:125:13
+    at Array.forEach (native)
+    at _each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:46:24)
+    at async.each (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:124:9)
+    at _asyncMap (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:248:13)
+    at Object.map (/home/john/_projects/Far/farmers/node_modules/mongoose/node_modules/async/lib/async.js:219:23)
 ---------------------------------------------------------------------------------------------------------

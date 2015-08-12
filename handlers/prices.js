@@ -17,7 +17,8 @@ var Price = function ( db ) {
     };
 
     this.syncVegetablePrices = function (req,res,next){
-        dataParser.syncVegetablePrices(function(err, result){
+        var DATA_URL = "https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4";
+        dataParser.syncVegetablePrices(DATA_URL, function(err, result){
             if (err) {
                 next(err);
             } else {

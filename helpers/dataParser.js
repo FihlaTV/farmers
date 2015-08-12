@@ -4,7 +4,7 @@
 var request = require("request");
 
 var async = require('async');
-var DATA_URL = "https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4";
+
 var lastSyncDate = new Date('12/08/15');
 
 module.exports = function ( db ) {
@@ -18,35 +18,32 @@ module.exports = function ( db ) {
     }
 
     function getVegetables(cb) {
-        Vegetable
-            .find()
-            .exec(cb)
+        Vegetable.find({}).exec(cb);
     }
 
     function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
-        var maxPrice = parseFloat(newVagetablePriceObj.max);
-        var minPrice = parseFloat(newVagetablePriceObj.min);
+        var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
+        var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
         var avgPrice = (minPrice + maxPrice) / 2;
 
         var saveOptions = {
-            avgPrice: avgPrice,
+            _vegetable: vagetable._id,
             minPrice: minPrice,
             maxPrice: maxPrice,
-            _vegetable: vagetable._id,
-            date: newVagetablePriceObj.date
+            avgPrice: avgPrice,
+
+            date: new Date(newVagetablePriceObj.date)
         };
 
-        var price  = new Price(saveOptions);
-
-        price
-            .save()
-            .exec(cb)
+        Price.create(saveOptions, function(err, res){
+            cb(err)
+        });
     }
 
-    function prepareData(cb) {
+    function prepareData(apiUrl, cb) {
         async.parallel([
             function(cb) {
-                getDateByUrl(DATA_URL, cb);
+                getDateByUrl(apiUrl, cb);
             },
             function(cb) {
                 getVegetables(cb)
@@ -63,22 +60,22 @@ module.exports = function ( db ) {
         })
     }
 
-    function findVegetableAndSavePrice(vegetables, newvegetablePrice, cb) {
+    function findVegetableAndSavePrice(vegetables, newVegetablePrice, cb) {
         async.each(vegetables, function(vegetable, cb) {
-            if (vegetable.jewishNames.indexOf(newvegetablePrice.jewishName) !== -1) {
-                saveVegetablePrice(vegetable, newvegetablePrice, cb);
+            if (vegetable.jewishNames.indexOf(newVegetablePrice.jewishName) !== -1) {
+                saveVegetablePrice(vegetable, newVegetablePrice, cb);
             } else {
                 cb();
             }
         }, cb);
     }
 
-    this.syncVegetablePrices = function(cb) {
+    this.syncVegetablePrices = function(apiUrl, cb) {
         var currentDate = new Date();
 
         if (true /*currentDate > lastSyncDate*/) {
             lastSyncDate = currentDate;
-            prepareData(function(err, resultObj) {
+            prepareData(apiUrl, function(err, resultObj) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -91,4 +88,4 @@ module.exports = function ( db ) {
             cb();
         }
     }
-}
+};

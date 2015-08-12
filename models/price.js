@@ -13,9 +13,10 @@ module.exports = function (db) {
             type: ObjectId,
             ref: 'Vegetable'
         },
+        maxPrice: Number,
         date: Date,
         minPrice: Number,
-        maxPrice: Number,
+
         avgPrice: Number
     }, {
         collection: 'Prices'
