@@ -12,12 +12,12 @@ var ObjectId = mongoose.Types.ObjectId;
 
 
 module.exports = function ( db ) {
-    var User = db.model('user');
-    var Plan = db.model('plan');
-    var Lesson = db.model('lesson');
-    var History = db.model('msgHistory');
-    var NotificationHandler = require('./pushes');
-    var notification = new NotificationHandler(db);
+    //var User = db.model('user');
+    //var Plan = db.model('plan');
+    //var Lesson = db.model('lesson');
+    //var History = db.model('msgHistory');
+    //var NotificationHandler = require('./pushes');
+    //var notification = new NotificationHandler(db);
 
 
     function isWeekEnd( date ) {

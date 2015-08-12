@@ -1,46 +1,21 @@
-/**
- * Created by User on 27.04.2015.
- */
+
+
 module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
-    var usersRouter = require('./users')(db);
-    var lessonsRouter = require('./lessons')(db);
-    var questionsRouter = require('./questions')(db);
-    var adminRouter = require('./admin')(db);
-    var taxonomyRouter = require('./taxonomys')(db);
-    var pushRouter = require('./pushes')(db);
-    var testRouter = require('./test')(db);
-
-    /*var Test = require( '../handlers/schedule' );
-    var test0 = new Test(db);*/
+    var vegetablesRouter = require('./vegetables')(db);
+    var pricesRouter = require('./prices')(db);
 
 
     app.get('/', function(req, res, next){
         res.status(200).send( 'Express start succeed' );
     });
 
-    app.use('/user', usersRouter);
-    app.use('/lesson', lessonsRouter);
-    app.use('/question', questionsRouter);
-    app.use('/admin', adminRouter );
-    app.use('/taxonomy', taxonomyRouter );
-    app.use('/test', testRouter );
-    app.use('/push', pushRouter );
+    app.use('/getVegetables', vegetablesRouter);
+    app.use('/getPrice', pricesRouter);
 
-    /*app.post('/test', function(req,res,next) {
-        test0.startMainCron();
-        res.status(200).send();
-    });*/
 
-    /*app.get('/test', function (req, res, next) {
-        res.status(200).send(test0.getJobs())
-    });*/
 
-    /*app.delete('/test/:id', function (req, res, next) {
-        test0.deleteJob( req.params.id );
-        res.status(200).send(test0.getJobs())
-    });*/
 
     function notFound(req, res, next){
         next();
