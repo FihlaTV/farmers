@@ -1,0 +1,83 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+}
+
+a{
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+#nav-container {
+    width: 100%;
+    height: 100px;
+    background-color: #545454;
+    padding: 0;
+}
+
+#nav-container #logo {
+    font-size: 25px;
+    color: #FFFFFF;
+    width: 100px;
+    line-height: 10px;
+    height: 100%;
+    float: left;
+    padding: 0;
+    margin: 0 175px 0 10px;
+}
+
+#nav-container .navBar{
+    width: 1200px;
+    height: 60px;
+    padding: 0;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
+#nav-container .navBar .menuItem{
+    float: left;
+    display: block;
+    width: 285px;
+    margin-right: 10px;
+}
+
+#nav-container .navBar .menuItem:last-child{
+    background-color: #545454;
+    text-align: left;
+    border-radius: 10px;
+    margin: 0 10px 0 35px;
+    width: 120px;
+    float: right;
+}
+
+#nav-container .navBar .menuItem:last-child a{
+    font-size: 14px;
+    float: right;
+    line-height: 5px;
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 10px 25px;
+    border: 2px solid #FFFFFF;
+    border-radius: 5px;
+    background-color: #545454;
+}
+
+#nav-container .navBar .menuItem a{
+    color: #606060;
+    display: block;
+    font-size: 25px;
+    border-radius: 10px 10px 0 0;
+    background-color: #C6C6C6;
+    text-align: center;
+    height: 100%;
+    line-height: 60px;
+    outline: none;
+}
+#nav-container .navBar .menuItem a.active {
+    background-color: #FFFFFF; !important;
+    color: #CC3A3A; !important;
+}
