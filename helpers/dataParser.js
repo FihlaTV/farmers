@@ -31,6 +31,7 @@ module.exports = function (db) {
     function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
         var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
         var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
+        var date = getTransformedDateOject(newVagetablePriceObj.date);
         var avgPrice;
         var saveOptions;
 
@@ -39,6 +40,7 @@ module.exports = function (db) {
         } else {
             avgPrice = (minPrice + maxPrice) / 2;
         }
+
 
         saveOptions = {
             _vegetable: vagetable._id,
@@ -86,22 +88,46 @@ module.exports = function (db) {
         }, cb);
     }
 
-    this.syncVegetablePrices = function (apiUrl, cb) {
-        var currentDate = new Date();
-
-        if (true /*currentDate > lastSyncDate*/) {
-            lastSyncDate = currentDate;
-            prepareData(apiUrl, function (err, resultObj) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    async.each(resultObj.newVegetablesPrice.results.collection1, function (newVegetablePrice, cb) {
-                        findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
-                    }, cb);
-                }
+    function checkIfPricesSynced(cb) {
+        var date = new Date();
+        Price
+            .findOne({
+                year: moment(date).year(),
+                dayOfYear: moment(date).dayOfYear()
             })
-        } else {
-            cb();
-        }
+            .exec(function (err, price) {
+                if (err) {
+                    cb(err);
+                } else {
+                    if (price) {
+                        cb(null, true);
+                    } else {
+                        cb(null, false);
+                    }
+                }
+            });
+    }
+
+    this.syncVegetablePrices = function (apiUrl, cb) {
+        checkIfPricesSynced(function(err, isSynced) {
+            if (err) {
+                cb(err);
+            } else {
+                if (isSynced) {
+                    cb() ;
+                } else {
+                    prepareData(apiUrl, function (err, resultObj) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            async.each(resultObj.newVegetablesPrice.results.collection1, function (newVegetablePrice, cb) {
+                                findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
+                            }, cb);
+                        }
+                    })
+                }
+            }
+        });
+
     }
 };
