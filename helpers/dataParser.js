@@ -21,6 +21,12 @@ module.exports = function ( db ) {
         Vegetable.find({}).exec(cb);
     }
 
+    function getTransformedDateOject(date) {
+        date = date.split('/');
+
+        return new Date(20 + date[2] + '/' + date[1] + '/' + date[0]);
+    }
+
     function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
         var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
         var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
@@ -32,7 +38,7 @@ module.exports = function ( db ) {
             maxPrice: maxPrice,
             avgPrice: avgPrice,
 
-            date: new Date(newVagetablePriceObj.date)
+            date: getTransformedDateOject(newVagetablePriceObj.date)
         };
 
         Price.create(saveOptions, function(err, res){

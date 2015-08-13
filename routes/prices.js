@@ -14,9 +14,10 @@ module.exports = function(db){
     //var session = new SessionHandler(db);
     //var schedule = new SchedulHandler(db);
 
-    router.get('/', prices.getPriceById);
-    router.get('/:date', prices.getPricesByDate);
+    router.get('/', prices.getPricesByDate);
     router.get('/getPrices', prices.syncVegetablePrices);
+
+
 
 
     return router;
