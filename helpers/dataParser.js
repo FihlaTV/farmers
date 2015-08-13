@@ -1,12 +1,6 @@
-/**
- * Created by eriy on 29.04.2015.
- */
 var request = require("request");
 var moment = require("moment");
-
 var async = require('async');
-
-var lastSyncDate = new Date('12/08/15');
 
 module.exports = function (db) {
     var Vegetable = db.model('Vegetable');
