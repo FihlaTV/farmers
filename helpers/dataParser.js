@@ -7,12 +7,12 @@ var async = require('async');
 
 var lastSyncDate = new Date('12/08/15');
 
-module.exports = function ( db ) {
+module.exports = function (db) {
     var Vegetable = db.model('Vegetable');
     var Price = db.model('Price');
 
     function getDateByUrl(url, cb) {
-        request(url, function(err, response, body) {
+        request(url, function (err, response, body) {
             cb(err, JSON.parse(body));
         });
     }
@@ -30,9 +30,16 @@ module.exports = function ( db ) {
     function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
         var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
         var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
-        var avgPrice = (minPrice + maxPrice) / 2;
+        var avgPrice;
+        var saveOptions;
 
-        var saveOptions = {
+        if ((minPrice === 0) || (maxPrice === 0)) {
+            avgPrice = (minPrice === 0) ? maxPrice : minPrice;
+        } else {
+            avgPrice = (minPrice + maxPrice) / 2;
+        }
+
+        saveOptions = {
             _vegetable: vagetable._id,
             minPrice: minPrice,
             maxPrice: maxPrice,
@@ -41,20 +48,20 @@ module.exports = function ( db ) {
             date: getTransformedDateOject(newVagetablePriceObj.date)
         };
 
-        Price.create(saveOptions, function(err, res){
+        Price.create(saveOptions, function (err, res) {
             cb(err)
         });
     }
 
     function prepareData(apiUrl, cb) {
         async.parallel([
-            function(cb) {
+            function (cb) {
                 getDateByUrl(apiUrl, cb);
             },
-            function(cb) {
+            function (cb) {
                 getVegetables(cb)
             }
-        ], function(err, results) {
+        ], function (err, results) {
             if (err) {
                 cb(err);
             } else {
@@ -67,7 +74,7 @@ module.exports = function ( db ) {
     }
 
     function findVegetableAndSavePrice(vegetables, newVegetablePrice, cb) {
-        async.each(vegetables, function(vegetable, cb) {
+        async.each(vegetables, function (vegetable, cb) {
             if (vegetable.jewishNames.indexOf(newVegetablePrice.jewishName) !== -1) {
                 saveVegetablePrice(vegetable, newVegetablePrice, cb);
             } else {
@@ -76,16 +83,16 @@ module.exports = function ( db ) {
         }, cb);
     }
 
-    this.syncVegetablePrices = function(apiUrl, cb) {
+    this.syncVegetablePrices = function (apiUrl, cb) {
         var currentDate = new Date();
 
         if (true /*currentDate > lastSyncDate*/) {
             lastSyncDate = currentDate;
-            prepareData(apiUrl, function(err, resultObj) {
+            prepareData(apiUrl, function (err, resultObj) {
                 if (err) {
                     console.log(err);
                 } else {
-                    async.each(resultObj.newVegetablesPrice.results.collection1, function(newVegetablePrice, cb) {
+                    async.each(resultObj.newVegetablesPrice.results.collection1, function (newVegetablePrice, cb) {
                         findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
                     }, cb);
                 }
