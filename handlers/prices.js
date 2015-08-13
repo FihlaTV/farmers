@@ -24,7 +24,7 @@ var Price = function (db) {
         var date = new Date(year + '/' + month + '/' + day);
 
         if (date) {
-            Price.find({}).populate('_vegetable').exec(function (err, prices) {
+            Price.find({date:date}).populate('_vegetable').exec(function (err, prices) {
                 if (err) {
                     return next(err);
                 } else {
@@ -32,6 +32,8 @@ var Price = function (db) {
                     res.status(200).send(prices);
                 }
             });
+        } else {
+            res.status(200).send([]);
         }
 
     };
