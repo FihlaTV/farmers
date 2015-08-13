@@ -15,8 +15,7 @@ var mainDb;
 //var session = require('express-session');
 //var cookieParser = require('cookie-parser');
 //var MongoStore = require('connect-mongo')( session );
-var MainSchedule = require('./handlers/schedule');
-var scheduler;
+var scheduleHelper = require('./helpers/schedule');
 
 
 app.use(logger('dev'));
@@ -64,8 +63,7 @@ mainDb.once('open', function callback() {
 
     require('./routes')(app, mainDb);
 
-    scheduler = new MainSchedule(mainDb);
-    //scheduler.startMainCron();
+    scheduleHelper(mainDb);
 
     server.listen(8856, function () {
         console.log('Server up successfully on port 8856');
