@@ -11,7 +11,7 @@ module.exports = function (db) {
     var Price = db.model('Price');
     var Vegetable = db.model('Vegetable');
 
-    schedule.scheduleJob('*/15 * * * *', function() {
+    schedule.scheduleJob('*/1 * * * *', function() {
         console.log('scheduleJob -> syncVegetablePrices');
         dataParser.syncVegetablePrices(constants.URL_APIS.PLANTS_URL, function (err, result) {
             if (err) {

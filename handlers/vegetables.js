@@ -38,7 +38,6 @@ var Vegetable = function (db) {
         });
     };
 
-    this.get
 };
 
 module.exports = Vegetable;
