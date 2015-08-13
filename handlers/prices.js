@@ -3,6 +3,7 @@
  */
 //var mongoose = require('mongoose');
 var DataParser = require('../helpers/dataParser');
+var moment = require("moment");
 
 var Price = function (db) {
     var Price = db.model('Price');
@@ -18,17 +19,20 @@ var Price = function (db) {
 
     this.getPricesByDate = function (req, res, next) {
         var date;
-        var badDate = req.query.date;
+        var dateString = req.query.date;
 
         //todo add regex for date
-        if (badDate) {
-            date = new Date(badDate.replace(/-/g,'/'));
+        if (dateString) {
+            date = new Date(dateString.replace(/-/g,'/'));
         } else {
             date = new Date();
         }
 
         Price
-            .find({date: date})
+            .find({
+                year: moment(date).year(),
+                dayOfYear: moment(date).dayOfYear()
+            })
             //.find({})
             .populate('_vegetable')
             .exec(function (err, prices) {

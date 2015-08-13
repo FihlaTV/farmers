@@ -14,6 +14,8 @@ module.exports = function (db) {
             ref: 'Vegetable'
         },
         date: Date,
+        year: Number,
+        dayOfYear: Number,
         minPrice: {
             type: Number,
             default: 0
@@ -30,8 +32,5 @@ module.exports = function (db) {
         collection: 'Prices'
     });
 
-
     db.model('Price', Price);
-
-
 };

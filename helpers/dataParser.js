@@ -2,6 +2,7 @@
  * Created by eriy on 29.04.2015.
  */
 var request = require("request");
+var moment = require("moment");
 
 var async = require('async');
 
@@ -31,6 +32,7 @@ module.exports = function ( db ) {
         var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
         var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
         var avgPrice = (minPrice + maxPrice) / 2;
+        var date = getTransformedDateOject(newVagetablePriceObj.date);
 
         var saveOptions = {
             _vegetable: vagetable._id,
@@ -38,7 +40,9 @@ module.exports = function ( db ) {
             maxPrice: maxPrice,
             avgPrice: avgPrice,
 
-            date: getTransformedDateOject(newVagetablePriceObj.date)
+            date: date,
+            year: moment(date).year(),
+            dayOfYear: moment(date).dayOfYear()
         };
 
         Price.create(saveOptions, function(err, res){
