@@ -12,7 +12,8 @@ module.exports = function(db){
     //var schedule = new SchedulHandler(db);
 
     router.get('/', vegetables.getList);
-    router.get('/import', vegetables.importCsvToDb);
+    router.get('/import', vegetables.importUniqVegetablesToDb);
+    router.get('/importFromCsv', vegetables.importFromCsv);
 
 
     return router;

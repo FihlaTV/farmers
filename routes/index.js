@@ -11,7 +11,7 @@ module.exports = function(app, db){
         res.status(200).send( 'Express start succeed' );
     });
 
-    app.use('/getVegetables', vegetablesRouter);
+    app.use('/vegetables', vegetablesRouter);
     app.use('/prices', pricesRouter);
 
 

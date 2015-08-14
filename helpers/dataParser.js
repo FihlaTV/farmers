@@ -84,6 +84,7 @@ module.exports = function (db) {
 
     function checkIfPricesSynced(cb) {
         var date = new Date();
+
         Price
             .findOne({
                 year: moment(date).year(),
@@ -103,12 +104,12 @@ module.exports = function (db) {
     }
 
     this.syncVegetablePrices = function (apiUrl, cb) {
-        checkIfPricesSynced(function(err, isSynced) {
+        checkIfPricesSynced(function (err, isSynced) {
             if (err) {
                 cb(err);
             } else {
                 if (isSynced) {
-                    cb() ;
+                    cb();
                 } else {
                     prepareData(apiUrl, function (err, resultObj) {
                         if (err) {

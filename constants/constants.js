@@ -5,5 +5,11 @@ module.exports = {
 
     URL_APIS: {
         PLANTS_URL: "https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4"
+    },
+
+    CSV_FILES: {
+        MAIN_VEGETABLES: 'csv/csvdata.csv',
+        VEGETABLES_WITH_PRICES_2013:'csv/veg_prices_2013.csv',
+        VEGETABLES_WITH_PRICES_2014:'csv/veg_prices_2014.csv'
     }
 };
