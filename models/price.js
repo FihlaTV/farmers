@@ -16,6 +16,7 @@ module.exports = function (db) {
         date: Date,
         year: Number,
         dayOfYear: Number,
+        source: String,
         minPrice: {
             type: Number,
             default: 0

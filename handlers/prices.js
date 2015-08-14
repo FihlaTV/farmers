@@ -32,16 +32,6 @@ var Price = function (db) {
             });
     };
 
-    this.syncVegetablePrices = function (req, res, next) {
-        dataParser.syncVegetablePrices(constants.URL_APIS.PLANTS_URL, function (err, result) {
-            if (err) {
-                next(err);
-            } else {
-                res.status(200).send(result);
-            }
-        });
-    };
-
 };
 
 module.exports = Price;

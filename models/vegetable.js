@@ -10,7 +10,11 @@ module.exports = function (db) {
 
     var Vegetable = new Schema({
         englishName: String,
-        jewishNames: Array
+        jewishNames: Array,
+        isNewVeg: {
+            type:Boolean,
+            default: false
+        }
     }, {
         collection: 'Vegetables'
     });

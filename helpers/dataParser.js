@@ -52,6 +52,27 @@ module.exports = function (db) {
         });
     }
 
+    function createNewVegetable(newVagetablePriceObj, cb) {
+        var saveOptions;
+
+        saveOptions = {
+            englishName: "No Name",
+            jewishNames: [newVagetablePriceObj.jewishName]
+        };
+
+        if (newVagetablePriceObj.isNewVeg) {
+            saveOptions.isNewVeg = true;
+        }
+
+        Vegetable.create(saveOptions, function (err, vegetable) {
+            if (err) {
+                cb(err);
+            } else {
+                saveVegetablePrice(vegetable, newVagetablePriceObj, cb)
+            }
+        });
+    }
+
     function prepareData(apiUrl, cb) {
         async.parallel([
             function (cb) {
@@ -73,13 +94,26 @@ module.exports = function (db) {
     }
 
     function findVegetableAndSavePrice(vegetables, newVegetablePrice, cb) {
+        var vegetableFound = false;
         async.each(vegetables, function (vegetable, cb) {
             if (vegetable.jewishNames.indexOf(newVegetablePrice.jewishName) !== -1) {
                 saveVegetablePrice(vegetable, newVegetablePrice, cb);
+                vegetableFound = true;
             } else {
                 cb();
             }
-        }, cb);
+        }, function(err, res){
+            if (err) {
+                cb(err);
+            } else {
+                if (!vegetableFound) {
+                    newVegetablePrice.isNewVeg = true;
+                    createNewVegetable(newVegetablePrice, cb);
+                } else {
+                    cb();
+                }
+            }
+        });
     }
 
     function checkIfPricesSynced(cb) {
@@ -123,6 +157,5 @@ module.exports = function (db) {
                 }
             }
         });
-
     }
 };
