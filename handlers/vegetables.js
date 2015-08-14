@@ -45,9 +45,7 @@ var Vegetable = function (db) {
             dayOfYear: moment(date).dayOfYear()
         };
 
-        Price.create(saveOptions, function (err, res) {
-            cb(err)
-        });
+        Price.create(saveOptions, cb);
     }
 
     function prepareData(csvFile, cb) {
@@ -96,11 +94,15 @@ var Vegetable = function (db) {
                             if (err) {
                                 cb(err);
                             } else {
-                                saveVegetablePrice(vegetable, newVegetablePrice, cb);
+                                saveVegetablePrice(vegetable, newVegetablePrice, function(err, price){
+                                    cb(err, vegetable);
+                                });
                             }
                         });
+
+                } else {
+                    cb();
                 }
-                cb();
             }
         });
     }
@@ -155,8 +157,17 @@ var Vegetable = function (db) {
             if (err) {
                 next(err);
             } else {
-                async.each(resultObj.newVegetablesPrice, function (newVegetablePrice, cb) {
-                    findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
+                async.eachSeries(resultObj.newVegetablesPrice, function (newVegetablePrice, cb) {
+                    findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, function (err, newVegetable) {
+                        if (err) {
+                            cb(err)
+                        } else if (newVegetable && newVegetable._id) {
+                            resultObj.vegetables.push(newVegetable);
+                            cb();
+                        } else {
+                            cb();
+                        }
+                    });
                 }, function (err) {
                     if (err) {
                         next(err);
