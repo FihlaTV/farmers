@@ -1,6 +1,7 @@
 var request = require("request");
 var moment = require("moment");
 var async = require('async');
+var constants = require("../constants/constants");
 
 module.exports = function (db) {
     var Vegetable = db.model('Vegetable');
@@ -38,6 +39,7 @@ module.exports = function (db) {
 
         saveOptions = {
             _vegetable: vagetable._id,
+            source: newVagetablePriceObj.url,
             minPrice: minPrice,
             maxPrice: maxPrice,
             avgPrice: avgPrice,
@@ -102,7 +104,7 @@ module.exports = function (db) {
             } else {
                 cb();
             }
-        }, function(err, res){
+        }, function (err, res) {
             if (err) {
                 cb(err);
             } else {
@@ -116,13 +118,14 @@ module.exports = function (db) {
         });
     }
 
-    function checkIfPricesSynced(cb) {
+    function checkIfPricesSynced(source, cb) {
         var date = new Date();
 
         Price
             .findOne({
                 year: moment(date).year(),
-                dayOfYear: moment(date).dayOfYear()
+                dayOfYear: moment(date).dayOfYear(),
+                source: source
             })
             .exec(function (err, price) {
                 if (err) {
@@ -137,8 +140,16 @@ module.exports = function (db) {
             });
     }
 
-    this.syncVegetablePrices = function (apiUrl, cb) {
-        checkIfPricesSynced(function (err, isSynced) {
+    function isTodayDate(dateString) {
+
+        var date = getTransformedDateOject(dateString);
+        var todayDate = new Date();
+
+        return (moment(date).format('YYYY/MM/DD') === moment(todayDate).format('YYYY/MM/DD'));
+    }
+
+    this.syncVegetablePrices = function (apiUrl, source, cb) {
+        checkIfPricesSynced(source, function (err, isSynced) {
             if (err) {
                 cb(err);
             } else {
@@ -149,9 +160,14 @@ module.exports = function (db) {
                         if (err) {
                             cb(err);
                         } else {
-                            async.each(resultObj.newVegetablesPrice.results.collection1, function (newVegetablePrice, cb) {
-                                findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
-                            }, cb);
+                            if (isTodayDate(resultObj.newVegetablesPrice.results.priceDate[0].date)) {
+                                async.each(resultObj.newVegetablesPrice.results.prices, function (newVegetablePrice, cb) {
+                                    newVegetablePrice.date = resultObj.newVegetablesPrice.results.priceDate[0].date;
+                                    findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
+                                }, cb);
+                            } else {
+                                cb();
+                            }
                         }
                     })
                 }

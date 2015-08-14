@@ -13,11 +13,24 @@ module.exports = function (db) {
 
     schedule.scheduleJob('*/1 * * * *', function() {
         console.log('scheduleJob -> syncVegetablePrices');
-        dataParser.syncVegetablePrices(constants.URL_APIS.PLANTS_URL, function (err, result) {
-            if (err) {
-                logWriter.log("scheduleJob -> syncVegetablePrices", err);
-            }
-        });
+
+
+        async.series([ function (cb){
+            dataParser.syncVegetablePrices(constants.URL_APIS.PLANTS_URL.API_URL, constants.URL_APIS.PLANTS_URL.SOURCE, function (err, result) {
+                if (err) {
+                    logWriter.log('scheduleJob -> syncVegetablePrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
+                }
+                cb(err, result);
+            });
+        }, function(cb){
+            dataParser.syncVegetablePrices(constants.URL_APIS.MOAG_URL.API_URL, constants.URL_APIS.MOAG_URL.SOURCE, function (err, result) {
+                if (err) {
+                    logWriter.log('scheduleJob -> syncVegetablePrices -> ' + constants.URL_APIS.MOAG_URL.SOURCE, err);
+                }
+                cb(err, result);
+            });
+        }]);
+
     });
 
     console.log('Schedule started');

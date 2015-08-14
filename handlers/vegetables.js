@@ -18,34 +18,10 @@ var Vegetable = function (db) {
         date = date.split('/');
 
         return new Date(date[2] + '/' + date[1] + '/' + date[0]);
-    };
+    }
 
-    function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
-        var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
-        var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
-        var date = getTransformedDateOject(newVagetablePriceObj.date);
-        var avgPrice;
-        var saveOptions;
-
-        if ((minPrice === 0) || (maxPrice === 0)) {
-            avgPrice = (minPrice === 0) ? maxPrice : minPrice;
-        } else {
-            avgPrice = (minPrice + maxPrice) / 2;
-        }
-
-
-        saveOptions = {
-            _vegetable: vagetable._id,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            avgPrice: avgPrice,
-
-            date: date,
-            year: moment(date).year(),
-            dayOfYear: moment(date).dayOfYear()
-        };
-
-        Price.create(saveOptions, cb);
+    function getAllVegetables(cb) {
+        Vegetable.find({}).exec(cb);
     }
 
     function prepareData(csvFile, cb) {
@@ -74,6 +50,36 @@ var Vegetable = function (db) {
         })
     }
 
+    function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
+        var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
+        var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
+        var date = getTransformedDateOject(newVagetablePriceObj.date);
+        var avgPrice;
+        var saveOptions;
+
+        if ((minPrice === 0) || (maxPrice === 0)) {
+            avgPrice = (minPrice === 0) ? maxPrice : minPrice;
+        } else {
+            avgPrice = (minPrice + maxPrice) / 2;
+        }
+
+
+        saveOptions = {
+            _vegetable: vagetable._id,
+            source: constants.URL_APIS.PLANTS_URL.SOURCE,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            avgPrice: avgPrice,
+
+            date: date,
+            year: moment(date).year(),
+            dayOfYear: moment(date).dayOfYear()
+        };
+
+        Price.create(saveOptions, cb);
+    }
+
+
     function findVegetableAndSavePrice(vegetables, newVegetablePrice, cb) {
         var flag = false;
 
@@ -94,7 +100,7 @@ var Vegetable = function (db) {
                             if (err) {
                                 cb(err);
                             } else {
-                                saveVegetablePrice(vegetable, newVegetablePrice, function(err, price){
+                                saveVegetablePrice(vegetable, newVegetablePrice, function (err, price) {
                                     cb(err, vegetable);
                                 });
                             }
@@ -106,40 +112,6 @@ var Vegetable = function (db) {
             }
         });
     }
-
-    function getAllVegetables(cb) {
-        Vegetable.find({}).exec(cb);
-    };
-
-
-    this.importUniqVegetablesToDb = function (req, res, next) {
-        var csvFile = constants.CSV_FILES.MAIN_VEGETABLES;
-
-        importCsv.parseCsvData(csvFile, function (err, jsonData, attributes) {
-            if (err) {
-                return next(err);
-            } else {
-                Vegetable.create(jsonData, function (err, cteatedData) {
-                    if (err) {
-                        return next(err);
-                    } else {
-                        res.status(200).send(cteatedData);
-                    }
-                });
-            }
-        });
-    };
-
-    this.getList = function (req, res, next) {
-
-        Vegetable.find({}, {englishName: 1, jewishNames: 1}, function (err, docs) {
-            if (err) {
-                return next(err);
-            } else {
-                res.status(200).send(docs);
-            }
-        });
-    };
 
     this.importFromCsv = function (req, res, next) {
         var year = req.query.year;
@@ -306,6 +278,35 @@ var Vegetable = function (db) {
         /*
          }
          });*/
+    };
+
+    this.importUniqVegetablesToDb = function (req, res, next) {
+        var csvFile = constants.CSV_FILES.MAIN_VEGETABLES;
+
+        importCsv.parseCsvData(csvFile, function (err, jsonData, attributes) {
+            if (err) {
+                return next(err);
+            } else {
+                Vegetable.create(jsonData, function (err, cteatedData) {
+                    if (err) {
+                        return next(err);
+                    } else {
+                        res.status(200).send(cteatedData);
+                    }
+                });
+            }
+        });
+    };
+
+    this.getList = function (req, res, next) {
+
+        Vegetable.find({}, {englishName: 1, jewishNames: 1}, function (err, docs) {
+            if (err) {
+                return next(err);
+            } else {
+                res.status(200).send(docs);
+            }
+        });
     };
 };
 
