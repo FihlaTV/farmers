@@ -10,7 +10,7 @@ module.exports = function (db) {
     function getDateByUrl(url, cb) {
         request(url, function (err, response, body) {
             cb(err, JSON.parse(body));
-        });20
+        });
     }
 
     function getVegetables(cb) {

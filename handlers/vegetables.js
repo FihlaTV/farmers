@@ -7,6 +7,7 @@ var ImportCsv = require('../helpers/import');
 var constants = require("../constants/constants");
 var async = require('async');
 var moment = require("moment");
+var _ = require('lodash');
 
 var Vegetable = function (db) {
     var Vegetable = db.model('Vegetable');
@@ -152,135 +153,6 @@ var Vegetable = function (db) {
                 });
             }
         });
-
-
-        /*importCsv.parseCsvData(csvFile, function (err, jsonData, attributes) {
-         if (err) {
-         return next(err);
-         } else {
-
-         async.waterfall([
-         //find vegetables
-         function (callback) {
-         Vegetable.find({}).exec(function (err, vegetables) {
-         if (err) {
-         callback(err);
-         } else {
-         callback(null, vegetables);
-         }
-         });
-
-         //update prices
-         }, function (vegetables, callback) {
-
-         async.each(jsonData, function (element, cb) {
-
-         for (var i = vegetables.length - 1; i >= 0; i--) {
-         if (vegetables[i].jewishNames.indexOf(element.jewishNames) !== -1) {
-         date = getTransformedDateOject(element.date);
-         minPrice = parseFloat(element.minPrice);
-         maxPrice = parseFloat(element.maxPrice);
-
-         if ((minPrice === 0) || (maxPrice === 0)) {
-         avgPrice = (minPrice === 0) ? maxPrice : minPrice;
-         } else {
-         avgPrice = (minPrice + maxPrice) / 2;
-         }
-
-         saveOptions = {
-         _vegetable: vegetables[i]._id,
-         minPrice: minPrice,
-         maxPrice: maxPrice,
-         avgPrice: avgPrice,
-
-         date: date,
-         year: moment(date).year(),
-         dayOfYear: moment(date).dayOfYear()
-         };
-
-         Price.create(saveOptions, function (err, res) {
-         if (err) {
-         cb(err)
-         }
-         });
-         flag = true;
-         }
-
-         if (flag === true) {
-         cb();
-         } else {
-         Vegetable.create(element, function (err, veg) {
-         if (err) {
-         cb(err)
-         } else {
-         minPrice = parseFloat(element.minPrice);
-         maxPrice = parseFloat(element.maxPrice);
-
-         if ((minPrice === 0) || (maxPrice === 0)) {
-         avgPrice = (minPrice === 0) ? maxPrice : minPrice;
-         } else {
-         avgPrice = (minPrice + maxPrice) / 2;
-         }
-
-         saveOptions = {
-         _vegetable: veg._id,
-         minPrice: minPrice,
-         maxPrice: maxPrice,
-         avgPrice: avgPrice,
-
-         date: date,
-         year: moment(date).year(),
-         dayOfYear: moment(date).dayOfYear()
-         };
-
-         Price.create(saveOptions, function (err, res) {
-         if (err) {
-         cb(err)
-         }
-         });
-         vegetables.push(veg);
-         cb();
-         }
-         });
-         }
-
-         }
-
-
-         }, function (err, newJsonData) {
-         if (err) {
-         callback(err);
-         } else {
-         callback(null, newJsonData);
-
-
-         }
-         });
-
-
-         }], function (err, result) {
-         if (err) {
-         next(err);
-         } else {
-         res.status(200).send(result);
-         }
-         });
-
-
-         //jsonData.date = getTransformedDateOject(jsonData.date);
-
-
-         */
-        /*Vegetable.create(jsonData, function (err, cteatedData) {
-         if (err) {
-         return next(err);
-         } else {
-         res.status(200).send(cteatedData);
-         }
-         });*/
-        /*
-         }
-         });*/
     };
 
     this.importUniqVegetablesToDb = function (req, res, next) {
@@ -310,6 +182,85 @@ var Vegetable = function (db) {
                 res.status(200).send(docs);
             }
         });
+    };
+
+    this.getVegetablesWithPrices = function (req, res, next) {
+        var date;
+        var dateString = req.query.date;
+
+        if (dateString && constants.REG_EXPS.VEGETABLE_PRICES_BY_DATE.test(dateString)) {
+            date = new Date(dateString.replace(/-/g, '/'));
+        } else {
+            date = new Date();
+        }
+
+        var year = moment(date).year();
+        var dayOfYear = moment(date).dayOfYear();
+        var index;
+
+        async.waterfall([
+
+            // get all vegetables from db
+            function (cb) {
+                getAllVegetables(function (err, vegetables) {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        cb(null, vegetables);
+                    }
+                });
+
+                //get all prices group by vegetables id
+            },
+            function (vegetables, cb) {
+
+                Price
+                    .aggregate([
+                        {
+                            $match: {
+                                year: year,
+                                dayOfYear: dayOfYear
+                            }
+                        }, {
+                            $group: {
+                                _id: '$_vegetable',
+                                prices: {
+                                    $push: {
+                                        minPrice: '$minPrice',
+                                        maxPrice: '$maxPrice',
+                                        avgPrice: '$avgPrice',
+                                        source: '$source',
+                                        date: '$date'
+                                    }
+                                }
+                            }
+                        }])
+                    .exec(function (err, prices) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            async.map(vegetables, function (vegetable, cb) {
+                                index = _.findIndex(prices, '_id', vegetable._id);
+                                vegetable = vegetable.toJSON();
+
+                                if (index !== -1) {
+                                    vegetable.prices = prices[index].prices;
+                                } else {
+                                    vegetable.prices = [];
+                                }
+                                cb(err, vegetable);
+                            }, cb);
+                        }
+                    });
+            }
+
+        ], function (err, result) {
+            if (err) {
+                next(err);
+            } else {
+                res.status(200).send(result);
+            }
+        })
     };
 };
 
