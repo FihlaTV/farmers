@@ -1,11 +1,13 @@
 var request = require("request");
 var moment = require("moment");
 var async = require('async');
-var constants = require("../constants/constants");
+var PlantsHelper = require('../helpers/plants');
 
 module.exports = function (db) {
     var Plant = db.model('Plant');
     var Price = db.model('Price');
+
+    var plantsHelper = new PlantsHelper(db);
 
     function getDateByUrl(url, cb) {
         request(url, function (err, response, body) {
@@ -31,15 +33,8 @@ module.exports = function (db) {
         var maxPrice = parseFloat(newPlantPriceObj.maxPrice) || 0;
         var minPrice = parseFloat(newPlantPriceObj.minPrice) || 0;
         var date = getTransformedDateOject(newPlantPriceObj.date);
-        var avgPrice;
+        var avgPrice = plantsHelper.getAvgPrice(minPrice, maxPrice);
         var saveOptions;
-
-        if ((minPrice === 0) || (maxPrice === 0)) {
-            avgPrice = (minPrice === 0) ? maxPrice : minPrice;
-        } else {
-            avgPrice = (minPrice + maxPrice) / 2;
-        }
-
 
         saveOptions = {
             _plant: plant._id,

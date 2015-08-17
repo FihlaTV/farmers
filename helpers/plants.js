@@ -3,13 +3,8 @@ var moment = require("moment");
 var async = require('async');
 var _ = require('lodash');
 
-var constants = require("../constants/constants");
-var ValidationHelper = require("./validation");
-
 
 module.exports = function (db) {
-    var validationHelper = new ValidationHelper(db);
-
     var Plant = db.model('Plant');
     var Price = db.model('Price');
 
@@ -57,23 +52,30 @@ module.exports = function (db) {
             .exec(cb);
     }
 
-    this.getPlantsWithPrices = function(date, cb) {
+    this.getPlantsWithPrices = function (date, cb) {
         async.parallel([
-            function(cb) {
+            function (cb) {
                 getPlantsPricesByDate(date, cb);
             },
-            function(cb) {
+            function (cb) {
                 Plant.find({}).exec(cb);
             }
-        ], function(err, result) {
+        ], function (err, result) {
             if (err) {
                 cb(err);
             } else {
                 concatPlantsPrices(result[1], result[0], cb);
             }
         });
-    }
+    };
 
+    this.getAvgPrice = function (minPrice, maxPrice) {
 
+        if ((minPrice === 0) || (maxPrice === 0)) {
+            return ((minPrice === 0) ? maxPrice : minPrice);
+        } else {
+            return ((minPrice * 100 + maxPrice * 100) / 200);
+        }
+    };
 
 };

@@ -15,7 +15,6 @@ module.exports = {
     },
 
     CSV_FILES: {
-        MAIN_VEGETABLES: 'csv/csvdata.csv',
         VEGETABLES_WITH_PRICES_2013: 'csv/veg_prices_2013.csv',
         VEGETABLES_WITH_PRICES_2014: 'csv/veg_prices_2014.csv'
     }
