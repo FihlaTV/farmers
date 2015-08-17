@@ -2,7 +2,7 @@
 module.exports = function(db){
     "use strict";
 
-    require('./vegetable')(db);
+    require('./plant')(db);
     //require('./sessions')(db);
     require('./price')(db);
 };

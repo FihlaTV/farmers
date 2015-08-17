@@ -4,7 +4,7 @@ var async = require('async');
 var constants = require("../constants/constants");
 
 module.exports = function (db) {
-    var Vegetable = db.model('Vegetable');
+    var Plant = db.model('Plant');
     var Price = db.model('Price');
 
     function getDateByUrl(url, cb) {
@@ -13,8 +13,8 @@ module.exports = function (db) {
         });
     }
 
-    function getVegetables(cb) {
-        Vegetable.find({}).exec(cb);
+    function getPlants(cb) {
+        Plant.find({}).exec(cb);
     }
 
     function getTransformedDateOject(date) {
@@ -27,10 +27,10 @@ module.exports = function (db) {
         return new Date(date[2] + '/' + date[1] + '/' + date[0]);
     }
 
-    function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {
-        var maxPrice = parseFloat(newVagetablePriceObj.maxPrice) || 0;
-        var minPrice = parseFloat(newVagetablePriceObj.minPrice) || 0;
-        var date = getTransformedDateOject(newVagetablePriceObj.date);
+    function savePlantPrice(plant, newPlantPriceObj, cb) {
+        var maxPrice = parseFloat(newPlantPriceObj.maxPrice) || 0;
+        var minPrice = parseFloat(newPlantPriceObj.minPrice) || 0;
+        var date = getTransformedDateOject(newPlantPriceObj.date);
         var avgPrice;
         var saveOptions;
 
@@ -42,8 +42,8 @@ module.exports = function (db) {
 
 
         saveOptions = {
-            _vegetable: vagetable._id,
-            source: newVagetablePriceObj.url,
+            _plant: plant._id,
+            source: newPlantPriceObj.url,
             minPrice: minPrice,
             maxPrice: maxPrice,
             avgPrice: avgPrice,
@@ -58,23 +58,23 @@ module.exports = function (db) {
         });
     }
 
-    function createNewVegetable(newVagetablePriceObj, cb) {
+    function createNewPlant(newPlantPriceObj, cb) {
         var saveOptions;
 
         saveOptions = {
             englishName: "No Name",
-            jewishNames: [newVagetablePriceObj.jewishName]
+            jewishNames: [newPlantPriceObj.jewishName]
         };
 
-        if (newVagetablePriceObj.isNewVeg) {
-            saveOptions.isNewVeg = true;
+        if (newPlantPriceObj.isNewPlant) {
+            saveOptions.isNewPlant = true;
         }
 
-        Vegetable.create(saveOptions, function (err, vegetable) {
+        Plant.create(saveOptions, function (err, plant) {
             if (err) {
                 cb(err);
             } else {
-                saveVegetablePrice(vegetable, newVagetablePriceObj, cb)
+                savePlantPrice(plant, newPlantPriceObj, cb)
             }
         });
     }
@@ -85,26 +85,26 @@ module.exports = function (db) {
                 getDateByUrl(apiUrl, cb);
             },
             function (cb) {
-                getVegetables(cb)
+                getPlants(cb)
             }
         ], function (err, results) {
             if (err) {
                 cb(err);
             } else {
                 cb(null, {
-                    newVegetablesPrice: results[0],
-                    vegetables: results[1]
+                    newPlantsPrice: results[0],
+                    plants: results[1]
                 });
             }
         })
     }
 
-    function findVegetableAndSavePrice(vegetables, newVegetablePrice, cb) {
-        var vegetableFound = false;
-        async.each(vegetables, function (vegetable, cb) {
-            if (vegetable.jewishNames.indexOf(newVegetablePrice.jewishName) !== -1) {
-                saveVegetablePrice(vegetable, newVegetablePrice, cb);
-                vegetableFound = true;
+    function findPlantAndSavePrice(plants, newPlantPrice, cb) {
+        var plantFound = false;
+        async.each(plants, function (plant, cb) {
+            if (plant.jewishNames.indexOf(newPlantPrice.jewishName) !== -1) {
+                savePlantPrice(plant, newPlantPrice, cb);
+                plantFound = true;
             } else {
                 cb();
             }
@@ -112,9 +112,9 @@ module.exports = function (db) {
             if (err) {
                 cb(err);
             } else {
-                if (!vegetableFound) {
-                    newVegetablePrice.isNewVeg = true;
-                    createNewVegetable(newVegetablePrice, cb);
+                if (!plantFound) {
+                    newPlantPrice.isNewPlant = true;
+                    createNewPlant(newPlantPrice, cb);
                 } else {
                     cb();
                 }
@@ -152,7 +152,7 @@ module.exports = function (db) {
         return (moment(date).format('YYYY/MM/DD') === moment(todayDate).format('YYYY/MM/DD'));
     }
 
-    this.syncVegetablePrices = function (apiUrl, source, cb) {
+    this.syncPlantPrices = function (apiUrl, source, cb) {
         checkIfPricesSynced(source, function (err, isSynced) {
             if (err) {
                 cb(err);
@@ -164,10 +164,10 @@ module.exports = function (db) {
                         if (err) {
                             cb(err);
                         } else {
-                            if (isTodayDate(resultObj.newVegetablesPrice.results.priceDate[0].date)) {
-                                async.each(resultObj.newVegetablesPrice.results.prices, function (newVegetablePrice, cb) {
-                                    newVegetablePrice.date = resultObj.newVegetablesPrice.results.priceDate[0].date;
-                                    findVegetableAndSavePrice(resultObj.vegetables, newVegetablePrice, cb);
+                            if (isTodayDate(resultObj.newPlantsPrice.results.priceDate[0].date)) {
+                                async.each(resultObj.newPlantsPrice.results.prices, function (newPlantPrice, cb) {
+                                    newPlantPrice.date = resultObj.newPlantsPrice.results.priceDate[0].date;
+                                    findPlantAndSavePrice(resultObj.plants, newPlantPrice, cb);
                                 }, cb);
                             } else {
                                 cb();

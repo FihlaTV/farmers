@@ -8,19 +8,19 @@ module.exports = function (db) {
     var Schema = mongoose.Schema;
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
-    var Vegetable = new Schema({
+    var Plant = new Schema({
         englishName: String,
         jewishNames: Array,
-        isNewVeg: {
+        isNewPlant: {
             type:Boolean,
             default: false
         }
     }, {
-        collection: 'Vegetables'
+        collection: 'Plants'
     });
 
 
-    db.model('Vegetable', Vegetable);
+    db.model('Plant', Plant);
 
 
 };

@@ -1,6 +1,3 @@
-/**
- * Created by kille on 12.08.2015.
- */
 module.exports = function (db) {
     'use strict';
 
@@ -9,9 +6,9 @@ module.exports = function (db) {
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var Price = new Schema({
-        _vegetable: {
+        _plant: {
             type: ObjectId,
-            ref: 'Vegetable'
+            ref: 'Plant'
         },
         date: Date,
         year: Number,
