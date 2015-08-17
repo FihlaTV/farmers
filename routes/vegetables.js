@@ -14,6 +14,7 @@ module.exports = function(db){
     router.get('/', vegetables.getList);
     router.get('/import', vegetables.importUniqVegetablesToDb);
     router.get('/importFromCsv', vegetables.importFromCsv);
+    router.get('/prices', vegetables.getVegetablesWithPrices);
 
 
     return router;

@@ -121,6 +121,9 @@ var Vegetable = function (db) {
             csvFile = constants.CSV_FILES.VEGETABLES_WITH_PRICES_2013;
         } else if (year === '2014') {
             csvFile = constants.CSV_FILES.VEGETABLES_WITH_PRICES_2014;
+        } else if (year === '2015') {
+            //csvFile = constants.CSV_FILES.VEGETABLES_WITH_PRICES_2015; //change when will have data for 2015 year
+            return res.status(200).send('No file with such year');
         } else {
             return res.status(200).send('No file with such year');
         }
