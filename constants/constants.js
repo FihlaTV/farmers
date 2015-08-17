@@ -6,10 +6,10 @@ module.exports = {
     URL_APIS: {
         PLANTS_URL: {
             API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
-            SOURCE: 'http://plants.moonsitesoftware.co.il/index.aspx#'
+            SOURCE: 'http://plants.moonsitesoftware.co.il/index.aspx'
         },
         MOAG_URL: {
-            API_URL: 'https://www.kimonolabs.com/api/337cxjki?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            API_URL: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
             SOURCE: 'http://www.prices.moag.gov.il/prices/veg_1.htm'
         }
     },

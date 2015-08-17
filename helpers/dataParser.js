@@ -10,7 +10,7 @@ module.exports = function (db) {
     function getDateByUrl(url, cb) {
         request(url, function (err, response, body) {
             cb(err, JSON.parse(body));
-        });
+        });20
     }
 
     function getVegetables(cb) {
@@ -20,7 +20,11 @@ module.exports = function (db) {
     function getTransformedDateOject(date) {
         date = date.split('/');
 
-        return new Date(20 + date[2] + '/' + date[1] + '/' + date[0]);
+        if (date[2].length === 2) {
+            date[2] = 20 + date[2];
+        }
+
+        return new Date(date[2] + '/' + date[1] + '/' + date[0]);
     }
 
     function saveVegetablePrice(vagetable, newVagetablePriceObj, cb) {

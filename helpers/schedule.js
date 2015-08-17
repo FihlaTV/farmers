@@ -11,9 +11,8 @@ module.exports = function (db) {
     var Price = db.model('Price');
     var Vegetable = db.model('Vegetable');
 
-    schedule.scheduleJob('*/1 * * * *', function() {
+    schedule.scheduleJob('*/3 * * * *', function() {
         console.log('scheduleJob -> syncVegetablePrices');
-
 
         async.series([ function (cb){
             dataParser.syncVegetablePrices(constants.URL_APIS.PLANTS_URL.API_URL, constants.URL_APIS.PLANTS_URL.SOURCE, function (err, result) {
@@ -30,7 +29,6 @@ module.exports = function (db) {
                 cb(err, result);
             });
         }]);
-
     });
 
     console.log('Schedule started');
