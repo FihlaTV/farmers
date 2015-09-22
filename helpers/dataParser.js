@@ -11,6 +11,9 @@ module.exports = function (db) {
 
     function getDateByUrl(url, cb) {
         request(url, function (err, response, body) {
+            if (!body){
+                return cb(new Error('body is empty (check your connection to internet)'));
+            }
             cb(err, JSON.parse(body));
         });
     }
