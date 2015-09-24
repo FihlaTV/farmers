@@ -4,6 +4,7 @@ module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
     var plantsRouter = require('./plants')(db);
+    var usersRouter = require('./users')(db);
     var pricesRouter = require('./prices')(db);
     var importRouter = require('./import')(db);
 
@@ -13,6 +14,7 @@ module.exports = function(app, db){
     });
 
     app.use('/plants', plantsRouter);
+    app.use('/users', usersRouter);
     app.use('/prices', pricesRouter);
     app.use('/importFromCsv', importRouter);
 

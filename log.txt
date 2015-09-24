@@ -127,3 +127,135 @@ TypeError: function parse() { [native code] } is not a constructor
     at d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:280:7
     at Function.process_params (d:\Thinkmobiles\Farmers\node_modules\express\lib\router\index.js:330:12)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Sep 23 2015 17:41:46 GMT+0300 (Финляндия (лето))
+login is not defined
+ReferenceError: login is not defined
+    at registration (D:\Projects\farmers\handlers\users.js:26:23)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at urlencodedParser (D:\Projects\farmers\node_modules\body-parser\lib\types\urlencoded.js:81:44)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\body-parser\lib\read.js:121:5
+    at invokeCallback (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Sep 23 2015 17:41:46 GMT+0300 (Финляндия (лето))
+login is not defined
+ReferenceError: login is not defined
+    at registration (D:\Projects\farmers\handlers\users.js:26:23)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at urlencodedParser (D:\Projects\farmers\node_modules\body-parser\lib\types\urlencoded.js:81:44)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\body-parser\lib\read.js:121:5
+    at invokeCallback (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Sep 23 2015 17:50:42 GMT+0300 (Финляндия (лето))
+login is not defined
+ReferenceError: login is not defined
+    at registration (D:\Projects\farmers\handlers\users.js:43:30)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at urlencodedParser (D:\Projects\farmers\node_modules\body-parser\lib\types\urlencoded.js:81:44)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\body-parser\lib\read.js:121:5
+    at invokeCallback (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Wed Sep 23 2015 17:50:42 GMT+0300 (Финляндия (лето))
+login is not defined
+ReferenceError: login is not defined
+    at registration (D:\Projects\farmers\handlers\users.js:43:30)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at urlencodedParser (D:\Projects\farmers\node_modules\body-parser\lib\types\urlencoded.js:81:44)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\body-parser\lib\read.js:121:5
+    at invokeCallback (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (D:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------

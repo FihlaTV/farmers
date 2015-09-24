@@ -12,9 +12,10 @@ var bodyParser = require('body-parser');
 var server = http.createServer(app);
 var connectOptions;
 var mainDb;
-//var session = require('express-session');
-//var cookieParser = require('cookie-parser');
-//var MongoStore = require('connect-mongo')( session );
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')( session );
+//var methodOverride = require('method-override');
 var scheduleHelper = require('./helpers/schedule');
 
 
@@ -48,18 +49,18 @@ mainDb.on('error', console.error.bind(console, 'connection error:'));
 mainDb.once('open', function callback() {
     console.log("Connection to " + process.env.DB_NAME + " is success");
 
-    /*app.use(session({
-     secret: '111',
-     resave: true,
-     saveUninitialized: true,
-     store: new MongoStore({
-     host: 'localhost',
-     port: 27017,
-     db: 'Farmer',
-     autoReconnect: true,
-     ssl: false
-     })
-     }));*/
+    app.use(session({
+        secret: '5891',
+        resave: true,
+        saveUninitialized: true,
+        store: new MongoStore({
+            host: process.env.DB_HOST,
+            port: process.env.DB_PORT,
+            db: process.env.DB_NAME,
+            autoReconnect: true,
+            ssl: false
+        })
+    }));
 
     require('./routes')(app, mainDb);
 
