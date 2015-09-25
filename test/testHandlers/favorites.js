@@ -40,7 +40,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
 
         agent
-            .post('/users/registration')
+            .post('/users/register')
             .send(loginData)
             .expect(200)
             .end(function (err, res) {

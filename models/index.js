@@ -6,4 +6,5 @@ module.exports = function(db){
     //require('./sessions')(db);
     require('./price')(db);
     require('./user')(db);
+    require('./chief')(db);
 };

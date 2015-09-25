@@ -9,11 +9,68 @@ var User = function (db) {
     'use strict';
 
     var User = db.model('User');
+    var Chief = db.model('Chief');
     var mongoose = require('mongoose');
     var session = new SessionHandler(db);
     var crypto = require('crypto');
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
+
+    createDefaultAdmin();
+
+    function generateConfirmToken() {
+        var randomPass = require('../helpers/randomPass');
+        return randomPass.generate();
+    }
+
+    function prepareChangePassEmail(model, confirmToken, callback) {
+
+        var templateName = 'public/templates/mail/changePassword.html';
+        var from = 'testTRA  <' + TRA.EMAIL_COMPLAIN_FROM + '>';
+        var resetUrl = process.env.HOST + 'crm/changeForgotPass/' + confirmToken;
+
+        var mailOptions = {
+            from: from,
+            mailTo: model.profile.email,
+            title: 'Reset password',
+            templateName:templateName,
+            templateData: {
+                login: model.login,
+                resetUrl: resetUrl
+            }
+        };
+
+        mailer.sendReport(mailOptions, callback);
+    }
+
+    function createDefaultAdmin() {
+        Chief
+            .findOne({})
+            .exec(function (err, model) {
+                var pass = 'cropAdmin';
+                var shaSum = crypto.createHash('sha256');
+                var admin;
+
+                shaSum.update(pass);
+                pass = shaSum.digest('hex');
+
+                admin = new Chief({
+                    login: 'defaultAdmin',
+                    pass: pass,
+                    email: 'farmerAdmin@gmail.com',
+                    updatedAt: new Date()
+                });
+
+                if (!model) {
+                    admin
+                        .save(function (err, user) {
+                            if (user) {
+                                console.log('Default Admin Created');
+                            }
+                        });
+                }
+            });
+    }
 
     function getUserById (userId, callback){
 
@@ -34,7 +91,7 @@ var User = function (db) {
             });
     }
 
-    this.registration = function (req, res, next) {
+    this.register = function (req, res, next) {
         var body = req.body;
         var email = body.email.toLowerCase();
         var pass = body.pass;
@@ -126,7 +183,7 @@ var User = function (db) {
         return session.kill(req, res, next);
     };
 
-    this.addServiceToFavorites = function ( req, res, next ) {
+    this.addCropsToFavorites = function ( req, res, next ) {
         var favorites = req.body.favorites;
         var userId = req.session.uId;
         var resultFavorites = [];
@@ -166,7 +223,7 @@ var User = function (db) {
         });
     };
 
-    this.deleteServiceToFavorites = function ( req, res, next ) {
+    this.deleteCropsFromFavorites = function ( req, res, next ) {
         var favorites = req.body.favorites;
         var userId = req.session.uId;
         var resultFavorites = [];
@@ -217,6 +274,38 @@ var User = function (db) {
                 //console.log(model.toJSON());
                 return res.status(200).send(model.toJSON().favorites);
             })
+    };
+
+    this.forgotPass = function(req, res, next) {
+        var passToken = generateConfirmToken();
+        var searchQuery = {
+            'email': req.body.email
+        };
+        var data = {
+            token: passToken
+        };
+
+        if (!req.body || !req.body.email) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+
+        User
+            .findOneAndUpdate(searchQuery,data)
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+                if (!model) {
+                    return res.status(400).send({error: RESPONSE.AUTH.EMAIL_NOT_REGISTERED});
+                }
+                prepareChangePassEmail(model, passToken, function (err, result) {
+                    if (err) {
+                        return next(err);
+                    }
+                    res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+                });
+
+            });
     };
 };
 

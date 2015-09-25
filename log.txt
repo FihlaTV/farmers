@@ -259,3 +259,151 @@ ReferenceError: login is not defined
     at _stream_readable.js:908:16
     at process._tickCallback (node.js:355:11)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Sep 24 2015 17:33:45 GMT+0300 (Финляндия (лето))
+Cannot read property 'toLowerCase' of undefined
+TypeError: Cannot read property 'toLowerCase' of undefined
+    at signIn (D:\Projects\farmers\handlers\users.js:123:31)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\express-session\index.js:433:7
+    at D:\Projects\farmers\node_modules\connect-mongo\lib\connect-mongo.js:305:11
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\collection.js:1240:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\cursor.js:649:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:244:5)
+    at nextFunction (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:743:5)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:668:7
+    at queryCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:321:5)
+    at Callbacks.emit (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:95:3)
+    at null.messageHandler (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:243:23)
+    at Socket.<anonymous> (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\connection\connection.js:262:22)
+    at Socket.emit (events.js:107:17)
+    at readableAddChunk (_stream_readable.js:163:16)
+    at Socket.Readable.push (_stream_readable.js:126:10)
+    at TCP.onread (net.js:538:20)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Sep 24 2015 17:33:45 GMT+0300 (Финляндия (лето))
+Cannot read property 'toLowerCase' of undefined
+TypeError: Cannot read property 'toLowerCase' of undefined
+    at signIn (D:\Projects\farmers\handlers\users.js:123:31)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\express-session\index.js:433:7
+    at D:\Projects\farmers\node_modules\connect-mongo\lib\connect-mongo.js:305:11
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\collection.js:1240:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\cursor.js:649:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:244:5)
+    at nextFunction (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:743:5)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:668:7
+    at queryCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:321:5)
+    at Callbacks.emit (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:95:3)
+    at null.messageHandler (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:243:23)
+    at Socket.<anonymous> (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\connection\connection.js:262:22)
+    at Socket.emit (events.js:107:17)
+    at readableAddChunk (_stream_readable.js:163:16)
+    at Socket.Readable.push (_stream_readable.js:126:10)
+    at TCP.onread (net.js:538:20)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Sep 24 2015 17:34:15 GMT+0300 (Финляндия (лето))
+Cannot read property 'toLowerCase' of undefined
+TypeError: Cannot read property 'toLowerCase' of undefined
+    at signIn (D:\Projects\farmers\handlers\users.js:123:31)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\express-session\index.js:433:7
+    at D:\Projects\farmers\node_modules\connect-mongo\lib\connect-mongo.js:305:11
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\collection.js:1240:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\cursor.js:649:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:244:5)
+    at nextFunction (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:743:5)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:668:7
+    at queryCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:321:5)
+    at Callbacks.emit (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:95:3)
+    at null.messageHandler (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:243:23)
+    at Socket.<anonymous> (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\connection\connection.js:262:22)
+    at Socket.emit (events.js:107:17)
+    at readableAddChunk (_stream_readable.js:163:16)
+    at Socket.Readable.push (_stream_readable.js:126:10)
+    at TCP.onread (net.js:538:20)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Sep 24 2015 17:34:15 GMT+0300 (Финляндия (лето))
+Cannot read property 'toLowerCase' of undefined
+TypeError: Cannot read property 'toLowerCase' of undefined
+    at signIn (D:\Projects\farmers\handlers\users.js:123:31)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (D:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (D:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (D:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (D:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (D:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at D:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (D:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (D:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at D:\Projects\farmers\node_modules\express-session\index.js:433:7
+    at D:\Projects\farmers\node_modules\connect-mongo\lib\connect-mongo.js:305:11
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\collection.js:1240:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\utils.js:96:12)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\cursor.js:649:5
+    at handleCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:244:5)
+    at nextFunction (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:743:5)
+    at D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:668:7
+    at queryCallback (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\cursor.js:321:5)
+    at Callbacks.emit (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:95:3)
+    at null.messageHandler (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:243:23)
+    at Socket.<anonymous> (D:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\connection\connection.js:262:22)
+    at Socket.emit (events.js:107:17)
+    at readableAddChunk (_stream_readable.js:163:16)
+    at Socket.Readable.push (_stream_readable.js:126:10)
+    at TCP.onread (net.js:538:20)
+---------------------------------------------------------------------------------------------------------
