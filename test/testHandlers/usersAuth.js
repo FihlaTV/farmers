@@ -33,7 +33,7 @@ describe('User Register and AUTH', function () {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
 
         agent
-            .post('/users/registration')
+            .post('/users/register')
             .send(loginData)
             .expect(200)
             .end(function (err, res) {
@@ -49,7 +49,7 @@ describe('User Register and AUTH', function () {
         var loginData = USERS.USER_BAD_EMAIL;
 
         agent
-            .post('/users/registration')
+            .post('/users/register')
             .send(loginData)
             .expect(400)
             .end(function (err, res) {
@@ -65,7 +65,7 @@ describe('User Register and AUTH', function () {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
 
         agent
-            .post('/users/registration')
+            .post('/users/register')
             .send(loginData)
             .expect(400)
             .end(function (err, res) {

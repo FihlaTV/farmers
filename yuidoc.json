@@ -1,0 +1,11 @@
+{
+  "name": "Farmer",
+  "description": "YUI 3 JavaScript Framework",
+  "version": "3.5.0",
+  "url": "http://localhost:7791/",
+  "options": {
+    "exclude":"prices.js, index.js, import.js, plants.js",
+    "paths": ["./routes"],
+    "outdir": "./api"
+  }
+}

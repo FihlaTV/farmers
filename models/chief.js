@@ -5,14 +5,14 @@ module.exports = function (db) {
     var Schema = mongoose.Schema;
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
-    var User = new Schema({
+    var Chief = new Schema({
         email: String,
         pass: String,
-        fullName: String,
-        favorites:[],
-        token: String
+        login: String,
+        createdAt: {type: Date, default: Date.now},
+        updatedAt: {type: Date, default: Date.now}
     }, {
-        collection: 'Users'
+        collection: 'Chiefs'
     });
-    db.model('User', User);
+    db.model('Chief', Chief);
 };
