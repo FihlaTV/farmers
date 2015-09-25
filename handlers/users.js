@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var SessionHandler = require('./sessions');
 var RESPONSE = require('../constants/response');
+var CONS = require('../constants/constants');
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
@@ -12,6 +13,7 @@ var User = function (db) {
     var Chief = db.model('Chief');
     var mongoose = require('mongoose');
     var session = new SessionHandler(db);
+    var mailer = require('../helpers/mailer');
     var crypto = require('crypto');
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
@@ -24,19 +26,20 @@ var User = function (db) {
     }
 
     function prepareChangePassEmail(model, confirmToken, callback) {
-
         var templateName = 'public/templates/mail/changePassword.html';
-        var from = 'testTRA  <' + TRA.EMAIL_COMPLAIN_FROM + '>';
-        var resetUrl = process.env.HOST + 'crm/changeForgotPass/' + confirmToken;
+        var from = 'testFarmer  <' + CONS.FARMER_EMAIL_NOTIFICATION + '>';
+        var resetUrl = process.env.HOST + 'users/changeForgotPass/' + confirmToken;
 
         var mailOptions = {
             from: from,
-            mailTo: model.profile.email,
+            mailTo: model.email,
             title: 'Reset password',
             templateName:templateName,
             templateData: {
-                login: model.login,
-                resetUrl: resetUrl
+                data: {
+                    fullName: model.fullName,
+                    resetUrl: resetUrl
+                }
             }
         };
 
