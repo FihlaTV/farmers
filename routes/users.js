@@ -195,6 +195,7 @@ module.exports = function(db){
      */
         .delete(session.isAuthenticatedUser, users.deleteCropsFromFavorites);
 
+
     router.post('/forgotPass', users.forgotPass);
     //router.get('/changeForgotPass/:token', traCrmHandler.changeForgotPassForm);
     //router.post('/changeForgotPass/:token', traCrmHandler.changeForgotPass);

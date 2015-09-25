@@ -1,6 +1,3 @@
-/**
- * Created by User on 27.04.2015.
- */
 
 var express = require('express');
 var app = express();
@@ -17,7 +14,6 @@ var cookieParser = require('cookie-parser');
 var MongoStore = require('connect-mongo')( session );
 //var methodOverride = require('method-override');
 var scheduleHelper = require('./helpers/schedule');
-
 
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -66,8 +62,8 @@ mainDb.once('open', function callback() {
 
     scheduleHelper(mainDb);
 
-    server.listen(8856, function () {
-        console.log('Server up successfully on port 8856');
+    server.listen(process.env.PORT, function () {
+        console.log('Server up successfully - host: ' + process.env.HOST + ' port: ' + process.env.PORT);
     });
 });
 
