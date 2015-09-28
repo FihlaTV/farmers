@@ -8,7 +8,7 @@ var USERS = require('./../testHelpers/usersTemplates');
 //var IMAGES = require('./../testHelpers/imageTemplates');
 //var SERVICES = require('./../testHelpers/servicesTemplates');
 var async = require ('async');
-var PreparingBd = require('./preparingDb');
+var PreparingBd = require('./preparingDB');
 var url = 'http://localhost:7792';
 
 describe('Favorites ADD, DELL, GET List  ,', function () {
