@@ -251,7 +251,6 @@ module.exports = function (db) {
      *      Body:
      *      oldPass
      *      newPass
-     *      confirmPass
      *
      * __Response:__
      *
@@ -261,8 +260,8 @@ module.exports = function (db) {
      * @example
      *      {
      *          "oldPass": "123456",
-                 "newPass": "123456789",
-        *      }
+     *          "newPass": "123456789",
+     *      }
      *
      * @method changePassBySession
      * @instance
