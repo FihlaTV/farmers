@@ -35,11 +35,32 @@ var User = function (db) {
             from: from,
             mailTo: model.email,
             title: 'Reset password',
-            templateName:templateName,
+            templateName: templateName,
             templateData: {
                 data: {
                     fullName: model.fullName,
                     resetUrl: resetUrl
+                }
+            }
+        };
+
+        mailer.sendReport(mailOptions, callback);
+    }
+
+    function prepareConfirmEmail(model, confirmToken, callback) {
+        var templateName = 'public/templates/mail/confirmEmail.html';
+        var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var confirmUrl = process.env.HOST + ':' + process.env.PORT + '/'  + 'users/confirmEmail/' + confirmToken;
+
+        var mailOptions = {
+            from: from,
+            mailTo: model.email,
+            title: 'Confirm registration',
+            templateName: templateName,
+            templateData: {
+                data: {
+                    fullName: model.fullName,
+                    confirmUrl: confirmUrl
                 }
             }
         };
@@ -76,7 +97,7 @@ var User = function (db) {
             });
     }
 
-    function getUserById (userId, callback){
+    function getUserById(userId, callback){
 
         User
             .findOne({_id: userId})
@@ -87,7 +108,6 @@ var User = function (db) {
                 }
 
                 if (model) {
-
                     return callback(null, model);
                 } else {
                     return callback(new Error(RESPONSE.ON_ACTION.NOT_FOUND + ' user with such _id '));
@@ -101,6 +121,7 @@ var User = function (db) {
         var pass = body.pass;
         var fullName = body.fullName;
         var shaSum = crypto.createHash('sha256');
+        var confirmToken = generateConfirmToken();
         var userData;
         var user;
 
@@ -122,7 +143,8 @@ var User = function (db) {
         userData = {
             email: email,
             pass: pass,
-            fullName: fullName
+            fullName: fullName,
+            confirmToken: confirmToken
         };
 
         User
@@ -137,11 +159,19 @@ var User = function (db) {
                 user = new User(userData);
 
                 user
-                    .save(function (err, user) {
+                    .save(function (err, model) {
                         if (err) {
                             return res.status(500).send({error: err});
                         }
-                        return res.status(200).send({success: RESPONSE.AUTH.REGISTER});
+
+                        console.log(model);
+
+                        prepareConfirmEmail(model, confirmToken, function (err, result) {
+                            if (err) {
+                                return next(err);
+                            }
+                            res.status(200).send({success: RESPONSE.AUTH.REGISTER_SEND_CONFIRMATION});
+                        });
                     });
             });
     };
@@ -177,6 +207,9 @@ var User = function (db) {
 
                 if (!model) {
                     return res.status(400).send({error: RESPONSE.AUTH.INVALID_CREDENTIALS});
+                }
+                if (!(model.confirmToken === null)) {
+                    return res.status(400).send({error: RESPONSE.AUTH.EMAIL_NOT_CONFIRMED});
                 }
 
                 return session.register(req, res, model._id.toString(), model.userType);
@@ -266,7 +299,7 @@ var User = function (db) {
         });
     };
 
-    this.getServicesFromFavorites = function ( req, res, next ) {
+    this.getCropsFromFavorites = function ( req, res, next ) {
         var userId = req.session.uId;
 
         User
@@ -286,7 +319,7 @@ var User = function (db) {
             'email': req.body.email
         };
         var data = {
-            token: passToken
+            changePassToken: passToken
         };
 
         if (!req.body || !req.body.email) {
@@ -302,6 +335,10 @@ var User = function (db) {
                 if (!model) {
                     return res.status(400).send({error: RESPONSE.AUTH.EMAIL_NOT_REGISTERED});
                 }
+                if (!(model.confirmToken === null)) {
+                    return res.status(400).send({error: RESPONSE.AUTH.EMAIL_NOT_CONFIRMED});
+                }
+
                 prepareChangePassEmail(model, passToken, function (err, result) {
                     if (err) {
                         return next(err);
@@ -320,7 +357,7 @@ var User = function (db) {
         }
 
         User
-            .findOne({'token': token})
+            .findOne({'changePassToken': token})
             .exec(function (err, model) {
 
                 if (err) {
@@ -333,12 +370,34 @@ var User = function (db) {
             });
     };
 
+    this.confirmEmail = function(req, res, next) {
+        var token = req.params.token;
+        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+
+        if (token.length < 30 || !tokenRegExpstr.test(token)) {
+            return res.status(404).send();
+        }
+
+        User
+            .findOneAndUpdate({'confirmToken': token}, {'confirmToken': null} )
+            .exec(function (err, model) {
+
+                if (err) {
+                    return next(err);
+                }
+                if (!model) {
+                    return res.status(404).send({error:  RESPONSE.ON_ACTION.NOT_FOUND});
+                }
+                return res.status(200).send({error:  RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
+            });
+    };
+
     this.changeForgotPass = function(req, res, next) {
         var newPass = req.body.newPass;
         var confirmPass = req.body.confirmPass;
         var token = req.params.token;
         var searchQuery = {
-            token: token
+            changePassToken: token
         };
         var shaSum = crypto.createHash('sha256');
         var pass;
@@ -350,7 +409,7 @@ var User = function (db) {
 
         data = {
             pass: pass,
-            token: null
+            changePassToken: null
         };
 
         //TODO password validation when customer will describe the requirements for a password
@@ -379,24 +438,19 @@ var User = function (db) {
     this.changePassBySession = function(req, res, next) {
         var oldPass = req.body.oldPass;
         var newPass = req.body.newPass;
-        var confirmPass = req.body.confirmPass;
         var shaSum = crypto.createHash('sha256');
         var userId = req.session.uId;
         var searchQuery;
-        var pass;
         var data;
 
         shaSum.update(oldPass);
-        pass = shaSum.digest('hex');
+        oldPass = shaSum.digest('hex');
 
         //TODO password validation when customer will describe the requirements for a password
-        if (newPass !== confirmPass) {
-            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': password and confirmation are not equal'});
-        }
 
         searchQuery = {
             "_id": userId,
-            pass: pass
+            pass: oldPass
         };
 
         shaSum = crypto.createHash('sha256');
@@ -416,6 +470,7 @@ var User = function (db) {
                 if (!model){
                     return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad old password'});
                 }
+                // SEND to user's web browser
                 return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
             });
     };
