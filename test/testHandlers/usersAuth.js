@@ -7,24 +7,27 @@ var CONST = require('../../constants/constants.js');
 var USERS = require('./../testHelpers/usersTemplates');
 var async = require ('async');
 var PreparingBd = require('./preparingDb');
-var url = 'http://localhost:8856';
+var url = 'http://localhost:7792';
 
 describe('User Register and AUTH', function () {
 
     var agent = request.agent(url);
+    var preparingDb = new PreparingBd();
+
     before(function (done) {
 
         console.log('>>> before');
 
-        var preparingDb = new PreparingBd();
+
 
         async.series([
             preparingDb.dropCollection('Users')
             //preparingDb.toFillUsers(1)
         ], function (err,results)   {
             if (err) {
-                return done(err)
+                return done(err);
             }
+            console.log('BD preparing completed');
             done();
         });
     });
@@ -39,7 +42,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -55,7 +58,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -71,10 +74,38 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
+    });
+
+    it('User confirm registration ', function (done) {
+        var loginData = USERS.USER_GOOD_CREDENRIALS;
+        var lastUser;
+
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {}, {}, function (err, models){
+            if (err) {
+                return done(err);
+            }
+            if (!models) {
+                return done(CONST.MODELS.USER + ' is empty');
+            }
+
+            lastUser = models[0];
+
+            console.log('lastUser :', lastUser);
+            agent
+                .get('/users/confirmEmail/' + lastUser.confirmToken)
+                .expect(200)
+                .end(function (err, res) {
+                    console.dir(res.body);
+                    if (err) {
+                        return done(err);
+                    }
+                    done();
+                });
+        });
     });
 
     it('User signIn with GOOD data', function (done) {
@@ -87,7 +118,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -119,7 +150,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -133,7 +164,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -147,7 +178,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });

@@ -10,7 +10,8 @@ module.exports = function (db) {
         pass: String,
         fullName: String,
         favorites:[],
-        token: String
+        changePassToken: String,
+        confirmToken: String
     }, {
         collection: 'Users'
     });
