@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var CONST = require('../../constants/constants.js');
 var USERS = require('./../testHelpers/usersTemplates');
 var async = require ('async');
-var PreparingBd = require('./preparingDb');
+var PreparingBd = require('./preparingDB');
 var url = 'http://localhost:7792';
 
 describe('User Register and AUTH', function () {
