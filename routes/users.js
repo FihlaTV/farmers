@@ -23,8 +23,7 @@ module.exports = function (db) {
      *
      * __URI:__ ___`/users/register`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -33,7 +32,7 @@ module.exports = function (db) {
      *      fullName
      *
      *  ## Responses:
-     *      status (200) JSON object: { success: 'success'}
+     *      status (200) JSON object: { success: 'Send confirmation on email. Check Email'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
      * @example
@@ -44,19 +43,20 @@ module.exports = function (db) {
      *      }
      *
      * @method register
+     * @instance
      * @for users
      * @memberOf users
      */
 
     router.post('/register', users.register);
+    router.get('/confirmEmail/:token', users.confirmEmail);
 
     /**
      * This __method__  for user sign in App
      *
      * __URI:__ ___`/users/signIn`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -65,7 +65,7 @@ module.exports = function (db) {
       *
      *  ## Responses:
      *      status (200) JSON object: { success: 'success'}
-     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *      status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}
      *
      * @example
      *      {
@@ -74,6 +74,7 @@ module.exports = function (db) {
      *      }
      *
      * @method signIn
+     * @instance
      * @for users
      * @memberOf users
      */
@@ -85,16 +86,15 @@ module.exports = function (db) {
      *
      * __URI:__ ___`/users/signOut`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
      *
      *  ## Responses:
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
      * @method signOut
+     * @instance
      * @for users
      * @memberOf users
      */
@@ -108,8 +108,7 @@ module.exports = function (db) {
      *
      * __URI:__ ___`/users/favorites`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -130,6 +129,7 @@ module.exports = function (db) {
      *      }
      *
      * @method addCropsToFavorites
+     * @instance
      * @for users
      * @memberOf users
      */
@@ -141,8 +141,7 @@ module.exports = function (db) {
      *
      * __URI:__ ___`/users/favorites`___
      *
-     *  ## METHOD:
-     * __GET__
+     * __METHOD:__ ___`GET`___
      *
      *
      *  ## Responses:
@@ -158,20 +157,20 @@ module.exports = function (db) {
      *          '5601418944d8fb702665b0c3' ]
      *      }
      *
-     * @method addCropsToFavorites
+     * @method getCropsFromFavorites
+     * @instance
      * @for users
      * @memberOf users
      */
 
-        .get(session.isAuthenticatedUser, users.getServicesFromFavorites)
+        .get(session.isAuthenticatedUser, users.getCropsFromFavorites)
 
     /**
      * This __method__  for user add crop (id of crop) to Favorites
      *
      * __URI:__ ___`/users/favorites`___
      *
-     *  ## METHOD:
-     * __DELETE__
+     *__METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -191,6 +190,7 @@ module.exports = function (db) {
      *      }
      *
      * @method deleteCropsFromFavorites
+     * @instance
      * @for users
      * @memberOf users
      */
@@ -198,12 +198,11 @@ module.exports = function (db) {
         .delete(session.isAuthenticatedUser, users.deleteCropsFromFavorites);
 
     /**
-     * This __method__  for user to reset password. After used route, will send email to user with link: http:\\ + token for reseting password
+     * This __method__  for user to reset password. After used route, will send to user mail with link: http:\\ + token for reseting password
      *
      * __URI:__ ___`/users/forgotPass`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -211,7 +210,7 @@ module.exports = function (db) {
      *
      *  ## Responses:
      *      status (200) JSON object: { success: 'success'}
-     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *      status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}
      *
      * @example
      *      {
@@ -219,6 +218,7 @@ module.exports = function (db) {
      *      }
      *
      * @method forgotPass
+     * @instance
      * @for users
      * @memberOf users
      */
@@ -232,8 +232,7 @@ module.exports = function (db) {
      *
      * __URI:__ ___`/users/changePass`___
      *
-     *  ## METHOD:
-     * __POST__
+     * __METHOD:__ ___`POST`___
      *
      *  ## Request:
      *      Body:
@@ -249,15 +248,15 @@ module.exports = function (db) {
      *      {
      *          "oldPass": "123456",
                  "newPass": "123456789",
-                 "confirmPass": "123456789"
-     *      }
+        *      }
      *
      * @method changePassBySession
+     * @instance
      * @for users
      * @memberOf users
      */
 
-    router.post('/changePass/', users.changePassBySession);
+    router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
 
     return router;
 };

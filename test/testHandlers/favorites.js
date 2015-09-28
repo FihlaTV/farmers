@@ -46,7 +46,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 agent
                     .post('/users/signIn')
@@ -55,7 +55,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
                     .end(function (err, res) {
                         console.dir(res.body);
                         if (err) {
-                            return done(err)
+                            return done(err);
                         }
                         done();
                     });
@@ -71,7 +71,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -79,7 +79,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
 
     it('GET Plant collection directly from DB', function (done) {
 
-        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.PLANT,{},{}, function (err, models){
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.PLANT, {}, {}, function (err, models){
             if (err) {
                 return done(err)
             }
@@ -103,12 +103,12 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
 
         agent
             .post('/users/favorites/')
-            .send({favorites: plantsId} )
+            .send({favorites: plantsId})
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -123,7 +123,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -138,12 +138,12 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
 
         agent
             .post('/users/favorites/')
-            .send({favorites: plantsId} )
+            .send({favorites: plantsId})
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -163,7 +163,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -178,7 +178,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -193,7 +193,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });

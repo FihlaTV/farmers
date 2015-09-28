@@ -2,7 +2,7 @@
 
 var request = require('supertest');
 var expect = require('chai').expect;
-var CONST = require('../../constants/index');
+var CONST = require('../../constants/constants');
 var USERS = require('./../testHelpers/usersTemplates');
 var async =  require('async');
 var PreparingDB = require('./preparingDB');
@@ -140,7 +140,7 @@ describe('Forgot And Cahnge Password', function () {
     it('SEND forgot password', function (done) {
 
         var data = {
-            email: 'allotheremails@ukr.net'
+            email: 'testfarmer@ukr.net'
         };
         agent
             .post('/users/forgotPass')
@@ -158,7 +158,7 @@ describe('Forgot And Cahnge Password', function () {
     it('SEND get Change forgoted password with GOOD token', function (done) {
 
         var data = {
-            email: 'allotheremails@ukr.net'
+            email: 'testfarmer@ukr.net'
         };
         agent
             .get('/users/changeForgotPass/2RK81jeYIC9WoqsO8n1IazLk17K77x4QQj582d6GLi4iHw1121V1441349037261')
@@ -176,14 +176,14 @@ describe('Forgot And Cahnge Password', function () {
     it('SEND get Change forgoted password with BAD token', function (done) {
 
         var data = {
-            email: 'allotheremails@ukr.net'
+            email: 'testfarmer@ukr.net'
         };
         agent
             .get('/users/changeForgotPass/2RK81jeYIC9WoqsO8~~~~~.Lk17K77x4QQj582d6GLi4iHw1121V1441349037261')
             .send(data)
             .expect(404)
             .end(function (err, res) {
-                //console.dir(res);
+                console.dir(res);
                 if (err) {
                     return done(err);
                 }
