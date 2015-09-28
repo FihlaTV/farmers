@@ -1,0 +1,53 @@
+<script>
+    function sendPassword() {
+        var xmlHttp;
+
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlHttp = new XMLHttpRequest();
+        }else {
+            // code for IE6, IE5
+            xmlHttp = new ActiveXObject("Microsoft.xmlHttp");
+        }
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && (xmlHttp.status == 500 || xmlHttp.status == 400 || xmlHttp.status == 404 )) {
+                alert(xmlHttp.responseText);
+            }
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                document.body.innerHTML = xmlHttp.responseText;
+            }
+        };
+
+        xmlHttp.open("POST","",true);
+        xmlHttp.setRequestHeader('Content-Type', 'application/json');
+        xmlHttp.send(JSON.stringify({
+            "newPass": document.getElementById('newPass').value,
+            "confirmPass": document.getElementById('confirmPass').value
+        }));
+    }
+</script>
+
+<div id="change">
+    <div class="startLogo"></div>
+
+    <h3>Change Your Password</h3>
+
+    <div>
+        <span>Enter your new password <br/></span>
+        <span>Password should be at least 6 characters long<br/></span>
+        <span>Confirm your new password<br/></span>
+
+    </div>
+
+    <div class="form-group">
+        <input id="newPass" type="password" placeholder="New Password" required name="newPass" minlength=6>
+    </div>
+
+    <div >
+        <input id="confirmPass" type="password" placeholder="Confirm New Password" required name="confirmPass">
+    </div>
+
+    <button onclick="sendPassword()">Change
+    </button>
+
+</div>

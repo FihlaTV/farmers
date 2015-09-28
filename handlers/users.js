@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var SessionHandler = require('./sessions');
 var RESPONSE = require('../constants/response');
+var CONST = require('../constants/constants');
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
@@ -11,8 +12,10 @@ var User = function (db) {
     var User = db.model('User');
     var Chief = db.model('Chief');
     var mongoose = require('mongoose');
-    var session = new SessionHandler(db);
+    var path = require('path');
+    var mailer = require('../helpers/mailer');
     var crypto = require('crypto');
+    var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
 
@@ -24,19 +27,20 @@ var User = function (db) {
     }
 
     function prepareChangePassEmail(model, confirmToken, callback) {
-
         var templateName = 'public/templates/mail/changePassword.html';
-        var from = 'testTRA  <' + TRA.EMAIL_COMPLAIN_FROM + '>';
-        var resetUrl = process.env.HOST + 'crm/changeForgotPass/' + confirmToken;
+        var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var resetUrl = process.env.HOST + ':' + process.env.PORT + '/'  + 'users/changeForgotPass/' + confirmToken;
 
         var mailOptions = {
             from: from,
-            mailTo: model.profile.email,
+            mailTo: model.email,
             title: 'Reset password',
             templateName:templateName,
             templateData: {
-                login: model.login,
-                resetUrl: resetUrl
+                data: {
+                    fullName: model.fullName,
+                    resetUrl: resetUrl
+                }
             }
         };
 
@@ -304,7 +308,115 @@ var User = function (db) {
                     }
                     res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
                 });
+            });
+    };
 
+    this.changeForgotPassGetForm = function(req, res, next) {
+        var token = req.params.token;
+        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+
+        if (token.length < 30 || !tokenRegExpstr.test(token)) {
+            return res.status(404).send();
+        }
+
+        User
+            .findOne({'token': token})
+            .exec(function (err, model) {
+
+                if (err) {
+                    return next(err);
+                }
+                if (!model) {
+                    return res.status(404).send({error:  RESPONSE.ON_ACTION.NOT_FOUND});
+                }
+                res.sendFile(path.resolve(__dirname + '/../public/templates/customElements/changePass.html'));
+            });
+    };
+
+    this.changeForgotPass = function(req, res, next) {
+        var newPass = req.body.newPass;
+        var confirmPass = req.body.confirmPass;
+        var token = req.params.token;
+        var searchQuery = {
+            token: token
+        };
+        var shaSum = crypto.createHash('sha256');
+        var pass;
+        var data;
+        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+
+        shaSum.update(newPass);
+        pass = shaSum.digest('hex');
+
+        data = {
+            pass: pass,
+            token: null
+        };
+
+        //TODO password validation when customer will describe the requirements for a password
+        if (newPass !== confirmPass) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': password and confirmation are not equal'});
+        }
+
+        //TODO check this condition in future
+        if (token.length < 30 || !tokenRegExpstr.test(token)) {
+            return res.status(404).send();
+        }
+
+        User
+            .findOneAndUpdate(searchQuery, data)
+            .exec(function (err, model){
+                if (err){
+                    return res.status(500).send({error: err });
+                }
+                if (!model){
+                    return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad token'});
+                }
+                return res.send('The password was successfully changed');
+            });
+    };
+
+    this.changePassBySession = function(req, res, next) {
+        var oldPass = req.body.oldPass;
+        var newPass = req.body.newPass;
+        var confirmPass = req.body.confirmPass;
+        var shaSum = crypto.createHash('sha256');
+        var userId = req.session.uId;
+        var searchQuery;
+        var pass;
+        var data;
+
+        shaSum.update(oldPass);
+        pass = shaSum.digest('hex');
+
+        //TODO password validation when customer will describe the requirements for a password
+        if (newPass !== confirmPass) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': password and confirmation are not equal'});
+        }
+
+        searchQuery = {
+            "_id": userId,
+            pass: pass
+        };
+
+        shaSum = crypto.createHash('sha256');
+        shaSum.update(newPass);
+        newPass = shaSum.digest('hex');
+
+        data = {
+            pass: newPass
+        };
+
+        User
+            .findOneAndUpdate(searchQuery, data)
+            .exec(function (err, model){
+                if (err){
+                    return res.status(500).send({error: err });
+                }
+                if (!model){
+                    return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad old password'});
+                }
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
             });
     };
 };
