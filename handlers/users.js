@@ -319,7 +319,7 @@ var User = function (db) {
             'email': req.body.email
         };
         var data = {
-            token: passToken
+            changePassToken: passToken
         };
 
         if (!req.body || !req.body.email) {
@@ -357,7 +357,7 @@ var User = function (db) {
         }
 
         User
-            .findOne({'token': token})
+            .findOne({'changePassToken': token})
             .exec(function (err, model) {
 
                 if (err) {
@@ -397,7 +397,7 @@ var User = function (db) {
         var confirmPass = req.body.confirmPass;
         var token = req.params.token;
         var searchQuery = {
-            token: token
+            changePassToken: token
         };
         var shaSum = crypto.createHash('sha256');
         var pass;
@@ -409,7 +409,7 @@ var User = function (db) {
 
         data = {
             pass: pass,
-            token: null
+            changePassToken: null
         };
 
         //TODO password validation when customer will describe the requirements for a password
@@ -470,6 +470,7 @@ var User = function (db) {
                 if (!model){
                     return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad old password'});
                 }
+                // SEND to user's web browser
                 return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
             });
     };

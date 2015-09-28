@@ -25,7 +25,7 @@ describe('User Register and AUTH', function () {
             //preparingDb.toFillUsers(1)
         ], function (err,results)   {
             if (err) {
-                return done(err)
+                return done(err);
             }
             console.log('BD preparing completed');
             done();
@@ -42,7 +42,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -58,7 +58,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -74,7 +74,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -92,7 +92,7 @@ describe('User Register and AUTH', function () {
                 return done(CONST.MODELS.USER + ' is empty');
             }
 
-            lastUser = (models.toJSON())[0];
+            lastUser = models[0];
 
             console.log('lastUser :', lastUser);
             agent
@@ -118,7 +118,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -150,7 +150,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -164,7 +164,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });
@@ -178,7 +178,7 @@ describe('User Register and AUTH', function () {
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
-                    return done(err)
+                    return done(err);
                 }
                 done();
             });

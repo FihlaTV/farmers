@@ -9,7 +9,7 @@ var USERS = require('./../testHelpers/usersTemplates');
 //var SERVICES = require('./../testHelpers/servicesTemplates');
 var async = require ('async');
 var PreparingBd = require('./preparingDb');
-var url = 'http://localhost:8856';
+var url = 'http://localhost:7792';
 
 describe('Favorites ADD, DELL, GET List  ,', function () {
 
@@ -36,7 +36,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
         });
     });
 
-    it('User Registration and signIn', function (done) {
+    it('User Registration with GOD data ', function (done) {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
 
         agent
@@ -48,17 +48,50 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
                 if (err) {
                     return done(err);
                 }
-                agent
-                    .post('/users/signIn')
-                    .send(loginData)
-                    .expect(200)
-                    .end(function (err, res) {
-                        console.dir(res.body);
-                        if (err) {
-                            return done(err);
-                        }
-                        done();
-                    });
+                done();
+            });
+    });
+
+    it('User confirm registration ', function (done) {
+        var lastUser;
+
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {}, {}, function (err, models){
+            if (err) {
+                return done(err);
+            }
+            if (!models) {
+                return done(CONST.MODELS.USER + ' is empty');
+            }
+
+            lastUser = models[0];
+
+            console.log('lastUser :', lastUser);
+            agent
+                .get('/users/confirmEmail/' + lastUser.confirmToken)
+                .expect(200)
+                .end(function (err, res) {
+                    console.dir(res.body);
+                    if (err) {
+                        return done(err);
+                    }
+                    done();
+                });
+        });
+    });
+
+    it('User sign with GOD data ', function (done) {
+        var loginData = USERS.USER_GOOD_CREDENRIALS;
+
+        agent
+            .post('/users/signIn')
+            .send(loginData)
+            .expect(200)
+            .end(function (err, res) {
+                console.dir(res.body);
+                if (err) {
+                    return done(err);
+                }
+                done();
             });
     });
 

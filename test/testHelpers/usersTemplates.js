@@ -1,7 +1,7 @@
 module.exports = {
 
     USER_GOOD_CREDENRIALS: {
-        email: 'client777@gmail.com',
+        email: 'smsspam@ukr.net',
         pass: 'pass1234',
         fullName: 'Avraam Rozenberg'
     },
