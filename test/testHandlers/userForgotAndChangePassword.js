@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 var CONST = require('../../constants/constants');
 var USERS = require('./../testHelpers/usersTemplates');
 var async =  require('async');
-var PreparingDB = require('./preparingDB');
+var PreparingDB = require('./preparingDb');
 var url = 'http://localhost:7792';
 
 describe('Forgot And Cahnge Password', function () {
