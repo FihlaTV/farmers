@@ -175,8 +175,10 @@
         <p>This <strong>method</strong>  for user add crop (id of crop) to Favorites</p>
 <p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
- favorites // String or [String, String, ...]</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ favorites // String or [String, String, ...]</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     
@@ -263,10 +265,12 @@
         <p>This <strong>method</strong>  for user to reset password. After used route, will send email to user with link: http:\ + token for reseting password</p>
 <p><strong>URI:</strong> <strong><em><code>/users/changePass</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
  oldPass
  newPass
- confirmPass</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ confirmPass</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     
@@ -351,11 +355,13 @@
     
     
     <div class="description">
-        <p>This <strong>method</strong>  for user add crop (id of crop) to Favorites</p>
+        <p>This <strong>method</strong>  for user delete crop (id of crop) to Favorites</p>
 <p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
-<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
- favorites // String or [String, String, ...]</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+<p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ favorites // String or [String, String, ...]</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     
@@ -442,8 +448,10 @@
         <p>This <strong>method</strong>  for user to reset password. After used route, will send to user mail with link: http:\ + token for reseting password</p>
 <p><strong>URI:</strong> <strong><em><code>/users/forgotPass</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
- email //</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email //</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}</code></pre>
     </div>
     
@@ -530,7 +538,8 @@
         <p>This <strong>method</strong>  for user add crop (id of crop) to Favorites</p>
 <p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
-<h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON Array of string: {[String, String, ...]}
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON Array of string: {[String, String, ...]}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     
@@ -617,10 +626,12 @@
         <p>This <strong>method</strong> for user registration in App</p>
 <p><strong>URI:</strong> <strong><em><code>/users/register</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
  email,
  pass,
- fullName</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'Send confirmation on email. Check Email'}
+ fullName</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'Send confirmation on email. Check Email'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     
@@ -707,9 +718,11 @@
         <p>This <strong>method</strong>  for user sign in App</p>
 <p><strong>URI:</strong> <strong><em><code>/users/signIn</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Request:</h2><pre class="prettyprint source"><code> Body:
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
  email,
- pass,</code></pre><h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ pass,</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}</code></pre>
     </div>
     
@@ -796,7 +809,8 @@
         <p>This <strong>method</strong>  for user sign out from App</p>
 <p><strong>URI:</strong> <strong><em><code>/users/signOut</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<h2>Responses:</h2><pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
     

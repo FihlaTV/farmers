@@ -474,6 +474,19 @@ var User = function (db) {
                 return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
             });
     };
+
+    this.getUserProfileBySession = function ( req, res, next ) {
+        var userId = req.session.uId;
+
+        getUserById(userId, function (err, profile) {
+            profile = profile.toJSON();
+
+            if (err) {
+                return next(err);
+            }
+            return res.status(200).send(profile);
+        });
+    };
 };
 
 module.exports = User;
