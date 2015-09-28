@@ -1,6 +1,6 @@
 /**
  * Provides ability for:
- *  -   User: Register/ SignIn /SignOut,
+ *  -   User: Register/ SignIn /SignOut / ChangePassowr / ForgotPassword
  *  -   CRUD Users Favorites Services
  *
  * @class users
@@ -25,13 +25,15 @@ module.exports = function (db) {
      *
      * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      email,
      *      pass,
      *      fullName
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'Send confirmation on email. Check Email'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -58,12 +60,14 @@ module.exports = function (db) {
      *
      * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      email,
      *      pass,
       *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}
      *
@@ -89,7 +93,8 @@ module.exports = function (db) {
      * __METHOD:__ ___`POST`___
      *
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -110,11 +115,13 @@ module.exports = function (db) {
      *
      * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      favorites // String or [String, String, ...]
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -144,7 +151,8 @@ module.exports = function (db) {
      * __METHOD:__ ___`GET`___
      *
      *
-     *  ## Responses:
+     * __Responses:__
+     *
      *      status (200) JSON Array of string: {[String, String, ...]}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -166,17 +174,19 @@ module.exports = function (db) {
         .get(session.isAuthenticatedUser, users.getCropsFromFavorites)
 
     /**
-     * This __method__  for user add crop (id of crop) to Favorites
+     * This __method__  for user delete crop (id of crop) from Favorites
      *
      * __URI:__ ___`/users/favorites`___
      *
-     *__METHOD:__ ___`POST`___
+     *__METHOD:__ ___`DELETE`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      favorites // String or [String, String, ...]
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -204,11 +214,13 @@ module.exports = function (db) {
      *
      * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      email //
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}
      *
@@ -234,13 +246,15 @@ module.exports = function (db) {
      *
      * __METHOD:__ ___`POST`___
      *
-     *  ## Request:
+     * __Request:__
+     *
      *      Body:
      *      oldPass
      *      newPass
      *      confirmPass
      *
-     *  ## Responses:
+     * __Response:__
+     *
      *      status (200) JSON object: { success: 'success'}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
@@ -257,6 +271,8 @@ module.exports = function (db) {
      */
 
     router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
+    router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
+
 
     return router;
 };
