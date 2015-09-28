@@ -1,0 +1,84 @@
+-------------------------------------------------------------------------------------
+Mon Sep 28 2015 09:52:49 GMT+0300 (Финляндия (лето))
+Cannot find module '../helpers/randomPass'
+Error: Cannot find module '../helpers/randomPass'
+    at Function.Module._resolveFilename (module.js:336:15)
+    at Function.Module._load (module.js:278:25)
+    at Module.require (module.js:365:17)
+    at require (module.js:384:17)
+    at generateConfirmToken (d:\Projects\farmers\handlers\users.js:24:26)
+    at forgotPass (d:\Projects\farmers\handlers\users.js:283:25)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Sep 28 2015 09:53:23 GMT+0300 (Финляндия (лето))
+Cannot find module 'node-uuid'
+Error: Cannot find module 'node-uuid'
+    at Function.Module._resolveFilename (module.js:336:15)
+    at Function.Module._load (module.js:278:25)
+    at Module.require (module.js:365:17)
+    at require (module.js:384:17)
+    at randomPass (d:\Projects\farmers\helpers\randomPass.js:4:16)
+    at Object.<anonymous> (d:\Projects\farmers\helpers\randomPass.js:48:3)
+    at Module._compile (module.js:460:26)
+    at Object.Module._extensions..js (module.js:478:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+    at Module.require (module.js:365:17)
+    at require (module.js:384:17)
+    at generateConfirmToken (d:\Projects\farmers\handlers\users.js:24:26)
+    at forgotPass (d:\Projects\farmers\handlers\users.js:283:25)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Sep 28 2015 09:54:40 GMT+0300 (Финляндия (лето))
+Cannot find module '../constants'
+Error: Cannot find module '../constants'
+    at Function.Module._resolveFilename (module.js:336:15)
+    at Function.Module._load (module.js:278:25)
+    at Module.require (module.js:365:17)
+    at require (module.js:384:17)
+    at randomPass (d:\Projects\farmers\helpers\randomPass.js:5:17)
+    at Object.<anonymous> (d:\Projects\farmers\helpers\randomPass.js:48:3)
+    at Module._compile (module.js:460:26)
+    at Object.Module._extensions..js (module.js:478:10)
+    at Module.load (module.js:355:32)
+    at Function.Module._load (module.js:310:12)
+    at Module.require (module.js:365:17)
+    at require (module.js:384:17)
+    at generateConfirmToken (d:\Projects\farmers\handlers\users.js:24:26)
+    at forgotPass (d:\Projects\farmers\handlers\users.js:283:25)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Sep 28 2015 10:46:49 GMT+0300 (Финляндия (лето))
+CONST is not defined
+ReferenceError: CONST is not defined
+    at changeForgotPassGetForm (d:\Projects\farmers\handlers\users.js:315:49)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:349:14)
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:410:3)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+---------------------------------------------------------------------------------------------------------

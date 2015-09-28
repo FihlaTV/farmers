@@ -1,0 +1,26 @@
+{
+  "name": "Farmer",
+  "version": "1.0.0",
+  "homepage": "",
+  "authors": [
+    ""
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.2.1",
+    "requirejs": "~2.1.18",
+    "text": "~2.0.14",
+    "jquery": "~2.1.4",
+    "jqueryui": "~1.11.4"
+  }
+}

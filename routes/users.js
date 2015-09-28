@@ -7,12 +7,12 @@
  *
  */
 
-var express = require( 'express' );
+var express = require('express');
 var router = express.Router();
 var UserHandler = require('../handlers/users');
 var SessionHandler = require('../handlers/sessions');
 
-module.exports = function(db){
+module.exports = function (db) {
     'use strict';
 
     var users = new UserHandler(db);
@@ -164,6 +164,7 @@ module.exports = function(db){
      */
 
         .get(session.isAuthenticatedUser, users.getServicesFromFavorites)
+
     /**
      * This __method__  for user add crop (id of crop) to Favorites
      *
@@ -193,12 +194,70 @@ module.exports = function(db){
      * @for users
      * @memberOf users
      */
+
         .delete(session.isAuthenticatedUser, users.deleteCropsFromFavorites);
 
+    /**
+     * This __method__  for user to reset password. After used route, will send email to user with link: http:\\ + token for reseting password
+     *
+     * __URI:__ ___`/users/forgotPass`___
+     *
+     *  ## METHOD:
+     * __POST__
+     *
+     *  ## Request:
+     *      Body:
+     *      email //
+     *
+     *  ## Responses:
+     *      status (200) JSON object: { success: 'success'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     * @example
+     *      {
+     *          email: 'client777@gmail.com'
+     *      }
+     *
+     * @method forgotPass
+     * @for users
+     * @memberOf users
+     */
 
     router.post('/forgotPass', users.forgotPass);
-    //router.get('/changeForgotPass/:token', traCrmHandler.changeForgotPassForm);
-    //router.post('/changeForgotPass/:token', traCrmHandler.changeForgotPass);
+    router.get('/changeForgotPass/:token', users.changeForgotPassGetForm);
+    router.post('/changeForgotPass/:token', users.changeForgotPass);
+
+    /**
+     * This __method__  for user to reset password. After used route, will send email to user with link: http:\\ + token for reseting password
+     *
+     * __URI:__ ___`/users/changePass`___
+     *
+     *  ## METHOD:
+     * __POST__
+     *
+     *  ## Request:
+     *      Body:
+     *      oldPass
+     *      newPass
+     *      confirmPass
+     *
+     *  ## Responses:
+     *      status (200) JSON object: { success: 'success'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     * @example
+     *      {
+     *          "oldPass": "123456",
+                 "newPass": "123456789",
+                 "confirmPass": "123456789"
+     *      }
+     *
+     * @method changePassBySession
+     * @for users
+     * @memberOf users
+     */
+
+    router.post('/changePass/', users.changePassBySession);
 
     return router;
 };

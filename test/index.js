@@ -10,4 +10,4 @@ require('./testHandlers/favorites');
 require('./testHandlers/usersAuth');
 //require('./testHandlers/servicesIcon');
 //require('./testHandlers/language');
-//require('./testHandlers/forgotAndCahngePassword');
+require('./testHandlers/userForgotAndCahngePassword');

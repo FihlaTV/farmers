@@ -5,6 +5,11 @@ module.exports = {
         pass: 'pass1234',
         fullName: 'Avraam Rozenberg'
     },
+    USER_GOOD_FARMER: {
+        email: 'testfarmer@ukr.net',
+        pass: 'pass1234',
+        fullName: 'Gosha Brin'
+    },
 
     USER_NOT_REGISTERED: {
         email: 'notregistered@gmail.com',

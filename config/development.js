@@ -1,4 +1,4 @@
-process.env.HOST = 'localhost';
+process.env.HOST = 'http://localhost';
 process.env.PORT = 7792;
 
 process.env.DB_HOST = 'localhost';
