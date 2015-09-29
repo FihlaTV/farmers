@@ -11,6 +11,7 @@ module.exports = {
         LOG_OUT: 'Logout successful',
         REGISTER: 'Register successful',
         REGISTER_SEND_CONFIRMATION: 'Send confirmation on email. Check Email',
+        FORGOT_SEND_EMAIL: 'Send instruction on email. Check Email',
         EMAIL_NOT_CONFIRMED: 'Registration not confirmed. Check Email',
         REGISTER_EMAIL_CONFIRMED: 'Register confirmed',
         REGISTER_EMAIL_USED: 'Email is used',

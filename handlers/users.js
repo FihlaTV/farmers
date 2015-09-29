@@ -10,7 +10,6 @@ var User = function (db) {
     'use strict';
 
     var User = db.model('User');
-    var Chief = db.model('Chief');
     var mongoose = require('mongoose');
     var path = require('path');
     var mailer = require('../helpers/mailer');
@@ -18,8 +17,6 @@ var User = function (db) {
     var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
-
-    createDefaultAdmin();
 
     function generateConfirmToken() {
         var randomPass = require('../helpers/randomPass');
@@ -66,35 +63,6 @@ var User = function (db) {
         };
 
         mailer.sendReport(mailOptions, callback);
-    }
-
-    function createDefaultAdmin() {
-        Chief
-            .findOne({})
-            .exec(function (err, model) {
-                var pass = 'cropAdmin';
-                var shaSum = crypto.createHash('sha256');
-                var admin;
-
-                shaSum.update(pass);
-                pass = shaSum.digest('hex');
-
-                admin = new Chief({
-                    login: 'defaultAdmin',
-                    pass: pass,
-                    email: 'farmerAdmin@gmail.com',
-                    updatedAt: new Date()
-                });
-
-                if (!model) {
-                    admin
-                        .save(function (err, user) {
-                            if (user) {
-                                console.log('Default Admin Created');
-                            }
-                        });
-                }
-            });
     }
 
     function getUserById(userId, callback){
@@ -202,7 +170,7 @@ var User = function (db) {
             .findOne({email: email, pass: pass})
             .exec(function (err, model) {
                 if (err) {
-                    return next(err)
+                    return next(err);
                 }
 
                 if (!model) {
@@ -343,7 +311,7 @@ var User = function (db) {
                     if (err) {
                         return next(err);
                     }
-                    res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+                    res.status(200).send({success: RESPONSE.AUTH.FORGOT_SEND_EMAIL});
                 });
             });
     };
@@ -386,9 +354,9 @@ var User = function (db) {
                     return next(err);
                 }
                 if (!model) {
-                    return res.status(404).send({error:  RESPONSE.ON_ACTION.NOT_FOUND});
+                    return res.status(404).send({error: RESPONSE.ON_ACTION.NOT_FOUND});
                 }
-                return res.status(200).send({error:  RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
+                return res.status(200).send({success: RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
             });
     };
 
@@ -475,7 +443,7 @@ var User = function (db) {
             });
     };
 
-    this.getUserProfileBySession = function ( req, res, next ) {
+    this.getUserProfileBySession = function (req, res, next ) {
         var userId = req.session.uId;
 
         getUserById(userId, function (err, profile) {

@@ -21,7 +21,7 @@ module.exports = {
     },
 
     MODELS: {
-        //ATTACHMENT: 'Attachment',
+        ADMIN: 'Admin',
         //SERVICES_ICON: 'ServicesIcon',
         USER: 'User',
         PLANT: 'Plant',
@@ -33,6 +33,5 @@ module.exports = {
         //FEEDBACK: 'Feedback',
         //EMAIL_REPORT: 'emailReport'
     },
-    ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890',
-
+    ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
 };

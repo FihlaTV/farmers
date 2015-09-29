@@ -31,7 +31,9 @@ module.exports = {
     },
 
     ADMIN: {
-        email: 'admin123',
-        pass: 'pass1234'
+        login: 'defaultAdmin',
+        email: 'smsspam@ukr.net',
+        //email pass: smsspam
+        pass: 'farmersAdmin'
     }
 };

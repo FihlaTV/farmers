@@ -20,6 +20,7 @@ PreparingDb = function (){
     };
     var dbConnection = mongoose.createConnection(process.env.DB_HOST, process.env.DB_NAME, process.env.DB_PORT, connectOptions);
     var models = require('../../models/index')(dbConnection);
+    var Admin = dbConnection.model(CONST.MODELS.ADMIN);
     var User = dbConnection.model(CONST.MODELS.USER);
     var Plant = dbConnection.model(CONST.MODELS.PLANT);
 

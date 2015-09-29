@@ -5,6 +5,7 @@ module.exports = function(app, db){
     var models = require('../models/index')(db);
     var plantsRouter = require('./plants')(db);
     var usersRouter = require('./users')(db);
+    var adminRouter = require('./admin')(db);
     var pricesRouter = require('./prices')(db);
     var importRouter = require('./import')(db);
 
@@ -15,6 +16,7 @@ module.exports = function(app, db){
 
     app.use('/plants', plantsRouter);
     app.use('/users', usersRouter);
+    app.use('/admin', adminRouter);
     app.use('/prices', pricesRouter);
     app.use('/importFromCsv', importRouter);
 

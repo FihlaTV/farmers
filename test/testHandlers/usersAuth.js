@@ -23,7 +23,7 @@ describe('User Register and AUTH', function () {
         async.series([
             preparingDb.dropCollection('Users')
             //preparingDb.toFillUsers(1)
-        ], function (err,results)   {
+        ], function (err, results) {
             if (err) {
                 return done(err);
             }

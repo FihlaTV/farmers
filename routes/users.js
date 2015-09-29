@@ -272,6 +272,5 @@ module.exports = function (db) {
     router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
     router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
 
-
     return router;
 };
