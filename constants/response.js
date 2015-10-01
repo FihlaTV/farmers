@@ -9,7 +9,7 @@ module.exports = {
         UN_AUTHORIZED: 'Un Authorized',
         LOG_IN: 'Login successful',
         LOG_OUT: 'Logout successful',
-        REGISTER: 'Register successful',
+        REGISTER_SUCCESSFUL: 'Register successful',
         REGISTER_SEND_CONFIRMATION: 'Send confirmation on email. Check Email',
         FORGOT_SEND_EMAIL: 'Send instruction on email. Check Email',
         EMAIL_NOT_CONFIRMED: 'Registration not confirmed. Check Email',

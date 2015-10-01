@@ -51,6 +51,7 @@ module.exports = function (db) {
      */
 
     router.post('/register', users.register);
+    router.post('/signUpFb', users.signUpFb);
     router.get('/confirmEmail/:token', users.confirmEmail);
 
     /**
