@@ -22,16 +22,10 @@ module.exports = {
 
     MODELS: {
         ADMIN: 'Admin',
-        //SERVICES_ICON: 'ServicesIcon',
         USER: 'User',
         PLANT: 'Plant',
         SESSION: 'Session',
-        //ADMIN_HISTORY: 'AdminHistoryLog',
-        //USER_HISTORY: 'UserHistoryLog',
-        //SERVICE: 'Service',
         IMAGE: 'Image'
-        //FEEDBACK: 'Feedback',
-        //EMAIL_REPORT: 'emailReport'
     },
     ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
 };
