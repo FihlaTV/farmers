@@ -184,13 +184,6 @@ describe('User Register and AUTH', function () {
             });
     });
 
-    it('SignIn with GOOD Facebook Credentials', function (done) {
-        done("Not discussed and not implemented");
-    });
-
-    it('SignIn with BAD Facebook Credentials', function (done) {
-        done("Not discussed and not implemented");
-    });
 
 
 });
