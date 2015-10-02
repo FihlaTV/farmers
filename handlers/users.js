@@ -210,7 +210,6 @@ var User = function (db) {
                 $or: [{'email': email}, {'fbId': fbId}]
             };
         }
-        if (fbAccessToken){}
 
         //TODO check fbID and email by accesToken
 
@@ -228,8 +227,7 @@ var User = function (db) {
             avatar: avatar
         };
 
-        //TODO check email or fbid
-        User
+          User
             .findOne(searchQuery)
             .exec(function (err, model) {
                 if (err) {
@@ -263,9 +261,15 @@ var User = function (db) {
                             }
                             console.log('create Model');
                             console.log(model);
+                            console.log('email:', email);
 
                             if (email) {
                                 prepareNotificationFb(model, textPass, function (err, result) {
+                                    if (err) {
+                                        console.log('mail err :', err);
+                                    } else {
+                                        console.log('Notification mail created');
+                                    }
                                 });
                             }
 
@@ -491,7 +495,7 @@ var User = function (db) {
                 prepareNotificationEmail(model, null, function (err, result) {
                 });
 
-                return res.status(200).send({success: RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
+                return res.status(200).send(RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED);
             });
     };
 

@@ -65,7 +65,7 @@ module.exports = function (db) {
      *      email, // or null, if not exist
      *      fbId,  // String
      *      fullName, // String
-     *      avatar, // String
+     *      avatar, // String or null, if not exist
      *      fbAccessToken // String
      *
      *
@@ -315,7 +315,7 @@ module.exports = function (db) {
 
     //TODO delete route after tests complete
     //TODO Warning only for testers! Check this end Delete
-    router.post('/dellAccountByEmail', users.dellAccountByEmail);
+    router.delete('/dellAccountByEmail', users.dellAccountByEmail);
 
     return router;
 };
