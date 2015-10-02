@@ -23,6 +23,7 @@ module.exports = {
     MODELS: {
         ADMIN: 'Admin',
         USER: 'User',
+        MARKETEER: 'marketeer',
         PLANT: 'Plant',
         SESSION: 'Session',
         IMAGE: 'Image'

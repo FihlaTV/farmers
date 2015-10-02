@@ -75,7 +75,7 @@
     <div class="description">
         <p>Provides ability for:</p>
 <ul>
-<li>User: Register/ SignIn /SignOut,</li>
+<li>User: Register/ SignIn /SignOut / ChangePassowr / ForgotPassword</li>
 <li>CRUD Users Favorites Services</li>
 </ul>
     </div>
@@ -268,8 +268,7 @@
 <p><strong>Request:</strong></p>
 <pre class="prettyprint source"><code> Body:
  oldPass
- newPass
- confirmPass</code></pre><p><strong>Response:</strong></p>
+ newPass</code></pre><p><strong>Response:</strong></p>
 <pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
@@ -337,8 +336,7 @@
     
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">{         &quot;oldPass&quot;: &quot;123456&quot;,
-                 &quot;newPass&quot;: &quot;123456789&quot;,     }</pre>
+    <pre class="sunlight-highlight-javascript">{         &quot;oldPass&quot;: &quot;123456&quot;,         &quot;newPass&quot;: &quot;123456789&quot;,     }</pre>
 
 
     
@@ -355,7 +353,7 @@
     
     
     <div class="description">
-        <p>This <strong>method</strong>  for user delete crop (id of crop) to Favorites</p>
+        <p>This <strong>method</strong>  for user delete crop (id of crop) from Favorites</p>
 <p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
 <p><strong>Request:</strong></p>
@@ -429,6 +427,96 @@
         <h5>Example</h5>
         
     <pre class="sunlight-highlight-javascript">{         favorites: &#x27;5603f832f889260c19a40d59&#x27;,     }     OR     {         favorites: [&#x27;5603f832f889260c19a40d59&#x27;, &#x27;5603f832f889260c00a40d77&#x27; ],     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dellAccountByEmail"><span class="type-signature"></span>dellAccountByEmail<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for Developer or Tester to delete account by email and make logOut for kill session</p>
+<p><strong>URI:</strong> <strong><em><code>/users/dellAccountByEmail</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: {&quot;success&quot;: &quot;Logout successful&quot;}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         &quot;email&quot;: &quot;deletemee@ukr.net&quot;,     }</pre>
 
 
     
@@ -607,6 +695,94 @@
         <h5>Example</h5>
         
     <pre class="sunlight-highlight-javascript">{         [ &#x27;5601418844d8fb702665b0af&#x27;,         &#x27;5601418944d8fb702665b0b1&#x27;,         &#x27;5601418944d8fb702665b0b3&#x27;,         &#x27;5601418944d8fb702665b0c3&#x27; ]     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getUserProfileBySession"><span class="type-signature"></span>getUserProfileBySession<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user get profile by session. At now (wile not strong DB structure)  it take all field's</p>
+<p><strong>URI:</strong> <strong><em><code>/users/profile</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: {}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{     &quot;_id&quot;: &quot;560e4f45899308c80d294e34&quot;,     &quot;email&quot;: &quot;smsspam@ukr.net&quot;,     &quot;pass&quot;: &quot;a552b653b9434e5abd7ba559d1a07cb9b6d9386cf9a07b38b6bd27e0ebd479fd&quot;,     &quot;fullName&quot;: &quot;Roberto Edinburg&quot;,     &quot;confirmToken&quot;: null,     &quot;fbId&quot;: &quot;1899544646937849&quot;,     &quot;avatar&quot;: &quot;https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&amp;oe=5692005F&quot;,     &quot;__v&quot;: 0,     &quot;updatedAt&quot;: &quot;2015-10-02T09:32:53.979Z&quot;,     &quot;createdAt&quot;: &quot;2015-10-02T09:32:53.979Z&quot;,     &quot;marketeer&quot;: null,     &quot;favorites&quot;: []     }</pre>
 
 
     
@@ -877,6 +1053,100 @@
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="signUpFb"><span class="type-signature"></span>signUpFb<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong> for user registration in App via Facebook account</p>
+<p><strong>URI:</strong> <strong><em><code>/users/signUpFb</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email, // or null, if not exist
+ fbId,  // String
+ fullName, // String
+ avatar, // String or null, if not exist
+ fbAccessToken // String</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'Login successful'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{     &quot;email&quot;: &quot;232323@ukr.net&quot;,     &quot;fullName&quot;: &quot;Serj Brin&quot;,     &quot;avatar&quot;: &quot;https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&amp;oe=5692005F&quot;,     &quot;fbId&quot;: &quot;889106887840848&quot;     &quot;fbAccessToken&quot;: &quot;CAAMoo1Q3lFABACrZATmqZAQFZA18m40VSN4sjNYgyPVZB1DWXdp2ZBrzlznNBx6NVe2qfwj23Psh6IorastLhMy6zUXk176qKcmFC1sNtwJMZBAKPQLXZCO96XRg9jzBc5OBl7PKFUKo8rzHzbbMCoZCosg4SkXk8gHk2DLeRg6Np5Y9x4t94ZABSZCipjZBAKEwGQZD&quot;     }</pre>
+
+
+    
+</dd>
+
         </dl>
     
 
@@ -915,7 +1185,7 @@
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a>
-	on Mon Sep 28th 2015 using the <a
+	on Fri Oct 2nd 2015 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>

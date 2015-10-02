@@ -7,20 +7,17 @@ module.exports = function (db) {
     var Schema = mongoose.Schema;
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
-    var User = new Schema({
-        email: String,
-        pass: String,
+    var Marketeer = new Schema({
         fullName: String,
-        favorites:[],
-        changePassToken: String,
-        fbId: String,
-        avatar: String,
-        confirmToken: String,
-        marketeer: {type: ObjectId, ref: CONST.MODELS.MARKETEER, default: null},
+        location: String,
+        mergeNames: [],
+        addedBy: String,
+        approved: Boolean,
+        logo: String,
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}
     }, {
-        collection: CONST.MODELS.USER + 's'
+        collection: CONST.MODELS.MARKETEER + 's'
     });
-    db.model(CONST.MODELS.USER, User);
+    db.model(CONST.MODELS.MARKETEER, Marketeer);
 };
