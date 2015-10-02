@@ -5,19 +5,14 @@
     <title></title>
 </head>
 <body>
-    <div class="pm-text">
-        <p>Hi Dear  <b><%= data ? data.fullName : '' %></b>! </p>
+<div class="pm-text">
+    <p>Hello  <b><%= data ? data.fullName : '' %></b>! </p>
 
-        <p>To verify your FarmerAPP account please click on link below
-            <br>
-            <a href="<%= data ? data.confirmUrl :'' %>" target="_blank">link
-            </a>
-        </p>
-        <p>Or copy this url in browser: "<%= data ? data.confirmUrl :'' %>"</p>
-
-        <br>
-        <p>If you have received this in error, please delete this email</p>
-
-    </div>
+    <p>Welcome to "4Farmers". To verify your account please click on  <a href="<%= data ? data.confirmUrl :'' %>" target="_blank">link </a>
+    </p>
+    <p>Or copy this url in browser:
+        <br>    "<%= data ? data.confirmUrl :'' %>"</p>
+    <p>If you have received this in error, please delete this email</p>
+</div>
 </body>
 </html>

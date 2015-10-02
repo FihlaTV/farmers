@@ -51,6 +51,45 @@ module.exports = function (db) {
      */
 
     router.post('/register', users.register);
+
+    /**
+     * This __method__ for user registration in App via Facebook account
+     *
+     * __URI:__ ___`/users/signUpFb`___
+     *
+     * __METHOD:__ ___`POST`___
+     *
+     * __Request:__
+     *
+     *      Body:
+     *      email, // or null, if not exist
+     *      fbId,  // String
+     *      fullName, // String
+     *      avatar, // String
+     *      fbAccessToken // String
+     *
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: { success: 'Login successful'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     * @example
+     *      {
+     *      "email": "232323@ukr.net",
+     *      "fullName": "Serj Brin",
+     *      "avatar": "https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&oe=5692005F",
+     *      "fbId": "889106887840848"
+     *      "fbAccessToken": "CAAMoo1Q3lFABACrZATmqZAQFZA18m40VSN4sjNYgyPVZB1DWXdp2ZBrzlznNBx6NVe2qfwj23Psh6IorastLhMy6zUXk176qKcmFC1sNtwJMZBAKPQLXZCO96XRg9jzBc5OBl7PKFUKo8rzHzbbMCoZCosg4SkXk8gHk2DLeRg6Np5Y9x4t94ZABSZCipjZBAKEwGQZD"
+     *      }
+     *
+     * @method signUpFb
+     * @instance
+     * @for users
+     * @memberOf users
+     */
+
+
     router.post('/signUpFb', users.signUpFb);
     router.get('/confirmEmail/:token', users.confirmEmail);
 
@@ -273,6 +312,10 @@ module.exports = function (db) {
     router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
     router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
     router.put('/profile', session.isAuthenticatedUser, users.updateUserProfileBySession);
+
+    //TODO delete route after tests complete
+    //TODO Warning only for testers! Check this end Delete
+    router.post('/dellAccountByEmail', users.dellAccountByEmail);
 
     return router;
 };

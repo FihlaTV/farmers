@@ -25,13 +25,13 @@ var User = function (db) {
 
     function prepareChangePassEmail(model, confirmToken, callback) {
         var templateName = 'public/templates/mail/changePassword.html';
-        var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
         var resetUrl = process.env.HOST + ':' + process.env.PORT + '/'  + 'users/changeForgotPass/' + confirmToken;
 
         var mailOptions = {
             from: from,
             mailTo: model.email,
-            title: 'Reset password',
+            title: '4Farmers. Reset password',
             templateName: templateName,
             templateData: {
                 data: {
@@ -65,13 +65,14 @@ var User = function (db) {
         mailer.sendReport(mailOptions, callback);
     }
 
-    function prepareNotificationEmail(model, pass, callback) {
-        var templateName = 'public/templates/mail/notificationEmail.html';
+
+    function prepareNotificationFb(model, pass, callback) {
+        var templateName = 'public/templates/mail/notificationFb.html';
         var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
         var mailOptions = {
             from: from,
             mailTo: model.email,
-            title: 'Confirm registration',
+            title: '4Farmers notification',
             templateName: templateName,
             templateData: {
                 data: {
@@ -80,7 +81,23 @@ var User = function (db) {
                 }
             }
         };
+        mailer.sendReport(mailOptions, callback);
+    }
 
+    function prepareNotificationEmail(model, pass, callback) {
+        var templateName = 'public/templates/mail/notificationEmail.html';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var mailOptions = {
+            from: from,
+            mailTo: model.email,
+            title: '4Farmers notification',
+            templateName: templateName,
+            templateData: {
+                data: {
+                    fullName: model.fullName
+                }
+            }
+        };
         mailer.sendReport(mailOptions, callback);
     }
 
@@ -165,11 +182,11 @@ var User = function (db) {
 
     this.signUpFb = function (req, res, next) {
         var body = req.body;
-        var email = body.email.toLowerCase();
+        var email = body.email ? body.email.toLowerCase() : null;
         var fbId = body.fbId;
         var avatar = body.avatar;
         var fullName = body.fullName;
-        var fbAccesToken = body.fbAccesToken;
+        var fbAccessToken = body.fbAccessToken;
         var textPass = (generateConfirmToken()).slice(0, 6);
         var pass = textPass;
         var shaSum = crypto.createHash('sha256');
@@ -177,7 +194,9 @@ var User = function (db) {
         var userData;
         var user;
 
-        if (!body || !email || !fbId) {
+        console.log('fbAccessToken: ', fbAccessToken);
+
+        if (!body || !fbId) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
 
@@ -191,6 +210,7 @@ var User = function (db) {
                 $or: [{'email': email}, {'fbId': fbId}]
             };
         }
+        if (fbAccessToken){}
 
         //TODO check fbID and email by accesToken
 
@@ -245,7 +265,7 @@ var User = function (db) {
                             console.log(model);
 
                             if (email) {
-                                prepareNotificationEmail(model, textPass, function (err, result) {
+                                prepareNotificationFb(model, textPass, function (err, result) {
                                 });
                             }
 
@@ -467,7 +487,29 @@ var User = function (db) {
                 if (!model) {
                     return res.status(404).send({error: RESPONSE.ON_ACTION.NOT_FOUND});
                 }
+
+                prepareNotificationEmail(model, null, function (err, result) {
+                });
+
                 return res.status(200).send({success: RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
+            });
+    };
+
+    //TODO only for test - delete this
+    this.dellAccountByEmail = function(req, res, next) {
+        var email = req.body.email;
+
+        User
+            .findOne({'email': email} )
+            .remove()
+            .exec(function (err, model) {
+
+                if (err) {
+                    return next(err);
+                }
+
+                console.log('Account deleted');
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
             });
     };
 

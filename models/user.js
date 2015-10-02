@@ -14,6 +14,7 @@ module.exports = function (db) {
         fbId: String,
         avatar: String,
         confirmToken: String,
+        //marketer:
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}
     }, {
