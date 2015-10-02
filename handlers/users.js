@@ -227,7 +227,7 @@ var User = function (db) {
             avatar: avatar
         };
 
-          User
+        User
             .findOne(searchQuery)
             .exec(function (err, model) {
                 if (err) {
@@ -501,7 +501,11 @@ var User = function (db) {
 
     //TODO only for test - delete this
     this.dellAccountByEmail = function(req, res, next) {
-        var email = req.body.email;
+        var email = req.body.email ? req.body.email.toLowerCase() : null;
+
+        if (!email) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
 
         User
             .findOne({'email': email} )
@@ -513,7 +517,7 @@ var User = function (db) {
                 }
 
                 console.log('Account deleted');
-                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+                return session.kill(req, res, next);
             });
     };
 

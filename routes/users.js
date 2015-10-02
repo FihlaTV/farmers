@@ -310,9 +310,74 @@ module.exports = function (db) {
      */
 
     router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
+
+    /**
+     * This __method__  for user get profile by session. At now (wile not strong DB structure)  it take all field's
+     *
+     * __URI:__ ___`/users/profile`___
+     *
+     * __METHOD:__ ___`GET`___
+     *
+     *
+     * __Responses:__
+     *
+     *      status (200) JSON object: {}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      {
+     *      "_id": "560e4f45899308c80d294e34",
+     *      "email": "smsspam@ukr.net",
+     *      "pass": "a552b653b9434e5abd7ba559d1a07cb9b6d9386cf9a07b38b6bd27e0ebd479fd",
+     *      "fullName": "Roberto Edinburg",
+     *      "confirmToken": null,
+     *      "fbId": "1899544646937849",
+     *      "avatar": "https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&oe=5692005F",
+     *      "__v": 0,
+     *      "updatedAt": "2015-10-02T09:32:53.979Z",
+     *      "createdAt": "2015-10-02T09:32:53.979Z",
+     *      "marketeer": null,
+     *      "favorites": []
+     *      }
+     *
+     * @method getUserProfileBySession
+     * @instance
+     * @for users
+     * @memberOf users
+     */
+
     router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
     router.put('/profile', session.isAuthenticatedUser, users.updateUserProfileBySession);
 
+
+    /**
+     * This __method__  for Developer or Tester to delete account by email and make logOut for kill session
+     *
+     * __URI:__ ___`/users/dellAccountByEmail`___
+     *
+     * __METHOD:__ ___`DELETE`___
+     *
+     * __Request:__
+     *
+     *      Body:
+     *      email
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: {"success": "Logout successful"}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     * @example
+     *      {
+     *          "email": "deletemee@ukr.net",
+     *      }
+     *
+     * @method dellAccountByEmail
+     * @instance
+     * @for users
+     * @memberOf users
+     */
     //TODO delete route after tests complete
     //TODO Warning only for testers! Check this end Delete
     router.delete('/dellAccountByEmail', users.dellAccountByEmail);
