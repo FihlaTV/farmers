@@ -51,6 +51,7 @@ module.exports = function (db) {
      */
 
     router.post('/register', users.register);
+    router.post('/signUpFb', users.signUpFb);
     router.get('/confirmEmail/:token', users.confirmEmail);
 
     /**
@@ -251,7 +252,6 @@ module.exports = function (db) {
      *      Body:
      *      oldPass
      *      newPass
-     *      confirmPass
      *
      * __Response:__
      *
@@ -261,8 +261,8 @@ module.exports = function (db) {
      * @example
      *      {
      *          "oldPass": "123456",
-                 "newPass": "123456789",
-        *      }
+     *          "newPass": "123456789",
+     *      }
      *
      * @method changePassBySession
      * @instance
@@ -272,7 +272,7 @@ module.exports = function (db) {
 
     router.post('/changePass/', session.isAuthenticatedUser, users.changePassBySession);
     router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
-
+    router.put('/profile', session.isAuthenticatedUser, users.updateUserProfileBySession);
 
     return router;
 };

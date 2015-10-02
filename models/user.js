@@ -11,7 +11,11 @@ module.exports = function (db) {
         fullName: String,
         favorites:[],
         changePassToken: String,
-        confirmToken: String
+        fbId: String,
+        avatar: String,
+        confirmToken: String,
+        createdAt: {type: Date, default: Date.now},
+        updatedAt: {type: Date, default: Date.now}
     }, {
         collection: 'Users'
     });
