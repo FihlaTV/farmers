@@ -82,3 +82,45 @@ ReferenceError: CONST is not defined
     at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
     at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Tue Sep 29 2015 19:03:14 GMT+0300 (Финляндия (лето))
+Cannot read property 'replace' of undefined
+TypeError: Cannot read property 'replace' of undefined
+    at updateUserProfileBySession (d:\Projects\farmers\handlers\users.js:462:34)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at isAuthenticatedUser (d:\Projects\farmers\handlers\sessions.js:51:13)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 01 2015 19:35:24 GMT+0300 (Финляндия (лето))
+Cannot set property 'fbId' of undefined
+TypeError: Cannot set property 'fbId' of undefined
+    at signUpFb (d:\Projects\farmers\handlers\users.js:186:26)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at d:\Projects\farmers\node_modules\express-session\index.js:433:7
+---------------------------------------------------------------------------------------------------------

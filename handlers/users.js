@@ -10,7 +10,6 @@ var User = function (db) {
     'use strict';
 
     var User = db.model('User');
-    var Chief = db.model('Chief');
     var mongoose = require('mongoose');
     var path = require('path');
     var mailer = require('../helpers/mailer');
@@ -18,8 +17,6 @@ var User = function (db) {
     var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
-
-    createDefaultAdmin();
 
     function generateConfirmToken() {
         var randomPass = require('../helpers/randomPass');
@@ -49,7 +46,7 @@ var User = function (db) {
 
     function prepareConfirmEmail(model, confirmToken, callback) {
         var templateName = 'public/templates/mail/confirmEmail.html';
-        var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
         var confirmUrl = process.env.HOST + ':' + process.env.PORT + '/'  + 'users/confirmEmail/' + confirmToken;
 
         var mailOptions = {
@@ -68,33 +65,23 @@ var User = function (db) {
         mailer.sendReport(mailOptions, callback);
     }
 
-    function createDefaultAdmin() {
-        Chief
-            .findOne({})
-            .exec(function (err, model) {
-                var pass = 'cropAdmin';
-                var shaSum = crypto.createHash('sha256');
-                var admin;
-
-                shaSum.update(pass);
-                pass = shaSum.digest('hex');
-
-                admin = new Chief({
-                    login: 'defaultAdmin',
-                    pass: pass,
-                    email: 'farmerAdmin@gmail.com',
-                    updatedAt: new Date()
-                });
-
-                if (!model) {
-                    admin
-                        .save(function (err, user) {
-                            if (user) {
-                                console.log('Default Admin Created');
-                            }
-                        });
+    function prepareNotificationEmail(model, pass, callback) {
+        var templateName = 'public/templates/mail/notificationEmail.html';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var mailOptions = {
+            from: from,
+            mailTo: model.email,
+            title: 'Confirm registration',
+            templateName: templateName,
+            templateData: {
+                data: {
+                    fullName: model.fullName,
+                    pass: pass
                 }
-            });
+            }
+        };
+
+        mailer.sendReport(mailOptions, callback);
     }
 
     function getUserById(userId, callback){
@@ -176,6 +163,98 @@ var User = function (db) {
             });
     };
 
+    this.signUpFb = function (req, res, next) {
+        var body = req.body;
+        var email = body.email.toLowerCase();
+        var fbId = body.fbId;
+        var avatar = body.avatar;
+        var fullName = body.fullName;
+        var fbAccesToken = body.fbAccesToken;
+        var textPass = (generateConfirmToken()).slice(0, 6);
+        var pass = textPass;
+        var shaSum = crypto.createHash('sha256');
+        var searchQuery = {};
+        var userData;
+        var user;
+
+        if (!body || !email || !fbId) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+
+        searchQuery.fbId = fbId;
+
+
+        if (!email) {
+            email = null;
+        } else {
+            searchQuery = {
+                $or: [{'email': email}, {'fbId': fbId}]
+            };
+        }
+
+        //TODO check fbID and email by accesToken
+
+        //TODO upload avatar by url with  image module uploader
+
+        shaSum.update(pass);
+        pass = shaSum.digest('hex');
+
+        userData = {
+            email: email,
+            pass: pass,
+            fullName: fullName,
+            confirmToken: null,
+            fbId: fbId,
+            avatar: avatar
+        };
+
+        //TODO check email or fbid
+        User
+            .findOne(searchQuery)
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+                if (model) {
+                    model.email = userData.email;
+                    model.pass = userData.pass;
+                    model.fullName = userData.fullName;
+                    model.fbId = userData.fbId;
+                    model.avatar = userData.avatar;
+                    model.confirmToken = null;
+                    model.updatedAt = new Date();
+                    model
+                        .save(function (err, model) {
+                            if (err) {
+                                return res.status(500).send({error: err});
+                            }
+                            console.log('update Model');
+                            console.log(model);
+                            return session.register(req, res, model._id.toString(), model.userType);
+                        });
+
+                } else {
+
+                    user = new User(userData);
+                    user
+                        .save(function (err, model) {
+                            if (err) {
+                                return res.status(500).send({error: err});
+                            }
+                            console.log('create Model');
+                            console.log(model);
+
+                            if (email) {
+                                prepareNotificationEmail(model, textPass, function (err, result) {
+                                });
+                            }
+
+                            return session.register(req, res, model._id.toString(), model.userType);
+                        });
+                }
+            });
+    };
+
     this.signIn = function (req, res, next) {
 
         var body = req.body;
@@ -202,7 +281,7 @@ var User = function (db) {
             .findOne({email: email, pass: pass})
             .exec(function (err, model) {
                 if (err) {
-                    return next(err)
+                    return next(err);
                 }
 
                 if (!model) {
@@ -343,7 +422,7 @@ var User = function (db) {
                     if (err) {
                         return next(err);
                     }
-                    res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+                    res.status(200).send({success: RESPONSE.AUTH.FORGOT_SEND_EMAIL});
                 });
             });
     };
@@ -386,9 +465,9 @@ var User = function (db) {
                     return next(err);
                 }
                 if (!model) {
-                    return res.status(404).send({error:  RESPONSE.ON_ACTION.NOT_FOUND});
+                    return res.status(404).send({error: RESPONSE.ON_ACTION.NOT_FOUND});
                 }
-                return res.status(200).send({error:  RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
+                return res.status(200).send({success: RESPONSE.AUTH.REGISTER_EMAIL_CONFIRMED});
             });
     };
 
@@ -475,7 +554,7 @@ var User = function (db) {
             });
     };
 
-    this.getUserProfileBySession = function ( req, res, next ) {
+    this.getUserProfileBySession = function (req, res, next ) {
         var userId = req.session.uId;
 
         getUserById(userId, function (err, profile) {
@@ -486,6 +565,34 @@ var User = function (db) {
             }
             return res.status(200).send(profile);
         });
+    };
+
+    this.updateUserProfileBySession = function (req, res, next ) {
+        var userId = req.session.uId;
+        var icon = req.body.icon;
+        var base64Data = icon.replace(/^data:image\/png;base64,/, "");
+        var newPath = __dirname + "/../public/uploads/uploadedFileName.png";
+
+        //TODO check icon if empty
+
+        //TODO save icon img type, in filename
+
+
+
+        require("fs").writeFile(newPath, base64Data, 'base64', function(err) {
+            console.log(err);
+        });
+
+        return res.status(200).send({succes: RESPONSE.ON_ACTION.SUCCESS});
+
+        //getUserById(userId, function (err, profile) {
+        //    profile = profile.toJSON();
+        //
+        //    if (err) {
+        //        return next(err);
+        //    }
+        //    return res.status(200).send(profile);
+        //});
     };
 };
 
