@@ -177,3 +177,101 @@ SyntaxError: Unexpected string
     at _stream_readable.js:908:16
     at process._tickCallback (node.js:355:11)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 15:38:02 GMT+0300 (Финляндия (лето))
+Unexpected token i
+SyntaxError: Unexpected token i
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 15:38:29 GMT+0300 (Финляндия (лето))
+Unexpected token i
+SyntaxError: Unexpected token i
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 15:38:54 GMT+0300 (Финляндия (лето))
+Unexpected token i
+SyntaxError: Unexpected token i
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 15:39:24 GMT+0300 (Финляндия (лето))
+Unexpected token i
+SyntaxError: Unexpected token i
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 15:39:28 GMT+0300 (Финляндия (лето))
+permission denied
+Error: permission denied
+    at isAdmin (d:\Projects\farmers\handlers\sessions.js:39:15)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at d:\Projects\farmers\node_modules\express-session\index.js:433:7
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Oct 05 2015 16:06:42 GMT+0300 (Финляндия (лето))
+Cannot read property 'toLowerCase' of undefined
+TypeError: Cannot read property 'toLowerCase' of undefined
+    at dellAccountByEmail (d:\Projects\farmers\handlers\users.js:511:56)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:349:14)
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:410:3)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+---------------------------------------------------------------------------------------------------------
