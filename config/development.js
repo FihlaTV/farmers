@@ -10,7 +10,6 @@ process.env.MAIL_USERNAME = 'istvan.nazarovits';
 process.env.MAIL_PASSWORD = 'sendGridpassw365';
 
 process.env.IMAGE_UPLOADER_CONFIG = {
-    type: 'AmazonS3',
 
 };
 
