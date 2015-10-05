@@ -11,8 +11,6 @@ module.exports = function (db) {
         fullName: String,
         location: String,
         mergeNames: [],
-        addedBy: String,
-        approved: Boolean,
         logo: String,
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}
