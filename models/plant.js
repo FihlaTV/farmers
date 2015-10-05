@@ -10,7 +10,7 @@ module.exports = function (db) {
         jewishNames: Array,
         image: String,
         isNewPlant: {
-            type:Boolean,
+            type:  Boolean,
             default: false
         }
     }, {

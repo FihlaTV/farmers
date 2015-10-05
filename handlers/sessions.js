@@ -32,11 +32,11 @@ var Session = function (db) {
     this.isAdmin = function (req, res, next) {
         var err;
 
-        if (req.session && req.session.admin) {
+        if (req.session && req.session.type == 'Admin') {
             return next()
         }
 
-        err = new Error('permission denied');
+        err = new Error('Permission denied');
         err.status = 403;
 
         next (err);

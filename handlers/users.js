@@ -17,9 +17,16 @@ var User = function (db) {
     var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
+    var imageUploaderConfig = {
+        type: 'FileSystem',
+        directory: 'public/uploads/'
+    };
+
+    var imageUploader = require('../helpers/imageUploader/imageUploader.js')(imageUploaderConfig);
 
     function generateConfirmToken() {
         var randomPass = require('../helpers/randomPass');
+
         return randomPass.generate();
     }
 
@@ -501,7 +508,7 @@ var User = function (db) {
 
     //TODO only for test - delete this
     this.dellAccountByEmail = function(req, res, next) {
-        var email = req.body.email ? req.body.email.toLowerCase() : null;
+        var email = req.params.email ? req.params.email.toLowerCase() : null;
 
         if (!email) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
@@ -516,7 +523,23 @@ var User = function (db) {
                     return next(err);
                 }
 
-                console.log('Account deleted');
+                console.log('Account deleted by email');
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+            });
+    };
+
+    //TODO only for test - delete this
+    this.dellAccountBySession = function(req, res, next) {
+        var userId = req.session.uId;
+
+        User
+            .findById(userId)
+            .remove()
+            .exec(function (err, model) {
+                if (err) {
+                    return next(err);
+                }
+                console.log('Account deleted by session');
                 return session.kill(req, res, next);
             });
     };
@@ -544,6 +567,10 @@ var User = function (db) {
         //TODO password validation when customer will describe the requirements for a password
         if (newPass !== confirmPass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': password and confirmation are not equal'});
+        }
+
+        if (!passRegExp.test(newPass)) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': password is not valid. Must consist of (A-Z, a-z, 0-9) and length 6-35 symbols '});
         }
 
         //TODO check this condition in future

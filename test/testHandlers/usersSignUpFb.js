@@ -36,8 +36,8 @@ describe('FB User SignUp', function () {
         var loginData = USERS.FB_USER_GOOD;
 
         agent
-            .delete('/users/dellAccountByEmail')
-            .send(loginData)
+            .delete('/users/dellAccountByEmail/' + loginData.email)
+            //.send(loginData)
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);

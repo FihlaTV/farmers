@@ -338,7 +338,9 @@ module.exports = function (db) {
      *      "updatedAt": "2015-10-02T09:32:53.979Z",
      *      "createdAt": "2015-10-02T09:32:53.979Z",
      *      "marketeer": null,
-     *      "favorites": []
+     *      "favorites": [],
+     *      "newMarketeer": false, // if true - don't show ADD  marketeer screen, marketeer is added but NOT approved
+     *      "marketeer": "561270af9c8fd4643656abd2", // or null if user not select marketeer.  If (marketeer == null) AND (newMarketeer == false) SHOW ADD  marketeer screen
      *      }
      *
      * @method getUserProfileBySession
@@ -354,33 +356,50 @@ module.exports = function (db) {
     /**
      * This __method__  for Developer or Tester to delete account by email and make logOut for kill session
      *
-     * __URI:__ ___`/users/dellAccountByEmail`___
+     * __URI:__ ___`/users/dellAccountByEmail/`___
      *
      * __METHOD:__ ___`DELETE`___
      *
      * __Request:__
+     * ___`/users/dellAccountByEmail/mail@mail.ru`___
      *
-     *      Body:
-     *      email
      *
      * __Response:__
      *
-     *      status (200) JSON object: {"success": "Logout successful"}
+     *      status (200) JSON object: {"success": "success"}
      *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
      *
-     * @example
-     *      {
-     *          "email": "deletemee@ukr.net",
-     *      }
      *
      * @method dellAccountByEmail
      * @instance
      * @for users
      * @memberOf users
      */
+
     //TODO delete route after tests complete
     //TODO Warning only for testers! Check this end Delete
-    router.delete('/dellAccountByEmail', users.dellAccountByEmail);
+
+    router.delete('/dellAccountByEmail/:email', users.dellAccountByEmail);
+    /**
+     * This __method__  for Developer or Tester to delete account by email and make logOut for kill session
+     *
+     * __URI:__ ___`/users/dellAccountBySession/`___
+     *
+     * __METHOD:__ ___`DELETE`___
+     *
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: {"success": "Logout successful"}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @method dellAccountBySession
+     * @instance
+     * @for users
+     * @memberOf users
+     */
+    router.delete('/dellAccountBySession', users.dellAccountBySession);
 
     return router;
 };
