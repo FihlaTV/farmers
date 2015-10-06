@@ -14,6 +14,9 @@ var User = function (db) {
     var path = require('path');
     var mailer = require('../helpers/mailer');
     var crypto = require('crypto');
+    var http = require('http');
+    var https = require('https');
+    var request = require('request');
     var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
@@ -28,6 +31,36 @@ var User = function (db) {
         var randomPass = require('../helpers/randomPass');
 
         return randomPass.generate();
+    }
+
+    function getUserFbInfo(urlPlusIdPlsuToken) {
+        return request(urlPlusIdPlsuToken, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                //console.log(body) // Show the HTML for the Google homepage.
+                return JSON.parse(body);
+            } else {
+                return {error: error};
+            }
+        })
+        //var requester;
+        //if (/^https/.test(urlPlusIdPlsuToken)) {
+        //    requester = https;
+        //} else {
+        //    requester = http;
+        //}
+
+        //requester.get(urlPlusIdPlsuToken, function(res) {
+        //    if (res){
+        //
+        //    } else {
+        //
+        //    }
+        //}).on('error', function(err) {
+        //    console.log('error:', err);
+        //    //if (callback && typeof callback === 'function') {
+        //    //    callback(err);
+        //    //}
+        //});
     }
 
     function prepareChangePassEmail(model, confirmToken, callback) {
@@ -200,7 +233,8 @@ var User = function (db) {
         var searchQuery = {};
         var userData;
         var user;
-
+        var checkFBurl;
+        var userFbInfo;
         console.log('fbAccessToken: ', fbAccessToken);
 
         if (!body || !fbId) {
@@ -218,7 +252,18 @@ var User = function (db) {
             };
         }
 
-        //TODO check fbID and email by accesToken
+        checkFBurl = 'https://graph.facebook.com/' + fbId + '?fields=picture,email,name&access_token=' + fbAccessToken;
+
+        //TODO check fbID and email by accessToken
+        //userFbInfo = getUserFbInfo(checkFBurl);
+        //console.dir(userFbInfo);
+        //
+        //if (fullName !== userFbInfo.name) {
+        //    return res.status(400).send({error: 'bad send fullName vs fb.name, must be ' + userFbInfo.name});
+        //}
+        //
+        //console.dir(userFbInfo);
+
 
         //TODO upload avatar by url with  image module uploader
 
