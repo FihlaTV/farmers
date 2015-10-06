@@ -38,7 +38,7 @@ module.exports = {
     },
 
     FB_USER_GOOD: {
-        "email": "smsspam@ukr.net",
+        "email": "taras.zmiy@gmail.com",
         "fullName": "Taras Zmiy",
         "avatar": "https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&oe=5692005F",
         "fbId": "1899544646937849",

@@ -64,50 +64,57 @@ describe('FB User SignUp', function () {
             });
     });
 
-    //it('User Sign Up FB with already USED EMAIL (Sync)', function (done) {
-    //    var loginData = USERS.USER_GOOD_CREDENRIALS;
-    //
-    //    agent
-    //        .post('/users/register')
-    //        .send(loginData)
-    //        .expect(400)
-    //        .end(function (err, res) {
-    //            console.dir(res.body);
-    //            if (err) {
-    //                return done(err);
-    //            }
-    //            done();
-    //        });
-    //});
-    //
-    //it('New user Sign Up FB (without email)', function (done) {
-    //    var loginData = USERS.USER_GOOD_CREDENRIALS;
-    //    var lastUser;
-    //
-    //    preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {}, {}, function (err, models){
-    //        if (err) {
-    //            return done(err);
-    //        }
-    //        if (!models) {
-    //            return done(CONST.MODELS.USER + ' is empty');
-    //        }
-    //
-    //        lastUser = models[0];
-    //
-    //        console.log('lastUser :', lastUser);
-    //        agent
-    //            .get('/users/confirmEmail/' + lastUser.confirmToken)
-    //            .expect(200)
-    //            .end(function (err, res) {
-    //                console.dir(res.body);
-    //                if (err) {
-    //                    return done(err);
-    //                }
-    //                done();
-    //            });
-    //    });
-    //});
-    //
+    it('ANTI Hacker user Sign Up FB (without email) or bad email', function (done) {
+        var loginData = USERS.FB_USER_GOOD;
+        loginData.email = null;
+
+        agent
+            .post('/users/signUpFb')
+            .send(loginData)
+            .expect(400)
+            .end(function (err, res) {
+                console.dir(res.body);
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
+    it('ANTI Hacker user Sign Up FB with BAD TOKEN', function (done) {
+        var loginData = USERS.FB_USER_GOOD;
+        loginData.fbAccessToken += "ee";
+
+        agent
+            .post('/users/signUpFb')
+            .send(loginData)
+            .expect(400)
+            .end(function (err, res) {
+                console.dir(res.body);
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+    it('ANTI Hacker user Sign Up FB with BAD fbId', function (done) {
+        var loginData = USERS.FB_USER_GOOD;
+        loginData.fbId += "11";
+
+        agent
+            .post('/users/signUpFb')
+            .send(loginData)
+            .expect(400)
+            .end(function (err, res) {
+                console.dir(res.body);
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
+
     //it('User Sign Up FB with BAD TOKEN', function (done) {
     //    var loginData = USERS.USER_GOOD_CREDENRIALS;
     //

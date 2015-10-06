@@ -11,6 +11,7 @@ var User = function (db) {
 
     var User = db.model('User');
     var mongoose = require('mongoose');
+    var async = require('async');
     var path = require('path');
     var mailer = require('../helpers/mailer');
     var crypto = require('crypto');
@@ -34,14 +35,18 @@ var User = function (db) {
     }
 
     function getUserFbInfo(urlPlusIdPlsuToken) {
-        return request(urlPlusIdPlsuToken, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                //console.log(body) // Show the HTML for the Google homepage.
-                return JSON.parse(body);
-            } else {
-                return {error: error};
-            }
-        })
+        return function (callback) {
+            request(urlPlusIdPlsuToken, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    return callback(null, JSON.parse(body));
+                }
+                if (!error && (response.statusCode == 400 || response.statusCode == 500) ) {
+                    return callback(JSON.parse(body));
+                } else  {
+                    return callback(error + ' error');
+                }
+            });
+        };
         //var requester;
         //if (/^https/.test(urlPlusIdPlsuToken)) {
         //    requester = https;
@@ -235,6 +240,7 @@ var User = function (db) {
         var user;
         var checkFBurl;
         var userFbInfo;
+        var tasks = [];
         console.log('fbAccessToken: ', fbAccessToken);
 
         if (!body || !fbId) {
@@ -254,81 +260,83 @@ var User = function (db) {
 
         checkFBurl = 'https://graph.facebook.com/' + fbId + '?fields=picture,email,name&access_token=' + fbAccessToken;
 
-        //TODO check fbID and email by accessToken
-        //userFbInfo = getUserFbInfo(checkFBurl);
-        //console.dir(userFbInfo);
-        //
-        //if (fullName !== userFbInfo.name) {
-        //    return res.status(400).send({error: 'bad send fullName vs fb.name, must be ' + userFbInfo.name});
-        //}
-        //
-        //console.dir(userFbInfo);
+        //TODO check fb accessToken if it is Farmers APP Token. If need.
 
+        tasks.push(getUserFbInfo(checkFBurl));
 
-        //TODO upload avatar by url with  image module uploader
+        async.waterfall(tasks, function (err, userFbInfo) {
+            //console.dir('userFbInfo: ',userFbInfo);
+            if (err) {
+                return res.status(400).send({error: err});
+            }
+            if (fullName !== userFbInfo.name) {
+                return res.status(400).send({error: ' send bad fullName vs fb.name'});
+            }
+            if (userFbInfo.email && email !== userFbInfo.email) {
+                return res.status(400).send({error: ' send bad email vs fb.email'});
+            }
 
-        shaSum.update(pass);
-        pass = shaSum.digest('hex');
+            shaSum.update(pass);
+            pass = shaSum.digest('hex');
 
-        userData = {
-            email: email,
-            pass: pass,
-            fullName: fullName,
-            confirmToken: null,
-            fbId: fbId,
-            avatar: avatar
-        };
+            userData = {
+                email: email,
+                pass: pass,
+                fullName: fullName,
+                confirmToken: null,
+                fbId: fbId,
+                avatar: avatar
+            };
 
-        User
-            .findOne(searchQuery)
-            .exec(function (err, model) {
-                if (err) {
-                    return res.status(500).send({error: err});
-                }
-                if (model) {
-                    model.email = userData.email;
-                    model.pass = userData.pass;
-                    model.fullName = userData.fullName;
-                    model.fbId = userData.fbId;
-                    model.avatar = userData.avatar;
-                    model.confirmToken = null;
-                    model.updatedAt = new Date();
-                    model
-                        .save(function (err, model) {
-                            if (err) {
-                                return res.status(500).send({error: err});
-                            }
-                            console.log('update Model');
-                            console.log(model);
-                            return session.register(req, res, model._id.toString(), model.userType);
-                        });
+            User
+                .findOne(searchQuery)
+                .exec(function (err, model) {
+                    if (err) {
+                        return res.status(500).send({error: err});
+                    }
+                    if (model) {
+                        model.email = userData.email;
+                        model.pass = userData.pass;
+                        model.fullName = userData.fullName;
+                        model.fbId = userData.fbId;
+                        model.avatar = userData.avatar;
+                        model.confirmToken = null;
+                        model.updatedAt = new Date();
+                        model
+                            .save(function (err, model) {
+                                if (err) {
+                                    return res.status(500).send({error: err});
+                                }
+                                console.log('update Model');
 
-                } else {
+                                return session.register(req, res, model._id.toString(), model.userType);
+                            });
 
-                    user = new User(userData);
-                    user
-                        .save(function (err, model) {
-                            if (err) {
-                                return res.status(500).send({error: err});
-                            }
-                            console.log('create Model');
-                            console.log(model);
-                            console.log('email:', email);
+                    } else {
 
-                            if (email) {
-                                prepareNotificationFb(model, textPass, function (err, result) {
-                                    if (err) {
-                                        console.log('mail err :', err);
-                                    } else {
-                                        console.log('Notification mail created');
-                                    }
-                                });
-                            }
+                        user = new User(userData);
+                        user
+                            .save(function (err, model) {
+                                if (err) {
+                                    return res.status(500).send({error: err});
+                                }
+                                console.log('create Model');
 
-                            return session.register(req, res, model._id.toString(), model.userType);
-                        });
-                }
-            });
+                                if (email) {
+                                    prepareNotificationFb(model, textPass, function (err, result) {
+                                        if (err) {
+                                            console.log('mail err :', err);
+                                        } else {
+                                            console.log('Notification mail created');
+                                        }
+                                    });
+                                }
+
+                                return session.register(req, res, model._id.toString(), model.userType);
+                            });
+                    }
+                });
+        });
     };
 
     this.signIn = function (req, res, next) {
@@ -463,7 +471,6 @@ var User = function (db) {
                 if (err) {
                     return res.status(400).send({error: err});
                 }
-                //console.log(model.toJSON());
                 return res.status(200).send(model.toJSON().favorites);
             })
     };
@@ -698,8 +705,6 @@ var User = function (db) {
         //TODO check icon if empty
 
         //TODO save icon img type, in filename
-
-
 
         require("fs").writeFile(newPath, base64Data, 'base64', function(err) {
             console.log(err);
