@@ -17,12 +17,8 @@ describe('FB User SignUp', function () {
     before(function (done) {
 
         console.log('>>> before');
-
-
-
         async.series([
-            //preparingDb.dropCollection('Users')
-            //preparingDb.toFillUsers(1)
+
         ], function (err, results) {
             if (err) {
                 return done(err);
@@ -97,6 +93,7 @@ describe('FB User SignUp', function () {
                 done();
             });
     });
+
     it('ANTI Hacker user Sign Up FB with BAD fbId', function (done) {
         var loginData = USERS.FB_USER_GOOD;
         loginData.fbId += "11";
@@ -113,38 +110,4 @@ describe('FB User SignUp', function () {
                 done();
             });
     });
-
-
-    //it('User Sign Up FB with BAD TOKEN', function (done) {
-    //    var loginData = USERS.USER_GOOD_CREDENRIALS;
-    //
-    //    agent
-    //        .post('/users/signIn')
-    //        .send(loginData)
-    //        .expect(200)
-    //        .end(function (err, res) {
-    //            console.dir(res.body);
-    //            if (err) {
-    //                return done(err);
-    //            }
-    //            done();
-    //        });
-    //});
-    //
-    //it('User Sign Up FB with BAD FB.ID', function (done) {
-    //    var loginData = USERS.USER_BAD_PASS;
-    //
-    //    agent
-    //        .post('/users/signIn')
-    //        .send(loginData)
-    //        .expect(400)
-    //        .end(function (err, res) {
-    //            console.dir(res.body);
-    //            if (err) {
-    //                return done(err)
-    //            }
-    //            done();
-    //        });
-    //});
-
 });
