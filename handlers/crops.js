@@ -13,14 +13,17 @@ var Crop = function (db) {
 
     var Crop = db.model(CONST.MODELS.CROP);
 
-    this.getList = function (req, res, next) {
-        Crop.find({}, function (err, docs) {
-            if (err) {
-                return next(err);
-            } else {
-                res.status(200).send(docs);
-            }
-        });
+    this.getCropList = function (req, res, next) {
+        Crop
+            .find({})
+            .select('englishName displayName')
+            .exec(function (err, docs) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.status(200).send(docs);
+                }
+            });
     };
 
     this.adminImportFromCsv = function (req, res, next) {
@@ -73,7 +76,8 @@ var Crop = function (db) {
                         englishName: item[2],
                         displayName: item[3],
                         wholeSaleNames: item[0],
-                        plantCouncilNames: item[1]
+                        plantCouncilNames: item[1],
+                        image: null
                     };
                     var crop = new Crop(data);
 

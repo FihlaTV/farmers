@@ -1,6 +1,7 @@
 /**
  * Provides ability for:
  *  -   User's Marketeer: ADD/ GET
+ *  - Admin CRUD Crops List
  *
  * @class marketeer
  *

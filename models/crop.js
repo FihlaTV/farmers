@@ -12,7 +12,7 @@ module.exports = function (db) {
         displayName: String,
         wholeSaleNames: [],
         plantCouncilNames: [],
-        image: String
+        image: {type: String, default: null}
     }, {
         collection: CONST.MODELS.CROP + 's'
     });
