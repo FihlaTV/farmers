@@ -108,13 +108,15 @@ var Admin = function (db) {
 
     this.signIn = function (req, res, next) {
         var body = req.body;
-        var email = body.email.toLowerCase();
+        var email = body.email;
         var pass = body.pass;
         var shaSum = crypto.createHash('sha256');
 
         if (!body || !email || !pass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
+
+        email = email.toLowerCase();
 
         if (!emailRegExp.test(email)) {
             return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});

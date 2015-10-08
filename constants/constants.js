@@ -17,7 +17,9 @@ module.exports = {
 
     CSV_FILES: {
         VEGETABLES_WITH_PRICES_2013: 'csv/veg_prices_2013.csv',
-        VEGETABLES_WITH_PRICES_2014: 'csv/veg_prices_2014.csv'
+        VEGETABLES_WITH_PRICES_2014: 'csv/veg_prices_2014.csv',
+        MARKETEER: 'csv/marketeers.csv',
+        CROP_LIST: 'csv/cropList.csv'
     },
 
     MODELS: {
@@ -26,6 +28,7 @@ module.exports = {
         MARKETEER: 'Marketeer',
         NEW_MARKETEER: 'NewMarketeer',
         PLANT: 'Plant',
+        CROP: 'Crop',
         SESSION: 'Session',
         IMAGE: 'Image'
     },

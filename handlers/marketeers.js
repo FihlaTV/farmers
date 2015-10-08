@@ -2,6 +2,10 @@ var _ = require('lodash');
 var SessionHandler = require('./sessions');
 var RESPONSE = require('../constants/response');
 var CONST = require('../constants/constants');
+var csv = require('csv');
+var fs = require('fs');
+var async = require('async');
+
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
@@ -16,14 +20,13 @@ var Marketeer = function (db) {
     var path = require('path');
     var session = new SessionHandler(db);
 
-    this.AdminCreateNewMarketeer = function (req, res, next) {
+    this.adminCreateNewMarketeer = function (req, res, next) {
         var fullName = req.body.fullName;
         var location = req.body.location;
         var logo = req.body.logo;
         var data = {
             fullName: fullName,
-            location: location,
-            logo: logo
+            location: location
         };
         var marketeer = new Marketeer(data);
 
@@ -38,12 +41,52 @@ var Marketeer = function (db) {
             });
     };
 
-    this.AdminAddNewMarketeer = function (req, res, next) {
+    this.adminAddNewMarketeer = function (req, res, next) {
         return res.status(500).send({error: 'NOT Implemented'});
     };
 
-    this.AdminMergeMarketeer = function (req, res, next) {
+    this.adminMergeMarketeer = function (req, res, next) {
         return res.status(500).send({error: 'NOT Implemented'});
+    };
+
+    this.adminImportFromCsv = function (req, res, next) {
+        var csvFileName =  CONST.CSV_FILES.MARKETEER;
+
+        fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+
+            csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                async.each(parsedData, function (item, callback) {
+                    var data = {
+                        fullName: item[1],
+                        location: item[0]
+                    };
+                    var marketeer = new Marketeer(data);
+
+                    marketeer
+                        .save(function (err, model) {
+                            if (err) {
+                                callback('DB err:' + err);
+                            } else {
+                                callback();
+                            }
+                        });
+                }, function (err) {
+                    if (err) {
+                        return res.status(400).send({error: err});
+                    }
+
+                    console.log('All items have been processed successfully');
+                    return res.status(200).send({success: parsedData.length + ' marketeers was imported'});
+                });
+            });
+        });
     };
 
 
