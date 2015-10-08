@@ -2,15 +2,23 @@ var request = require("request");
 var moment = require("moment");
 var async = require('async');
 var PlantsHelper = require('../helpers/plants');
+var CONST = require('../constants/constants');
 
 module.exports = function (db) {
     var Plant = db.model('Plant');
     var Price = db.model('Price');
+    var ParsedBody = db.model(CONST.MODELS.PARSED_BODY);
 
     var plantsHelper = new PlantsHelper(db);
 
+
+
     function getDateByUrl(url, cb) {
         request(url, function (err, response, body) {
+            var parsedBody = new ParsedBody({body: body});
+
+            parsedBody.save()
+
             if (!body){
                 return cb(new Error('body is empty (check your connection to internet)'));
             }

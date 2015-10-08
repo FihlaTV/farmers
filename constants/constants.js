@@ -6,11 +6,15 @@ module.exports = {
 
     URL_APIS: {
         PLANTS_URL: {
-            API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            //API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            API_URL: 'https://www.kimonolabs.com/api/azwrvkw8?apikey=iixRhkE8EfnDKY6LfiqLl4y4JNb8ymeh',
             SOURCE: 'http://plants.moonsitesoftware.co.il/index.aspx'
         },
         MOAG_URL: {
             API_URL: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            API_URL_1: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            API_URL_2: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
+            API_URL_3: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
             SOURCE: 'http://www.prices.moag.gov.il/prices/veg_1.htm'
         }
     },
@@ -30,7 +34,9 @@ module.exports = {
         PLANT: 'Plant',
         CROP: 'Crop',
         SESSION: 'Session',
-        IMAGE: 'Image'
+        IMAGE: 'Image',
+        //TODO it need  to detect and fix server crash when not JSON data received, and parse crash. Delete this in future
+        PARSED_BODY: 'ParsedBody'
     },
     ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
 };
