@@ -5,19 +5,16 @@ var CONST = require('../constants/constants');
 var csv = require('csv');
 var fs = require('fs');
 var async = require('async');
-
-//var PlantsHelper = require("../helpers/plants");
-//var ValidationHelper = require("../helpers/validation");
-
+var mongoose = require('mongoose');
+var path = require('path');
+var mailer = require('../helpers/mailer');
 
 var Marketeer = function (db) {
     'use strict';
 
     var Marketeer = db.model(CONST.MODELS.MARKETEER);
-    var NewMarketeer = db.model(CONST.MODELS.NEW_MARKETEER);
+    var Notification = db.model(CONST.MODELS.NOTIFICATION);
     var User = db.model(CONST.MODELS.USER);
-    var mongoose = require('mongoose');
-    var path = require('path');
     var session = new SessionHandler(db);
 
     this.adminCreateNewMarketeer = function (req, res, next) {
@@ -93,6 +90,7 @@ var Marketeer = function (db) {
     this.addMarketeer = function (req, res, next) {
         var marketeerFullName = req.body.fullName;
         var userId = req.session.uId;
+        var notification;
 
         Marketeer
             .findOne({"fullName": marketeerFullName})
@@ -118,8 +116,6 @@ var Marketeer = function (db) {
                         });
                 } else {
                     console.log(userId);
-
-
                     User
                         .findOneAndUpdate({'_id': userId}, {'newMarketeer': true})
                         .exec(function (err, model) {
@@ -128,9 +124,10 @@ var Marketeer = function (db) {
                             }
                             console.log('New marketeer: ', model);
 
-                            newMarketeer = new NewMarketeer({'user': userId, 'fullName': marketeerFullName});
+                            mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User add marketeer that is not in marketeers list. Added name:  ' + marketeerFullName);
 
-                            newMarketeer
+                            notification = new Notification({'user': userId, 'marketeerName': marketeerFullName, type: 'newMarketeer'});
+                            notification
                                 .save(function (err, model) {
                                     if (err) {
                                         return res.status(500).send({error: err});

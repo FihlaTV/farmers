@@ -1,4 +1,7 @@
+var CONST = require('../constants/constants');
+
 module.exports = new function () {
+    'use strict';
 
     var nodemailer = require('nodemailer');
     var sgTransport = require('nodemailer-sendgrid-transport');
@@ -11,6 +14,7 @@ module.exports = new function () {
 
         var attachments = [];
         var attachment = options.attachment;
+        var encoding = 'utf8';
 
         var mailOptions = {
             from: options.from,
@@ -46,6 +50,25 @@ module.exports = new function () {
         }
 
         deliver(mailOptions, callback);
+    };
+
+    this.sendEmailNotificationToAdmin = function (title, notification) {
+        var templateName = 'public/templates/mail/notification.html';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+
+        var mailOptions = {
+            from: from,
+            mailTo: CONST.DEFAULT_ADMIN.email,
+            title: title,
+            templateName: templateName,
+            templateData: {
+                data: {
+                    notification: notification
+                }
+            }
+        };
+
+        this.sendReport(mailOptions, function () {});
     };
 
     function deliver(mailOptions, callback) {

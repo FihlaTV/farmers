@@ -8,7 +8,7 @@ module.exports = function(db){
     require('./price')(db);
     require('./parsedBody')(db);
     require('./marketeer')(db);
-    require('./newMarketeer')(db);
+    require('./notification')(db);
     require('./user')(db);
     require('./admin')(db);
 };

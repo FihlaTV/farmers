@@ -4,6 +4,9 @@ module.exports = {
         URL_STRING_DATE: /([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])/ //yyyy-MM-DD
     },
 
+    WHOLE_SALE_MARKET: 'Wholesale',
+    PLANT_COUNCIL: 'PlantCouncil',
+
     URL_APIS: {
         PLANTS_URL: {
             //API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
@@ -30,13 +33,22 @@ module.exports = {
         ADMIN: 'Admin',
         USER: 'User',
         MARKETEER: 'Marketeer',
-        NEW_MARKETEER: 'NewMarketeer',
+        NOTIFICATION: 'Notification',
         PLANT: 'Plant',
+        PRICE: 'Price',
         CROP: 'Crop',
         SESSION: 'Session',
         IMAGE: 'Image',
         //TODO it need  to detect and fix server crash when not JSON data received, and parse crash. Delete this in future
         PARSED_BODY: 'ParsedBody'
     },
-    ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+
+    ALPHABETICAL_FOR_TOKEN: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890',
+
+    DEFAULT_ADMIN: {
+        login: 'defaultAdmin',
+        email: 'smsspam@ukr.net'
+        //email pass: smsspam
+        //pass: 'farmersAdmin'
+    }
 };
