@@ -2,6 +2,10 @@ var _ = require('lodash');
 var SessionHandler = require('./sessions');
 var RESPONSE = require('../constants/response');
 var CONST = require('../constants/constants');
+var mongoose = require('mongoose');
+var path = require('path');
+var mailer = require('../helpers/mailer');
+var crypto = require('crypto');
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
@@ -11,10 +15,6 @@ var Admin = function (db) {
 
     var User = db.model('User');
     var Admin = db.model('Admin');
-    var mongoose = require('mongoose');
-    var path = require('path');
-    var mailer = require('../helpers/mailer');
-    var crypto = require('crypto');
     var session = new SessionHandler(db);
     var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var passRegExp = /^[\w\.@]{6,35}$/;
@@ -49,7 +49,7 @@ var Admin = function (db) {
 
     function prepareCreateAdminEmail(model, pass, callback) {
         var templateName = 'public/templates/mail/notification.html';
-        var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
+        var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
 
         var mailOptions = {
             from: from,
@@ -81,10 +81,9 @@ var Admin = function (db) {
                 pass = shaSum.digest('hex');
 
                 admin = new Admin({
-                    login: 'defaultAdmin',
+                    login: CONST.DEFAULT_ADMIN.login,
                     pass: pass,
-                    email: 'smsspam@ukr.net',
-                    updatedAt: new Date()
+                    email:  CONST.DEFAULT_ADMIN.email
                 });
 
                 if (!model) {
@@ -108,13 +107,15 @@ var Admin = function (db) {
 
     this.signIn = function (req, res, next) {
         var body = req.body;
-        var email = body.email.toLowerCase();
+        var email = body.email;
         var pass = body.pass;
         var shaSum = crypto.createHash('sha256');
 
         if (!body || !email || !pass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
+
+        email = email.toLowerCase();
 
         if (!emailRegExp.test(email)) {
             return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});

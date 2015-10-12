@@ -3,7 +3,7 @@
 module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
-    var plantsRouter = require('./plants')(db);
+    var cropsRouter = require('./crops')(db);
     var usersRouter = require('./users')(db);
     var marketeersRouter = require('./marketeers')(db);
     var adminRouter = require('./admin')(db);
@@ -15,7 +15,7 @@ module.exports = function(app, db){
         res.status(200).send( 'Express start succeed' );
     });
 
-    app.use('/plants', plantsRouter);
+    app.use('/crops', cropsRouter);
     app.use('/users', usersRouter);
     app.use('/marketeers', marketeersRouter);
     app.use('/admin', adminRouter);

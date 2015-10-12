@@ -1,6 +1,7 @@
 /**
  * Provides ability for:
  *  -   User's Marketeer: ADD/ GET
+ *  - Admin CRUD Crops List
  *
  * @class marketeer
  *
@@ -17,8 +18,41 @@ module.exports = function (db) {
     var marketeers = new MarketeerHandler(db);
     var session = new SessionHandler(db);
 
-    router.route('/')
+    router.route('/bySession')
 
+    /**
+     * This __method__  for user add marketeer
+     *
+     * __URI:__ ___`/marketeers/bySession`___
+     *
+     * __METHOD:__ ___`GET`___
+     *
+     * __Request:__
+     *
+     *
+     * __Response:__
+     *
+     *      status (200) || 201 JSON object: { object }
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      {
+     *      "_marketeer": "56162b75c1d2b4088ee98aea",
+     *      "fullName": "??? ???? ???? ????'",
+     *      "location": "???? ?????",
+     *      "newMarketeer": false,
+     *      "canChangeMarketeer": true
+     *      }
+     *
+     * @method getMarketeerBySession
+     * @instance
+     * @for marketeer
+     * @memberOf marketeer
+     */
+        .get(session.isAuthenticatedUser, marketeers.getMarketeerBySession);
+
+    router.route('/')
     /**
      * This __method__  for user add marketeer
      *
@@ -81,9 +115,12 @@ module.exports = function (db) {
 
         .get(session.isAuthenticatedUser, marketeers.getMarketeerList);
 
-    router.post('/create', session.isAdmin, marketeers.AdminCreateNewMarketeer);
-    router.post('/merge', session.isAdmin, marketeers.AdminMergeMarketeer);
-    router.post('/add', session.isAdmin, marketeers.AdminAddNewMarketeer);
+    router.post('/create', session.isAdmin, marketeers.adminCreateNewMarketeer);
+    router.post('/merge', session.isAdmin, marketeers.adminMergeMarketeer);
+    router.post('/add', session.isAdmin, marketeers.adminAddNewMarketeer);
+
+    //import "marketeers.csv" from /csv/ folder... TODO it on new server
+    router.get('/import', session.isAdmin, marketeers.adminImportFromCsv);
 
     return router;
 };
