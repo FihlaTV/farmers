@@ -140,7 +140,6 @@ var Marketeer = function (db) {
     };
 
     this.getMarketeerList = function (req, res, next) {
-
         Marketeer
             .find()
             .lean()
@@ -163,6 +162,30 @@ var Marketeer = function (db) {
                 return res.status(200).send(marketeerList);
             })
     };
+
+    this.getMarketeerBySession = function (req, res, next) {
+        var userId = req.session.uId;
+        var resultObj = {};
+
+        User
+            .findById(userId)
+            .populate({path: 'marketeer', select: '_id fullName location'})
+            .lean()
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+                console.log('Update marketeer: ', model);
+                 if (model.marketeer) {
+                     resultObj._marketeer = model.marketeer._id;
+                     resultObj.fullName = model.marketeer.fullName;
+                     resultObj.location = model.marketeer.location;
+                 }
+                resultObj.newMarketeer = model.newMarketeer;
+                resultObj.canChangeMarketeer = model.canChangeMarketeer;
+                return res.status(200).send(resultObj);
+            });
+    }
 };
 
 module.exports = Marketeer;

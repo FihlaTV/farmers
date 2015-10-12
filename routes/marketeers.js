@@ -18,8 +18,41 @@ module.exports = function (db) {
     var marketeers = new MarketeerHandler(db);
     var session = new SessionHandler(db);
 
-    router.route('/')
+    router.route('/bySession')
 
+    /**
+     * This __method__  for user add marketeer
+     *
+     * __URI:__ ___`/marketeers/bySession`___
+     *
+     * __METHOD:__ ___`GET`___
+     *
+     * __Request:__
+     *
+     *
+     * __Response:__
+     *
+     *      status (200) || 201 JSON object: { object }
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      {
+     *      "_marketeer": "56162b75c1d2b4088ee98aea",
+     *      "fullName": "??? ???? ???? ????'",
+     *      "location": "???? ?????",
+     *      "newMarketeer": false,
+     *      "canChangeMarketeer": true
+     *      }
+     *
+     * @method getMarketeerBySession
+     * @instance
+     * @for marketeer
+     * @memberOf marketeer
+     */
+        .get(session.isAuthenticatedUser, marketeers.getMarketeerBySession);
+
+    router.route('/')
     /**
      * This __method__  for user add marketeer
      *
