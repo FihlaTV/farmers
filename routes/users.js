@@ -339,6 +339,7 @@ module.exports = function (db) {
      *      "createdAt": "2015-10-02T09:32:53.979Z",
      *      "marketeer": null,
      *      "favorites": [],
+     *      "canChangeMarketeer": true // if true - > show Change Marketeer Button
      *      "newMarketeer": false, // if true - don't show ADD  marketeer screen, marketeer is added but NOT approved
      *      "marketeer": "561270af9c8fd4643656abd2", // or null if user not select marketeer.  If (marketeer == null) AND (newMarketeer == false) SHOW ADD  marketeer screen
      *      }

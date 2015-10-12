@@ -23,7 +23,6 @@ module.exports = function (db) {
         }, cb);
     }
 
-
     function getPlantsPricesByDate(date, cb) {
         var year = moment(date).year();
         var dayOfYear = moment(date).dayOfYear();

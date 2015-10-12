@@ -11,7 +11,7 @@ var Plant = function (db) {
     var validationHelper = new ValidationHelper(db);
 
 
-    this.getList = function (req, res, next) {
+    this.getCropList = function (req, res, next) {
         Plant.find({}, function (err, docs) {
             if (err) {
                 return next(err);

@@ -7,15 +7,21 @@ module.exports = function (db) {
     var Schema = mongoose.Schema;
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
-    var NewMarketeer = new Schema({
+    var Notification = new Schema({
         user: {
             type: ObjectId,
             ref: CONST.MODELS.USER
         },
-        fullName: String,
+        type: String, //newMarketeer | changeMarketeer | newCrop |
+        marketeerName: String,
+        oldMarketeerName: String,
+        newCropPriceId:  {
+            type: ObjectId,
+            ref: CONST.MODELS.PRICE
+        },
         createdAt: {type: Date, default: Date.now}
     }, {
-        collection: CONST.MODELS.NEW_MARKETEER + 's'
+        collection: CONST.MODELS.NOTIFICATION + 's'
     });
-    db.model(CONST.MODELS.NEW_MARKETEER, NewMarketeer);
+    db.model(CONST.MODELS.NOTIFICATION, Notification);
 };
