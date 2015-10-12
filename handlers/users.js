@@ -47,25 +47,6 @@ var User = function (db) {
                 }
             });
         };
-        //var requester;
-        //if (/^https/.test(urlPlusIdPlsuToken)) {
-        //    requester = https;
-        //} else {
-        //    requester = http;
-        //}
-
-        //requester.get(urlPlusIdPlsuToken, function(res) {
-        //    if (res){
-        //
-        //    } else {
-        //
-        //    }
-        //}).on('error', function(err) {
-        //    console.log('error:', err);
-        //    //if (callback && typeof callback === 'function') {
-        //    //    callback(err);
-        //    //}
-        //});
     }
 
     function prepareChangePassEmail(model, confirmToken, callback) {

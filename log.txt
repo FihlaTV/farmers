@@ -352,3 +352,7 @@ SyntaxError: Unexpected token s
     at _stream_readable.js:908:16
     at process._tickCallback (node.js:355:11)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://plants.moonsitesoftware.co.il/index.aspx-------------------------------------------------------
+Mon Oct 12 2015 11:38:21 GMT+0300 (Финляндия (лето))
+Error: body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------

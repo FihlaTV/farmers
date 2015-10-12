@@ -17,6 +17,7 @@ module.exports = function (db) {
         avatar: String,
         confirmToken: String,
         marketeer: {type: ObjectId, ref: CONST.MODELS.MARKETEER, default: null},
+        canChangeMarketeer:  {type: Boolean, default: true},
         newMarketeer:  {type: Boolean, default: false},
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}

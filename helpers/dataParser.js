@@ -27,6 +27,7 @@ module.exports = function (db) {
             }
             if ((/</.test(body))) {
                 console.log('!!!! recieved Body has <DOCTYPE>   !!!!');
+                console.log(body);
 
             } else {
                 cb(err, JSON.parse(body));

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Farmer Class: crops</title>
+	<title>Farmer Class: prices</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -44,16 +44,16 @@
 	<div class="col-md-8">
 	
 		<div id="main">
-    		<h1 class="page-title">Class: crops</h1>
+    		<h1 class="page-title">Class: prices</h1>
 			
 
-	<h1 class="page-title">Class: crops</h1>
+	<h1 class="page-title">Class: prices</h1>
 <section>
 
 <header>
     
         <h2>
-        crops
+        prices
         </h2>
         
     
@@ -65,7 +65,7 @@
     
         
 <dt>
-    <h4 class="name" id="crops"><span class="type-signature"></span>new crops<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="prices"><span class="type-signature"></span>new prices<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -75,8 +75,8 @@
     <div class="description">
         <p>Provides ability for:</p>
 <ul>
-<li>User GET Crops List</li>
-<li>Admin CRUD Crops List</li>
+<li>User GET Prices of crops, with different parameters</li>
+<li>User SET Prices of crop for Marketeer</li>
 </ul>
     </div>
     
@@ -164,7 +164,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="getCropList"><span class="type-signature"></span>getCropList<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getLast"><span class="type-signature"></span>getLast<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -173,7 +173,7 @@
     
     <div class="description">
         <p>This <strong>method</strong>  for get CropList</p>
-<p><strong>URI:</strong> <strong><em><code>/crops</code></em></strong></p>
+<p><strong>URI:</strong> <strong><em><code>/getLast</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
 <p><strong>Responses:</strong></p>
 <pre class="prettyprint source"><code> status (200) JSON Array of objects: {[ {} , ...]}
@@ -243,7 +243,7 @@
     
         <h5>Example</h5>
         
-    <pre class="sunlight-highlight-javascript">[     {     &quot;_id&quot;: &quot;561672bbf82da5f410348e1e&quot;,     &quot;englishName&quot;: &quot;Avocado Etinger&quot;, // !!! this field WILL deprecated after testing !!!     &quot;displayName&quot;: &quot;?????? ??????&quot;     },     {     &quot;_id&quot;: &quot;561672bbf82da5f410348e1f&quot;,     &quot;englishName&quot;: &quot;Avocado Ardit&quot;, // !!! this field WILL deprecated after testing !!!     &quot;displayName&quot;: &quot;?????? ?????&quot;     }, ....     ]</pre>
+    <pre class="sunlight-highlight-javascript">[ ...     {     &quot;_crop&quot;: &quot;561672bbf82da5f410348e76&quot;,     &quot;englishName&quot;: &quot;Greenhouse Tomatoes&quot;,     &quot;displayName&quot;: &quot;??????? ????&quot;,     &quot;isInFavorites&quot;: false,     &quot;image&quot;: null,     &quot;prices&quot;: [         {         &quot;source&quot;: {             &quot;type&quot;: &quot;marketeer&quot;,             &quot;name&quot;: &quot;56162b75c1d2b4088ee98aea&quot;                    },          &quot;value&quot;: 0,          &quot;data&quot;: &quot;2015-10-08T12:09:12.000Z&quot;,          &quot;more&quot;: []         },         {         &quot;source&quot;: {             &quot;type&quot;: &quot;site&quot;,             &quot;name&quot;: &quot;Wholesale&quot;         },         &quot;value&quot;: 0,         &quot;data&quot;: &quot;2015-10-08T12:09:12.000Z&quot;,         &quot;more&quot;: []         },         {         &quot;source&quot;: {             &quot;type&quot;: &quot;site&quot;,             &quot;name&quot;: &quot;PlantCouncil&quot;         },         &quot;value&quot;: 12,         &quot;data&quot;: &quot;2015-10-08T12:09:12.000Z&quot;,         &quot;more&quot;: [                 {                 &quot;minPrice&quot;: 11.5,                 &quot;maxPrice&quot;: 12,                 &quot;avgPrice&quot;: 11.75,                 &quot;site&quot;: &quot;PlantCouncil&quot;,                 &quot;name&quot;: &quot;??????? ????????&quot;,                 &quot;date&quot;: &quot;2015-10-08T12:09:12.000Z&quot;                 },                 {                 &quot;minPrice&quot;: 11,                 &quot;maxPrice&quot;: 12,                 &quot;avgPrice&quot;: 11.5,                 &quot;site&quot;: &quot;PlantCouncil&quot;,                 &quot;name&quot;: &quot;??????? ????&quot;,                 &quot;date&quot;: &quot;2015-10-08T12:09:12.000Z&quot;                 }                 ]             }             ]},...     ]</pre>
 
 
     
