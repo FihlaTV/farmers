@@ -132,12 +132,14 @@ var User = function (db) {
         User
             .findOne({_id: userId})
             //.select()
+            .lean()
             .exec(function (err, model) {
                 if (err) {
                     return callback(err);
                 }
 
                 if (model) {
+                    console.log(userId ,'  ', model );
                     return callback(null, model);
                 } else {
                     return callback(new Error(RESPONSE.ON_ACTION.NOT_FOUND + ' user with such _id '));
@@ -373,7 +375,7 @@ var User = function (db) {
         favorites = Array.isArray(favorites) ? favorites : [favorites];
 
         getUserById(userId, function (err, user) {
-            user = user.toJSON();
+            console.log ('user: ', user);
 
             if (user.favorites.length) {
 
@@ -405,45 +407,28 @@ var User = function (db) {
     };
 
     this.deleteCropsFromFavorites = function ( req, res, next ) {
-        var favorites = req.body.favorites;
+        var favorites = req.params.cropName;
         var userId = req.session.uId;
         var resultFavorites = [];
         var found = false;
 
-        favorites = Array.isArray(favorites) ? favorites : [favorites];
+        if (!favorites) {
+            return res.status(400).send({error: RESPONSE.ON_ACTION.NOT_FOUND});
+        }
 
-        getUserById(userId, function (err, user) {
-            user = user.toJSON();
-
-            if (user.favorites.length){
-
-                for (var i = user.favorites.length - 1; i >= 0; i--) {
-                    for (var j = favorites.length - 1; j >= 0; j--) {
-                        if (user.favorites[i] == favorites[j]) {
-                            found = true;
-                        }
-                    }
-                    if (!found) {
-                        resultFavorites.push(user.favorites[i]);
-                    }
-                    found = false;
-                }
-            }
-
-            console.log('resultFavorites : ', resultFavorites);
+        //https://docs.mongodb.org/manual/reference/operator/update/pull/
 
             User
-                .update({_id: user._id}, {$set: {
-                    'favorites': resultFavorites}}, function (err, data) {
+                .update({_id: userId}, { $pull: { 'favorites': favorites }}, function (err, data) {
                     if (err) {
                         return res.status(400).send({error: err});
                     }
                     return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
                 });
-        });
-    };
+        };
 
-    this.getCropsFromFavorites = function ( req, res, next ) {
+
+    this.getFavoritesCrops = function ( req, res, next ) {
         var userId = req.session.uId;
 
         User

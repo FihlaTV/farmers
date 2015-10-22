@@ -38,11 +38,11 @@ module.exports = function (db) {
      *
      * @example
      *      {
-     *      "_marketeer": "56162b75c1d2b4088ee98aea",
-     *      "fullName": "??? ???? ???? ????'",
-     *      "location": "???? ?????",
+     *      "_marketeer": "56162b76c1d2b4088ee98b60",
+     *      "fullName": "נ.ע.ם. שיווק פירות וירקות",
+     *      "location": "שוק צריפין",
      *      "newMarketeer": false,
-     *      "canChangeMarketeer": true
+     *      "canChangeMarketeer": true // - if this  === false  User cant change marketeer
      *      }
      *
      * @method getMarketeerBySession
@@ -73,7 +73,7 @@ module.exports = function (db) {
      *
      * @example
      *      {
-     *          fullName: 'Iakov Rouzas',
+     *          fullName: 'גלי משה- בוקר שיווק ואריזה',
      *      }
      *
      * @method addMarketeer
@@ -100,10 +100,10 @@ module.exports = function (db) {
      *
      * @example
      *      {
-     *          [ 'Avraam Rihtenberg',
-     *          'Noah Fotten',
-     *          'Ioan Brin',
-     *          'Antonio Banderas',
+     *          [ 'גלי משה- בוקר שיווק ואריזה',
+     *          'יבולי טירה שיווק פירות וירקות"',
+     *          'עוזר איתן',
+     *          'משק כרמי יצור ושיווק תוצרת חקלאית ',
       *          ]
      *      }
      *
@@ -120,7 +120,8 @@ module.exports = function (db) {
     router.post('/add', session.isAdmin, marketeers.adminAddNewMarketeer);
 
     //import "marketeers.csv" from /csv/ folder... TODO it on new server
-    router.get('/import', session.isAdmin, marketeers.adminImportFromCsv);
+    router.get('/import', marketeers.adminImportFromCsv);
+    //router.get('/import', session.isAdmin, marketeers.adminImportFromCsv);
 
     return router;
 };

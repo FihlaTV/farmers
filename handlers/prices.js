@@ -7,12 +7,15 @@ var moment = require("moment");
 var constants = require("../constants/constants");
 var async = require('async');
 
+
 var Price = function (db) {
     var Price = db.model(CONST.MODELS.PRICE);
     var Crop = db.model(CONST.MODELS.CROP);
     var User = db.model(CONST.MODELS.USER);
     var session = new SessionHandler(db);
+    var dataParser = new DataParser(db);
     var cropList;
+    var cropListMerged = [];
     var lastPriceDate;
     var userFavorites;
     var userMarketeer;
@@ -23,6 +26,7 @@ var Price = function (db) {
         return function (callback) {
             User
                 .findById(userId)
+                .populate({path: 'marketeer', select: '_id fullName location'})
                 .exec(function (err, model) {
                     if (err) {
                         console.log('error: ', userId);
@@ -43,19 +47,39 @@ var Price = function (db) {
     function getCropList(cb) {
         Crop
             .find({})
+            .sort({'order': 1})
             .lean()
             .exec(function (err, docs) {
                 if (err) {
                     cb(err);
                 } else {
+                    cropListMerged = [];
+                    cropListMerged.push(
+                        {
+                            englishName: docs[0].englishName,
+                            displayName: docs[0].displayName,
+                            image: docs[0].image,
+                            order: docs[0].order
+                        }
+                    );
+
+                    for (var i = 1, len = docs.length - 1; i <= len; i++ ){
+                        if (docs[i-1].order !== docs[i].order) {
+                            cropListMerged.push(
+                                {
+                                    englishName: docs[i].englishName,
+                                    displayName: docs[i].displayName,
+                                    image: docs[i].image,
+                                    order: docs[i].order
+                                }
+                            );
+                        }
+                    }
+
                     cropList = docs;
                     cb();
                 }
             });
-    }
-
-    function getJewishDate(date) {
-        return
     }
 
     function getLastPriceDate(cb) {
@@ -77,7 +101,7 @@ var Price = function (db) {
 
     function createFnGetPricesByDate(date) {
         return function (cb) {
-            console.log('date:', date);
+            console.log('date:', lastPriceDate);
 
             Price
                 .aggregate([
@@ -88,15 +112,15 @@ var Price = function (db) {
                         }
                     }, {
                         $group: {
-                            _id: '$_crop',
+                            _id: '$cropListName',
                             prices: {
                                 $push: {
-                                    minPrice: '$minPrice',
-                                    maxPrice: '$maxPrice',
-                                    avgPrice: '$avgPrice',
-                                    site: '$site',
-                                    name: '$name',
-                                    date: '$date'
+                                    'price': '$price',
+                                    'site': '$site',
+                                    'cropListName': '$cropListName',
+                                    'date': '$date',
+                                    'pcQuality': '$pcQuality',
+                                    'wsQuality': '$wsQuality'
                                 }
                             }
                         }
@@ -106,33 +130,34 @@ var Price = function (db) {
                         cb(err);
                     } else {
                         receivedPrices = results;
-                        //console.log ('receivedPrices',receivedPrices);
+                        console.log ('receivedPrices',receivedPrices);
                         cb();
                     }
                 });
         };
     }
 
-    function syncPricesAndCropList (cb) {
-        var cropsLen = cropList.length - 1;
-        var pricedLen = receivedPrices.length -1;
+    function syncPricesAndCropList(cb) {
+        var cropsLen = cropListMerged.length - 1;
+        var pricedLen = receivedPrices.length - 1;
         var isInFavorites = false;
         var wholesalePrices = {};
         var plantsCouncilPrices = {};
         var marketeerPrices = [];
         var prices = [];
         var maxPrice = -1;
+        var maxQuality = '';
         var more = [];
 
-        console.log('cropsLen: ',cropsLen);
-        console.log('pricedLen: ',pricedLen);
+        console.log('cropsLen: ', cropsLen);
+        console.log('pricedLen: ', pricedLen);
 
         resultPriceList = [];
 
         for (var i = 0; i <= cropsLen; i++) {
             for (var j = pricedLen; j >= 0; j--) {
 
-                if ("" + cropList[i]._id == "" + receivedPrices[j]._id) {
+                if (cropListMerged[i].displayName === receivedPrices[j]._id) {
 
                     wholesalePrices = {};
                     plantsCouncilPrices = {};
@@ -143,7 +168,7 @@ var Price = function (db) {
                     receivedPriceArray = receivedPrices[j].prices;
 
 
-                    if (userFavorites.indexOf(cropList[i]._id) >= 0 ) {
+                    if (userFavorites.indexOf(cropListMerged[i].displayName) >= 0 ) {
                         isInFavorites = true;
                     }
 
@@ -154,9 +179,10 @@ var Price = function (db) {
                     marketeerPrices = {
                         source: {
                             type: "marketeer",
-                            name: userMarketeer
+                            name: userMarketeer.fullName
                         },
-                        value: 0,
+                        price: 0,
+                        quality: '',
                         data: lastPriceDate,
                         more: more
                     };
@@ -167,18 +193,35 @@ var Price = function (db) {
 
                     for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
                         if (receivedPriceArray[k].site == "PlantCouncil") {
-                            maxPrice = maxPrice < receivedPriceArray[k].minPrice ?  receivedPriceArray[k].minPrice : maxPrice;
-                            maxPrice = maxPrice < receivedPriceArray[k].maxPrice ?  receivedPriceArray[k].maxPrice : maxPrice;
-                            more.push(receivedPriceArray[k])
+
+                            if (maxPrice < receivedPriceArray[k].price) {
+                                maxPrice = receivedPriceArray[k].price;
+                                maxQuality =  receivedPriceArray[k].pcQuality
+                            }
+
+                            more.push(
+                                {
+                                    price: receivedPriceArray[k].price,
+                                    quality: receivedPriceArray[k].pcQuality
+                                })
                         }
                     }
 
+                    // sort more max -> to -> min
+                    //http://jsperf.com/array-sort-vs-lodash-sort/2
+                    more.sort(function compare(a, b) {
+                        if (a.price < b.price) return 1;
+                        if (a.price > b.price) return -1;
+                        return 0;
+                    });
+
                     plantsCouncilPrices = {
                         source: {
-                            type: "site",
-                            name: "PlantCouncil"
+                            type: "PlantCouncil",
+                            name: "מועצת הצמחים"
                         },
-                        value: maxPrice,
+                        price: maxPrice,
+                        quality: maxQuality,
                         data: lastPriceDate,
                         more: more
                     };
@@ -189,10 +232,11 @@ var Price = function (db) {
 
                     wholesalePrices = {
                         source: {
-                            type: "site",
-                            name: "Wholesale"
+                            type: "Wholesale",
+                            name: "שוק סיטונאי"
                         },
-                        value: 0,
+                        price: 0,
+                        quality: '',
                         data: lastPriceDate,
                         more: more
                     };
@@ -202,11 +246,11 @@ var Price = function (db) {
                     prices.push(plantsCouncilPrices);
 
                     resultPriceList.push({
-                        _crop: cropList[i]._id,
-                        englishName: cropList[i].englishName,
-                        displayName: cropList[i].displayName,
+                        //_crop: cropListMerged[i]._id,
+                        englishName: cropListMerged[i].englishName,
+                        displayName: cropListMerged[i].displayName,
                         isInFavorites: isInFavorites,
-                        image: cropList[i].image,
+                        image: cropListMerged[i].image,
                         prices: prices
                     });
 
@@ -236,9 +280,67 @@ var Price = function (db) {
             //return res.status(200).send({success: receivedPrices});
             console.log('resultPriceList Len: ', resultPriceList.length);
             return res.status(200).send(resultPriceList);
+            //return res.status(200).send(receivedPrices);
 
         });
     }
+
+    // TODO Test parse date from wholesale
+    this.getWholeSalePrice = function (req, res, next) {
+        var tasks = [];
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_1,
+            results: []
+        });
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_2,
+            results: []
+        });
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_3,
+            //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm',
+            results: []
+        });
+
+        async.map(tasks, dataParser.getBodyByUrl, function (err, result) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+            return res.send(result);
+        });
+
+
+
+
+
+        //dataParser.getBodyByUrl(constants.URL_APIS.MOAG_URL.SOURCE_2, [], function (err, result) {
+        //    if (err) {
+        //        return res.status(500).send({error: err});
+        //
+        //    }
+        //    return res.send(result);
+        //});
+    };
+
+    this.getPlantCouncilPrice = function (req, res, next) {
+        var tasks = [];
+
+        tasks.push({
+            url: constants.URL_APIS.PLANTS_URL.SOURCE,
+            //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm',
+            results: []
+        });
+
+        async.map(tasks, dataParser.getPlantCouncilPrice, function (err, result) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+            return res.send(result);
+        });
+    };
 };
 
 module.exports = Price;

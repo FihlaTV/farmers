@@ -9,8 +9,9 @@ module.exports = {
 
     URL_APIS: {
         PLANTS_URL: {
-            //API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
-            API_URL: 'https://www.kimonolabs.com/api/azwrvkw8?apikey=iixRhkE8EfnDKY6LfiqLl4y4JNb8ymeh',
+            //API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',   // old API KEY by Ivan Kornik
+             API_URL: 'https://www.kimonolabs.com/api/azwrvkw8?apikey=iixRhkE8EfnDKY6LfiqLl4y4JNb8ymeh', // full api key by Mor Bad: get old prices, after site updating
+            //API_URL: 'https://www.kimonolabs.com/api/ondemand/azwrvkw8',
             SOURCE: 'http://plants.moonsitesoftware.co.il/index.aspx'
         },
         MOAG_URL: {
@@ -18,7 +19,9 @@ module.exports = {
             API_URL_1: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
             API_URL_2: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
             API_URL_3: 'https://www.kimonolabs.com/api/341qt4hq?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',
-            SOURCE: 'http://www.prices.moag.gov.il/prices/veg_1.htm'
+            SOURCE_1: 'http://www.prices.moag.gov.il/prices/veg_1.htm',
+            SOURCE_2: 'http://www.prices.moag.gov.il/prices/fruit_1.htm',
+            SOURCE_3: 'http://www.prices.moag.gov.il/prices/citr_1.htm'
         }
     },
 
