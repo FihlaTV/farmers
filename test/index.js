@@ -3,7 +3,7 @@
 var app = require('../app');
 
 
-//require('./testHandlers/favorites');
+require('./testHandlers/favorites');
 require('./testHandlers/marketeers');
 //require('./testHandlers/usersAuth');
 require('./testHandlers/usersSignUpFb');

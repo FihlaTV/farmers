@@ -356,3 +356,113 @@ SyntaxError: Unexpected token s
 Mon Oct 12 2015 11:38:21 GMT+0300 (Финляндия (лето))
 Error: body is empty (check your connection to internet)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://plants.moonsitesoftware.co.il/index.aspx-------------------------------------------------------
+Mon Oct 12 2015 17:41:01 GMT+0300 (Финляндия (лето))
+Error: body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://plants.moonsitesoftware.co.il/index.aspx-------------------------------------------------------
+Mon Oct 12 2015 17:43:00 GMT+0300 (Финляндия (лето))
+Error: body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Oct 16 2015 10:07:29 GMT+0300 (Финляндия (лето))
+undefined is not a function
+TypeError: undefined is not a function
+    at getWholeSalePrice (d:\Projects\farmers\handlers\prices.js:247:20)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (d:\Projects\farmers\node_modules\express\lib\router\index.js:312:13)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:280:7
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:330:12)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at d:\Projects\farmers\node_modules\express-session\index.js:433:7
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 22 2015 13:51:47 GMT+0300 (Финляндия (лето))
+user is not defined
+ReferenceError: user is not defined
+    at deleteCropsFromFavorites (d:\Projects\farmers\handlers\users.js:422:31)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at isAuthenticatedUser (d:\Projects\farmers\handlers\sessions.js:51:13)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\route.js:131:13)
+    at Route.dispatch (d:\Projects\farmers\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+    at d:\Projects\farmers\node_modules\express\lib\router\index.js:277:22
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:349:14)
+    at param (d:\Projects\farmers\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (d:\Projects\farmers\node_modules\express\lib\router\index.js:410:3)
+    at next (d:\Projects\farmers\node_modules\express\lib\router\index.js:271:10)
+    at Function.handle (d:\Projects\farmers\node_modules\express\lib\router\index.js:176:3)
+    at router (d:\Projects\farmers\node_modules\express\lib\router\index.js:46:12)
+    at Layer.handle [as handle_request] (d:\Projects\farmers\node_modules\express\lib\router\layer.js:95:5)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 22 2015 15:04:59 GMT+0300 (Финляндия (лето))
+Unexpected string
+SyntaxError: Unexpected string
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 22 2015 15:32:31 GMT+0300 (Финляндия (лето))
+Unexpected string
+SyntaxError: Unexpected string
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 22 2015 15:56:47 GMT+0300 (Финляндия (лето))
+Unexpected token 
+
+SyntaxError: Unexpected token 
+
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Thu Oct 22 2015 15:57:01 GMT+0300 (Финляндия (лето))
+Unexpected token 
+
+SyntaxError: Unexpected token 
+
+    at Object.parse (native)
+    at parse (d:\Projects\farmers\node_modules\body-parser\lib\types\json.js:88:17)
+    at d:\Projects\farmers\node_modules\body-parser\lib\read.js:108:18
+    at invokeCallback (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:251:16)
+    at done (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:240:7)
+    at IncomingMessage.onEnd (d:\Projects\farmers\node_modules\body-parser\node_modules\raw-body\index.js:297:7)
+    at IncomingMessage.emit (events.js:104:17)
+    at _stream_readable.js:908:16
+    at process._tickCallback (node.js:355:11)
+---------------------------------------------------------------------------------------------------------

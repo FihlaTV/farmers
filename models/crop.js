@@ -10,8 +10,17 @@ module.exports = function (db) {
     var Crop = new Schema({
         englishName: String,
         displayName: String,
-        wholeSaleNames: [],
-        plantCouncilNames: [],
+        plantCouncilName: String,
+        pcNameOptimize: String,
+        pcQuality: String,
+        wsQuality: String,
+        wholeSaleName: String,
+        wsNameOptimize: String,
+        kind: String,
+        varieties: String,
+        type: String,
+        imported: {type: Boolean, default: false},
+        order: Number,
         image: {type: String, default: null}
     }, {
         collection: CONST.MODELS.CROP + 's'

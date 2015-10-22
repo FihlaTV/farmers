@@ -22,19 +22,36 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
         console.log('>>> before');
 
         async.series([
-            preparingDb.dropCollection(CONST.MODELS.USER + 's'),
+            //preparingDb.dropCollection(CONST.MODELS.USER + 's'),
             ////preparingDb.dropCollection(CONST.MODELS.ADMIN_HISTORY + 's'),
             ////preparingDb.dropCollection(CONST.MODELS.USER_HISTORY + 's'),
             //preparingDb.createServiceByTemplate(SERVICES.SERVICE_GET_DOMAIN_DATA_TMA_TRA_SERVICES),
 
             //preparingDb.toFillUsers(1)
-        ], function (err,results)   {
+        ], function (err, results) {
             if (err) {
-                return done(err)
+                return done(err);
             }
             done();
         });
     });
+
+    it('Delete user IF registered ', function (done) {
+        var loginData = USERS.USER_GOOD_CREDENRIALS;
+
+        agent
+            .delete('/users/dellAccountByEmail/' + loginData.email)
+            //.send(loginData)
+            .expect(200)
+            .end(function (err, res) {
+                console.dir(res.body);
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
 
     it('User Registration with GOD data ', function (done) {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
@@ -55,7 +72,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
     it('User confirm registration ', function (done) {
         var lastUser;
 
-        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {}, {}, function (err, models){
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, { "email" :  USERS.USER_GOOD_CREDENRIALS.email }, {}, function (err, models){
             if (err) {
                 return done(err);
             }
@@ -112,12 +129,12 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
 
     it('GET Plant collection directly from DB', function (done) {
 
-        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.PLANT, {}, {}, function (err, models){
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.CROP, {}, {}, function (err, models){
             if (err) {
                 return done(err)
             }
             if (!models) {
-                return done(CONST.MODELS.PLANT + ' is empty');
+                return done(CONST.MODELS.CROP + ' is empty');
             }
 
             plantCollection = models;
@@ -129,10 +146,10 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
     it('ADD items to Favorites', function (done) {
         var plantsId = [];
 
-        plantsId.push(plantCollection[0]._id);
-        plantsId.push(plantCollection[1]._id);
-        plantsId.push(plantCollection[2]._id);
-        plantsId.push(plantCollection[5]._id);
+        plantsId.push(plantCollection[0].displayName);
+        plantsId.push(plantCollection[10].displayName);
+        plantsId.push(plantCollection[20].displayName);
+        plantsId.push(plantCollection[50].displayName);
 
         agent
             .post('/users/favorites/')
@@ -151,7 +168,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
 
         agent
             .post('/users/favorites/')
-            .send({favorites: plantCollection[8]._id} )
+            .send({favorites: plantCollection[8].displayName})
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
@@ -165,9 +182,9 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
     it('ADD Duplicate items to Favorites', function (done) {
         var plantsId = [];
 
-        plantsId.push(plantCollection[0]._id);
-        plantsId.push(plantCollection[5]._id);
-        plantsId.push(plantCollection[10]._id);
+        plantsId.push(plantCollection[0].displayName);
+        plantsId.push(plantCollection[10].displayName);
+        plantsId.push(plantCollection[12].displayName);
 
         agent
             .post('/users/favorites/')
@@ -182,16 +199,11 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             });
     });
 
-    it('Delete items from Favorites', function (done) {
+    it('Delete ONE item from Favorites', function (done) {
         var plantsId = [];
 
-        plantsId.push(plantCollection[3]._id);
-        plantsId.push(plantCollection[4]._id);
-        plantsId.push(plantCollection[5]._id);
-
         agent
-            .delete('/users/favorites/')
-            .send({favorites: plantsId})
+            .delete('/users/favorites/' + plantCollection[0].displayName)
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
@@ -202,22 +214,7 @@ describe('Favorites ADD, DELL, GET List  ,', function () {
             });
     });
 
-    it('Delete ONE item from Favorites', function (done) {
-
-        agent
-            .delete('/users/favorites/')
-            .send({favorites: plantCollection[8]._id})
-            .expect(200)
-            .end(function (err, res) {
-                console.dir(res.body);
-                if (err) {
-                    return done(err);
-                }
-                done();
-            });
-    });
-
-    it('User GET result Favorites List', function (done) {
+     it('User GET result Favorites List', function (done) {
 
         agent
             .get('/users/favorites/')

@@ -61,8 +61,8 @@ var Marketeer = function (db) {
 
                 async.each(parsedData, function (item, callback) {
                     var data = {
-                        fullName: item[1],
-                        location: item[0]
+                        fullName: item[1].trim(),
+                        location: item[0].trim()
                     };
                     var marketeer = new Marketeer(data);
 
