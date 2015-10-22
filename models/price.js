@@ -15,19 +15,15 @@ module.exports = function (db) {
         dayOfYear: Number,
         source: String,
         name: String,
+        price: Number,
+        pcQuality: String,
+        wsQuality: String,
+        cropListName: String,
         site: String,
-        minPrice: {
-            type: Number,
-            default: 0
-        },
-        maxPrice: {
-            type: Number,
-            default: 0
-        },
-        avgPrice: {
-            type: Number,
-            default: 0
-        }
+        excellent: {type: Boolean, default: false},
+        minPrice: {type: Number, default: 0 },
+        maxPrice: {type: Number, default: 0 },
+        avgPrice: {type: Number, default: 0 }
     }, {
         collection: CONST.MODELS.PRICE + 's'
     });

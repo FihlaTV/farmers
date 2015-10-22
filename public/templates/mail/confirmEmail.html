@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="HE" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -11,11 +11,11 @@
         }
     </style>
 </head>
-<body>
+<body style = "direction: rtl; text-align: right">
 <div class="pm-text">
     <p>שלום,  <strong><%= data ? data.fullName : '' %></strong>! </p>
 
-    <p>ברוך הבא ל<strong>"העיקר האיכר"</strong>. לעימות חשבונך <a href="<%= data ? data.confirmUrl :'' %>" target="_blank">נא לחץ</a></p>
+    <p>ברוך הבא ל<strong>"העיקר האיכר"</strong>, לאישור חשבונך <a href="<%= data ? data.confirmUrl :'' %>" target="_blank">אנא לחץ</a></p>
     <p>או העתק כתובת קישור זו לדפדפן:
         <br>"<%= data ? data.confirmUrl :'' %>"</p>
     <p>אם קבלת זאת בטעות, בבקשה מחק אימייל זה</p>

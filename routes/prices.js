@@ -14,7 +14,7 @@ module.exports = function(db){
     var prices = new PricesHandler(db);
 
     /**
-     * This __method__  for get CropList
+     * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
      *
      * __URI:__ ___`/getLast`___
      *
@@ -30,58 +30,51 @@ module.exports = function(db){
      * @example
      *      [ ...
      *      {
-     *      "_crop": "561672bbf82da5f410348e76",
-     *      "englishName": "Greenhouse Tomatoes",
-     *      "displayName": "??????? ????",
-     *      "isInFavorites": false,
-     *      "image": null,
+     *      "englishName": "Onion Green",
+     *      "displayName": "בצל ירוק",
+     *      "isInFavorites": false,     *
+     *      "image": "img/crops/Onion Green.jpg",
      *      "prices": [
      *          {
-     *          "source": {
-     *              "type": "marketeer",
-     *              "name": "56162b75c1d2b4088ee98aea"
-     *                     },
-     *           "value": 0,
-     *           "data": "2015-10-08T12:09:12.000Z",
-     *           "more": []
+     *              "source": {
+     *                  "type": "marketeer",
+     *                  "name": "נ.ע.ם. שיווק פירות וירקות"
+     *                         },
+     *              "price": 0,
+     *              "quality": ""
+     *              "data": "2015-10-22T12:09:12.000Z",
+     *              "more": []
      *          },
      *          {
-     *          "source": {
-     *              "type": "site",
-     *              "name": "Wholesale"
-     *          },
-     *          "value": 0,
-     *          "data": "2015-10-08T12:09:12.000Z",
-     *          "more": []
+     *              "source": {
+     *               "type": "Wholesale",
+     *                "name": "שוק סיטונאי"
+     *                      },
+     *              "price": 0,
+     *              "quality": ""
+     *              "data": "2015-10-22T12:09:12.000Z",
+     *              "more": []
      *          },
      *          {
-     *          "source": {
-     *              "type": "site",
-     *              "name": "PlantCouncil"
-     *          },
-     *          "value": 12,
-     *          "data": "2015-10-08T12:09:12.000Z",
-     *          "more": [
+     *              "source": {
+     *                  "type": "PlantCouncil",
+     *                  "name": "מועצת הצמחים"
+     *                         },
+     *              "price": 10,
+     *              "quality": "מובחר",
+     *              "data": "2015-10-22T12:09:12.000Z",
+     *              "more": [
      *                  {
-     *                  "minPrice": 11.5,
-     *                  "maxPrice": 12,
-     *                  "avgPrice": 11.75,
-     *                  "site": "PlantCouncil",
-     *                  "name": "??????? ????????",
-     *                  "date": "2015-10-08T12:09:12.000Z"
+     *                      "price": 10,
+     *                      "quality": "מובחר"
      *                  },
      *                  {
-     *                  "minPrice": 11,
-     *                  "maxPrice": 12,
-     *                  "avgPrice": 11.5,
-     *                  "site": "PlantCouncil",
-     *                  "name": "??????? ????",
-     *                  "date": "2015-10-08T12:09:12.000Z"
+     *                      "price": 9,
+     *                      "quality": "סוג א"
      *                  }
      *                  ]
-     *              }
-     *              ]},...
-     *      ]
+     *          }...
+     *          ...]
      *
      * @method getLast
      * @instance
@@ -91,6 +84,8 @@ module.exports = function(db){
 
         //TODO del "englishName" field from response after testing
     router.get('/getLast', prices.getLast);
+    router.get('/getWholeSalePrice', prices.getWholeSalePrice);
+    router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
 
     return router;
 };

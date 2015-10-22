@@ -146,6 +146,31 @@ module.exports = function (db) {
 
     router.post('/signOut', users.signOut);
 
+
+    /**
+     * This __method__  for user delete crop (id of crop) from Favorites
+     *
+     * __URI:__ ___`/users/favorites/:cropName`___
+     *
+     *__METHOD:__ ___`DELETE`___
+     *
+     * __Request:__/users/favorites/אבוקדו פנקילטון
+     *
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: { success: 'success'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @method deleteCropsFromFavorites
+     * @instance
+     * @for users
+     * @memberOf users
+     */
+
+    router.delete('/favorites/:cropName', session.isAuthenticatedUser, users.deleteCropsFromFavorites);
+
     router.route('/favorites/')
 
     /**
@@ -168,11 +193,11 @@ module.exports = function (db) {
      *
      * @example
      *      {
-     *          favorites: '5603f832f889260c19a40d59',
+     *          favorites: 'אבטיחים סידלס',
      *      }
      *      OR
      *      {
-     *          favorites: ['5603f832f889260c19a40d59', '5603f832f889260c00a40d77' ],
+     *          favorites: ['אגסים ספדונה', 'אגסים ג'נטיל' ],
      *      }
      *
      * @method addCropsToFavorites
@@ -199,53 +224,20 @@ module.exports = function (db) {
      *
      * @example
      *      {
-     *          [ '5601418844d8fb702665b0af',
-     *          '5601418944d8fb702665b0b1',
-     *          '5601418944d8fb702665b0b3',
-     *          '5601418944d8fb702665b0c3' ]
+     *          [ 'אשכוליות לבנות',
+     *          'בטטות',
+     *          'דלעת',
+     *          'חבושים' ]
      *      }
      *
-     * @method getCropsFromFavorites
+     * @method getFavoritesCrops
      * @instance
      * @for users
      * @memberOf users
      */
 
-        .get(session.isAuthenticatedUser, users.getCropsFromFavorites)
+        .get(session.isAuthenticatedUser, users.getFavoritesCrops);
 
-    /**
-     * This __method__  for user delete crop (id of crop) from Favorites
-     *
-     * __URI:__ ___`/users/favorites`___
-     *
-     *__METHOD:__ ___`DELETE`___
-     *
-     * __Request:__
-     *
-     *      Body:
-     *      favorites // String or [String, String, ...]
-     *
-     * __Response:__
-     *
-     *      status (200) JSON object: { success: 'success'}
-     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
-     *
-     * @example
-     *      {
-     *          favorites: '5603f832f889260c19a40d59',
-     *      }
-     *      OR
-     *      {
-     *          favorites: ['5603f832f889260c19a40d59', '5603f832f889260c00a40d77' ],
-     *      }
-     *
-     * @method deleteCropsFromFavorites
-     * @instance
-     * @for users
-     * @memberOf users
-     */
-
-        .delete(session.isAuthenticatedUser, users.deleteCropsFromFavorites);
 
     /**
      * This __method__  for user to reset password. After used route, will send to user mail with link: http:\\ + token for reseting password

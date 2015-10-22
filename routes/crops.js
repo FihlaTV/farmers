@@ -34,30 +34,29 @@ module.exports = function(db){
      * @example
      *      [
      *      {
-     *      "_id": "561672bbf82da5f410348e1e",
      *      "englishName": "Avocado Etinger", // !!! this field WILL deprecated after testing !!!
-     *      "displayName": "?????? ??????"
+     *      "displayName": "אבוקדו אטינגר"
      *      },
      *      {
-     *      "_id": "561672bbf82da5f410348e1f",
      *      "englishName": "Avocado Ardit", // !!! this field WILL deprecated after testing !!!
-     *      "displayName": "?????? ?????"
+     *      "displayName": "אבוקדו ארדיט"
      *      }, ....
      *      ]
      *
-     * @method getCropList
+     * @method getMergedCropList
      * @instance
      * @for crops
      * @memberOf crops
      */
 
     //TODO del "englishName" field from response after testing
-    router.get('/', crops.getCropList);
+    router.get('/', crops.getMergedCropList);
 
     router.get('/prices', plants.getPlantsWithPrices);
 
     //import "cropList.csv" from /csv/ folder... TODO it on new server
-    router.get('/import', session.isAdmin, crops.adminImportFromCsv);
+    //router.get('/import', session.isAdmin, crops.adminImportFromCsv);
+    router.get('/import', crops.adminImportFromCsv);
 
     return router;
 };

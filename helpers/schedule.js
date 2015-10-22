@@ -19,9 +19,9 @@ module.exports = function (db) {
         tasks =[];
 
         tasks.push(function (cb) {
-            dataParser.getCropList(function (err, result) {
+            dataParser.getMergedCropList(function (err, result) {
                 if (err) {
-                    logWriter.log('scheduleJob -> getCropList-> ' + err);
+                    logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
                 }
                 cropList = result;
                 console.log('CropList loaded');
@@ -39,7 +39,8 @@ module.exports = function (db) {
             });
         });
 
-        async.series(tasks
+        async.series(
+            tasks
             //    [ function (cb){
             //    dataParser.syncPlantPrices(constants.URL_APIS.PLANTS_URL.API_URL, constants.URL_APIS.PLANTS_URL.SOURCE, function (err, result) {
             //        if (err) {
