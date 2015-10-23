@@ -265,7 +265,7 @@ module.exports = function (db) {
         });
     };
 
-    this.getMergedCropList = function (cb) {
+    this.getCropList = function (cb) {
         Crop
             .find({})
             .lean()

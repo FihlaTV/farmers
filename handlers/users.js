@@ -653,7 +653,6 @@ var User = function (db) {
         var userId = req.session.uId;
 
         getUserById(userId, function (err, profile) {
-            profile = profile.toJSON();
 
             if (err) {
                 return next(err);

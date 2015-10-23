@@ -19,7 +19,7 @@ module.exports = function (db) {
         tasks =[];
 
         tasks.push(function (cb) {
-            dataParser.getMergedCropList(function (err, result) {
+            dataParser.getCropList(function (err, result) {
                 if (err) {
                     logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
                 }
@@ -30,14 +30,7 @@ module.exports = function (db) {
             });
         });
 
-        tasks.push(function (cb) {
-            dataParser.syncCropPrices(constants.URL_APIS.PLANTS_URL.API_URL, cropList, function (err, result) {
-                if (err) {
-                    logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
-                }
-                cb(err, result);
-            });
-        });
+        tasks.push(parseAndStoreDataFromPlantCouncil);
 
         async.series(
             tasks
@@ -58,6 +51,15 @@ module.exports = function (db) {
             //}]
         );
     });
+
+    function parseAndStoreDataFromPlantCouncil(cb) {
+        dataParser.syncCropPrices(constants.URL_APIS.PLANTS_URL.API_URL, cropList, function (err, result) {
+            if (err) {
+                logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
+            }
+            cb(err, result);
+        });
+    }
 
     function getWholeSalePrice(cb) {
         var tasks = [];
