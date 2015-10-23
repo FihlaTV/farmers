@@ -263,7 +263,7 @@ var Crop = function (db) {
                     type: parsedData[i][7],
                     wsQuality: parsedData[i][8],
                     imported: parsedData[i][9] ? true : false,
-                    image: parsedData[i][10],
+                    image: 'img/crops/' + parsedData[i][10],
                     order: order
                 };
 
@@ -291,7 +291,7 @@ var Crop = function (db) {
                         type: parsedData[i][7],
                         wsQuality: parsedData[i][8],
                         imported: parsedData[i][9] ? true : false,
-                        image: parsedData[i][10],
+                        image: 'img/crops/' + parsedData[i][10],
                         order: order
                     });
                 }

@@ -179,7 +179,7 @@ var Price = function (db) {
                     marketeerPrices = {
                         source: {
                             type: "marketeer",
-                            name: userMarketeer.fullName
+                            name: userMarketeer ? userMarketeer.fullName : '',
                         },
                         price: 0,
                         quality: '',
@@ -288,6 +288,7 @@ var Price = function (db) {
     // TODO Test parse date from wholesale
     this.getWholeSalePrice = function (req, res, next) {
         var tasks = [];
+        var startTime = new Date();
 
         tasks.push({
             url: constants.URL_APIS.MOAG_URL.SOURCE_1,
@@ -304,25 +305,16 @@ var Price = function (db) {
             //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm',
             results: []
         });
+        console.log('start time: ', startTime);
 
-        async.map(tasks, dataParser.getBodyByUrl, function (err, result) {
+        //async.mapSeries(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 10498
+        async.map(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 4558
             if (err) {
                 return res.status(500).send({error: err});
             }
+            console.log('Spend time: ', new Date() - startTime);
             return res.send(result);
         });
-
-
-
-
-
-        //dataParser.getBodyByUrl(constants.URL_APIS.MOAG_URL.SOURCE_2, [], function (err, result) {
-        //    if (err) {
-        //        return res.status(500).send({error: err});
-        //
-        //    }
-        //    return res.send(result);
-        //});
     };
 
     this.getPlantCouncilPrice = function (req, res, next) {

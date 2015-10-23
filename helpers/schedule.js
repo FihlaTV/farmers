@@ -19,7 +19,7 @@ module.exports = function (db) {
         tasks =[];
 
         tasks.push(function (cb) {
-            dataParser.getMergedCropList(function (err, result) {
+            dataParser.getCropList(function (err, result) {
                 if (err) {
                     logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
                 }
@@ -30,14 +30,7 @@ module.exports = function (db) {
             });
         });
 
-        tasks.push(function (cb) {
-            dataParser.syncCropPrices(constants.URL_APIS.PLANTS_URL.API_URL, cropList, function (err, result) {
-                if (err) {
-                    logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
-                }
-                cb(err, result);
-            });
-        });
+        tasks.push(parseAndStoreDataFromPlantCouncil);
 
         async.series(
             tasks
@@ -58,6 +51,46 @@ module.exports = function (db) {
             //}]
         );
     });
+
+    function parseAndStoreDataFromPlantCouncil(cb) {
+        dataParser.syncCropPrices(constants.URL_APIS.PLANTS_URL.API_URL, cropList, function (err, result) {
+            if (err) {
+                logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
+            }
+            cb(err, result);
+        });
+    }
+
+    function getWholeSalePrice(cb) {
+        var tasks = [];
+        var startTime = new Date();
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_1,
+            results: []
+        });
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_2,
+            results: []
+        });
+
+        tasks.push({
+            url: constants.URL_APIS.MOAG_URL.SOURCE_3,
+            //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm',
+            results: []
+        });
+        console.log('start time: ', startTime);
+
+        //async.mapSeries(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 10498
+        async.map(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 4558
+            if (err) {
+                return cb(err);
+            }
+            console.log('Spend time: ', new Date() - startTime);
+            return cb(err, result);
+        });
+    };
 
     console.log('Schedule started');
 };
