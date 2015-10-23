@@ -407,57 +407,42 @@ module.exports = function (db) {
             });
     };
 
-    this.getBodyByUrl = function (item, cb) {
+    this.parseWholesalesByUrl = function (item, cb) {
 
-        return getHtmlByUrl(item, cb);
+        return parseWholesalesByUrl(item, cb);
     };
 
-    function  getHtmlByUrl(item, cb) {
+    function  parseWholesalesByUrl(item, cb) {
         var self = this;
         var url = item.url;
         var results = item.results;
 
-        //http.get(url, function (res) {
-        //    res.pipe(Iconv.decodeStream('win1255')).collect(function (err, body) {
-        //        console.log(body);
-
-
-        request({url : url, encoding: null, headers: {
+            request({url : url, encoding: null, headers: {
             'User-Agent': 'request'
         }}, function (err, response, body) {
-            var data;
+            var date;
             var nextPage;
             var dateRegExp = /(0[1-9]|[12][0-9]|3[01])[- \/.](0[1-9]|1[012])[- \/.](19|20)\d\d/g;
             var trTagsArray;
             var nameRegExp = /(?:<FONT face='Arial' size=\d color='BLUE'>)([.\S\s]*?)(?:<)/m;
-            //var nameRegExp = /(?:<FONT face='Arial' size=1 color='BLUE'>)([.\S\s]*?)(?:<\/)/m; //before when was one price
-            //var priceRegExp = /(?:<FONT face='Arial' size=1 color='DARKBLUE'>)([.\S\s]*?)(?:<\/)/m; //before when was one price
             var priceRegExp = /(?:<FONT face='Arial' size=1 color='DARKBLUE'>)([.\S\s]*?)(?:<)/m;
             var nextPageRegExp = /(?:<a href=)(.*)(?:>לדף הבא _<\/a>)/m;
 
             var name;
             var price;
-            var fromEnc = 'cp1251';
-            var toEnc = 'utf-8';
             var translator = Iconv.decode(body, 'win1255');
 
-            //console.log(body);
             console.log(translator);
-
-            //console.log(Iconv.encodingExists("win1255"));
             body = translator;
-            //var parsedBody = new ParsedBody({body: body});
-            //parsedBody.save();
 
             if (!body || response.statusCode == '404') {
                 return cb('body is empty (check your connection to internet)');
             }
-            //body = encoding.convert(body, "UTF-8", "Windows1255");
 
-            data = body.match(dateRegExp)[0];
+            date = body.match(dateRegExp)[0];
             nextPage = body.match(nextPageRegExp) ? (body.match(nextPageRegExp)[1]).replace(/\\/g,"/") : '';
 
-            console.log('data: ', data);
+            console.log('data: ', date);
             console.log('current URL: ', url);
             console.log('next page: ', nextPage);
 
@@ -471,9 +456,10 @@ module.exports = function (db) {
                 price = trTagsArray[i].match(priceRegExp)[1];
 
                 results.push({
-                    minPrice: price,
+                    price: price,
                     name: name,
-                    url: url
+                    url: url,
+                    date: date
                 });
 
                 console.log('price: ', price, ' name: ', name);
@@ -490,7 +476,7 @@ module.exports = function (db) {
 
                 return cb(err, results);
             }
-            return getHtmlByUrl ({url: nextPage, results: results}, cb);
+            return parseWholesalesByUrl ({url: nextPage, results: results}, cb);
 
         });
         //});
