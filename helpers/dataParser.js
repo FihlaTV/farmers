@@ -5,7 +5,6 @@ var PlantsHelper = require('../helpers/plants');
 var CONST = require('../constants/constants');
 var mailer = require('../helpers/mailer');
 var $ = require('../public/js/libs/jquery/dist/jquery.js');
-var encoding = require("encoding");
 var Iconv = require('iconv-lite');
 var http = require('http');
 
