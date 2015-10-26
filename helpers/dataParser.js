@@ -336,8 +336,6 @@ module.exports = function (db) {
             cropName: model.name
         };
 
-        //TODO switch off mailer
-
         mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
 
         notification = new Notification(saveOptions);
@@ -424,8 +422,6 @@ module.exports = function (db) {
                             }
 
                             callback();
-
-
                         });
                 }, function (err) {
                     if (err) {
@@ -490,7 +486,7 @@ module.exports = function (db) {
                         saveOptions.wsQuality = cropList[foundPosition].wsQuality;
                         saveOptions.imported = cropList[foundPosition].imported;
 
-
+                        // TODO delete this when it will be not need
                     } else {
                         console. log ('New crop detected: ', item.name);
                     }
@@ -512,11 +508,11 @@ module.exports = function (db) {
                     if (err) {
                         return cb(err);
                     }
-                    console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
+                    //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
                     cb(null, false);
                 });
             });
-    };
+    }
 
     this.parseWholesalesByUrl = function (item, cb) {
 
@@ -580,11 +576,9 @@ module.exports = function (db) {
             }
             return parseWholesalesByUrl ({url: nextPage, results: results}, cb);
         });
-        //});
-    };
+    }
 
     this.getPlantCouncilPrice = function (item, cb) {
-        var self = this;
         var url = item.url;
         var results = item.results;
 
@@ -596,15 +590,12 @@ module.exports = function (db) {
             var trTagsArray;
             var nameRegExp = /(?:<FONT face='Arial' size=\d color='BLUE'>)([.\S\s]*?)(?:<)/m;
             var p1P2NameRegExp = /(?:<td class="productName" style="width:249px;">)([.\S\s]*?)(?:<\/td><td style="width:115px;">)([.\S\s]*?)(?:<\/td><td style="width:115px;">)([.\S\s]*?)(?:<)/m;
-
             var match;
             var price;
 
             trTagsArray = body.match(/<tr class="(rgAltRow tblPricesAltCells|rgRow tblPricesCells)[.\S\s]*?<\/tr>/gm);
 
-
-            //console.log(trTagsArray);
-            console.log(trTagsArray.length);
+            //console.log(trTagsArray.length);
 
             if (!body || response.statusCode == '404') {
                 return cb('body is empty (check your connection to internet)');
@@ -635,7 +626,7 @@ module.exports = function (db) {
                 i++;
             }
 
-            console.log('CALLBACK _________________PlanCouncil');
+            //console.log('CALLBACK _________________PlanCouncil');
             cb(err, results);
         });
     };

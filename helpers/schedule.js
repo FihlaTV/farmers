@@ -14,7 +14,7 @@ module.exports = function (db) {
     var cropList;
 
     //schedule.scheduleJob('*/3 * * * *', function() {
-    schedule.scheduleJob('*/2 * * * *', function() {
+    schedule.scheduleJob('*/3 * * * *', function() {
         console.log('scheduleJob -> syncPlantPrices ' + new Date());
         tasks =[];
 
@@ -25,7 +25,7 @@ module.exports = function (db) {
             if(err) {
                 console.log('ERROR:  Main Schedule Async ended with ERROR: ', err);
             } else {
-                console.log('Main Schedule Async ended without error: ', result);
+                console.log('Main Schedule Async ended without error');
             }
         });
     });
