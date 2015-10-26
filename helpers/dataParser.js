@@ -196,72 +196,117 @@ module.exports = function (db) {
         });
     };
 
-    function parsePricesFromSite(apiUrl, callback) {
-        async.parallel([
-            function (cb) {
-                getDateByUrl(apiUrl, cb);
-            },
-            function (cb) {
-                getPlants(cb)
-            }
-        ], function (err, results) {
-            if (err) {
-                cb(err);
-            } else {
-                cb(null, {
-                    newPlantsPrice: results[0],
-                    plants: results[1]
-                });
-            }
-        });
-    }
 
     // process getting date is different for sites that is why need different function
 
-    this.syncCropPrices = function (apiUrl, cropList, cb) {
+    this.syncPlantCouncilCropPrices = function (cropList, cb) {
         var priceDate;
         var source;
         var tempArray = [];
         var resultPricesArray = [];
+        var apiUrl = CONST.URL_APIS.PLANTS_URL.API_URL;
+        var results;
 
-        getDataByUrl(apiUrl, function (err, results) {
+        request(apiUrl, function (err, response, body) {
+            var parsedBody = new ParsedBody({body: body});
+
+            parsedBody.save();
+
+            if (!body || response.statusCode === '404') {
+                return cb('body is empty (check your connection to internet)');
+            }
+
+            if ((/</.test(body))) {
+                console.log('!!!! recieved Body has <DOCTYPE>   !!!!');
+                return cb('recieved Body has <DOCTYPE>');
+
+            }
+            results = JSON.parse(body);
+
             if (err || !results || !results.results.priceDate) {
                 //console.log('error : ', err + ' ' +  !results + ' ' +  !results.results.priceDate);
-                cb(err);
-            } else {
-                priceDate =  getTransformedDateOject(results.results.priceDate[0].date);
-                source =  results.results.priceDate[0].url;
-                tempArray = results.results.prices;
+                return cb(err + ' or now results');
+            }
 
-                console.log('received price date: ', results.results.priceDate[0].date);
-                console.log('received price transformed date: ', priceDate);
-                console.log('received price url: ', source);
+            priceDate =  getTransformedDateOject(results.results.priceDate[0].date);
+            source =  results.results.priceDate[0].url;
+            tempArray = results.results.prices;
+
+            console.log('received price date: ', results.results.priceDate[0].date);
+            console.log('received price transformed date: ', priceDate);
+            console.log('received price url: ', source);
 
 
-                // prepare received array, separate on excellent quality and class A quality
-                for (var i = 0, len = tempArray.length - 1; i <= len; i++){
-                    if (tempArray[i].maxPrice) {
-                        resultPricesArray.push(
-                            {
-                                price: tempArray[i].maxPrice,
-                                name: tempArray[i].name,
-                                url: source,
-                                excellent: true
-                            }
-                        )
-                    }
+            // prepare received array, separate on excellent quality and class A quality
+            for (var i = 0, len = tempArray.length - 1; i <= len; i++){
+                if (tempArray[i].maxPrice) {
                     resultPricesArray.push(
                         {
-                            price: tempArray[i].minPrice,
+                            price: tempArray[i].maxPrice,
                             name: tempArray[i].name,
-                            url: source
+                            url: source,
+                            excellent: true
                         }
                     )
                 }
-
-
-                checkInDbAndWrite(priceDate, source, cropList, resultPricesArray, cb);
+                resultPricesArray.push(
+                    {
+                        price: tempArray[i].minPrice,
+                        name: tempArray[i].name,
+                        url: source
+                    }
+                )
             }
+            checkPlantCouncilDataInDbAndWrite(priceDate, source, cropList, resultPricesArray, cb);
+
+        });
+    };
+
+    this.syncWholeSaleCropPrices = function (cropList, cb) {
+        var priceDate;
+        var source;
+        var tempArray = [];
+        var resultPricesArray = [];
+        var parallelTasks = [];
+        var startTime = new Date();
+
+        parallelTasks.push({
+            url: CONST.URL_APIS.MOAG_URL.SOURCE_1,
+            results: []
+        });
+
+        parallelTasks.push({
+            url: CONST.URL_APIS.MOAG_URL.SOURCE_2,
+            results: []
+        });
+
+        parallelTasks.push({
+            url: CONST.URL_APIS.MOAG_URL.SOURCE_3,
+            //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm', // test bad link
+            results: []
+        });
+        console.log('start time: ', startTime);
+
+        //async.mapSeries(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 10498
+        async.map(parallelTasks, parseWholesalesByUrl, function (err, result) { // spend time: 4558
+            if (err) {
+                return cb(err);
+            }
+            console.log('Spend time: ', new Date() - startTime);
+            // prepare received array, separate on excellent quality and class A quality
+            // resalt is array of results from 3 sites we need concat it
+
+            resultPricesArray = [].concat(result[0] ? result[0] : [], result[1] ? result[1] : [], result[2] ? result[2] : [] );
+
+            priceDate = getTransformedDateOject(resultPricesArray[0].date);
+            source = resultPricesArray[0].url;
+
+            console.log('received price date: ', resultPricesArray[0].date);
+            console.log('received price transformed date: ', priceDate);
+            console.log('Parsed items count: ', resultPricesArray.length);
+
+            checkWholeSaleDataInDbAndWrite(priceDate, source, cropList, resultPricesArray, cb);
+
         });
     };
 
@@ -280,30 +325,18 @@ module.exports = function (db) {
         return ((minPrice * 100 + maxPrice * 100) / 200);
     }
 
-    function getDataByUrl(url, cb) {
-        request(url, function (err, response, body) {
-            var parsedBody = new ParsedBody({body: body});
-
-            parsedBody.save();
-
-            if (!body || response.statusCode === '404') {
-                return cb(new Error('body is empty (check your connection to internet)'));
-            }
-            if ((/</.test(body))) {
-                console.log('!!!! recieved Body has <DOCTYPE>   !!!!');
-
-            } else {
-                cb(err, JSON.parse(body));
-            }
-        });
-    }
 
     function createNewCropNotification(model, callback) {
         var notification;
         var saveOptions = {
             newCropPriceId: model._id,
-            type: 'newCrop'
+            type: 'newCrop',
+            source: model.source,
+            site: model.site,
+            cropName: model.name
         };
+
+        //TODO switch off mailer
 
         mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
 
@@ -312,14 +345,17 @@ module.exports = function (db) {
             .save(function (err, model) {
                 if (err) {
                     console.log('DB Notification err:' + err);
-                    callback('DB Notification err:' + err);
-                } else {
-                    callback();
+
+                    return callback('DB Notification err:' + err);
                 }
+
+                console.log('DB Create Notification, return CallBACK');
+                callback();
+
             });
     }
 
-    function checkInDbAndWrite(priceDate, source, cropList, parsedData, cb) {
+    function checkPlantCouncilDataInDbAndWrite(priceDate, source, cropList, parsedData, cb) {
         var searchQuery = {
             date: priceDate,
             source: source
@@ -327,82 +363,158 @@ module.exports = function (db) {
 
         var cropLen = cropList.length - 1;
 
+        Price
+            .findOne(searchQuery)
+            .lean()
+            .exec(function (err, price) {
+                if (err) {
+                    return cb(err);
+                }
+                if (price) {
+                    console.log('not need update');
+                    return cb(null, true);
+                }
+
+                // eachSeries need only in check purpose
+                async.eachSeries(parsedData, function (item, callback) {
+                    var foundPosition = -1;
+                    var price = parseFloat(item.price) || 0;
+                    var saveOptions;
+                    var nameOptimize = item.name.replace (/ /g,'');
+                    var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
+
+                    for (var i = cropLen; i >= 0; i--) {
+                        if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
+                            foundPosition = i;
+                            i = -1;
+                        }
+                    }
+
+                    saveOptions = {
+                        source: item.url,
+                        price: price,
+                        date: priceDate,
+                        name: item.name,
+                        site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                        year: moment(priceDate).year(),
+                        month: moment(priceDate).month(),
+                        dayOfYear: moment(priceDate).dayOfYear(),
+                        excellent: !!item.excellent
+                    };
+
+                    if (foundPosition >= 0) {
+                        saveOptions._crop = cropList[foundPosition]._id;
+                        saveOptions.cropListName = cropList[foundPosition].displayName;
+                        saveOptions.pcQuality = cropList[foundPosition].pcQuality;
+                        saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+
+                    } else {
+                        console. log ('New crop detecdet: ', item.name);
+                    }
+
+                    price = new Price(saveOptions);
+                    price
+                        .save(function (err, model) {
+                            if (err) {
+                                return  callback('DB err:' + err);
+                            }
+
+                            if (foundPosition < 0) {
+                                return createNewCropNotification (model.toJSON(), callback );
+                            }
+
+                            callback();
+
+
+                        });
+                }, function (err) {
+                    if (err) {
+                        return cb(err);
+                    }
+                    cb(null, false);
+                });
+            });
+    };
+
+    function checkWholeSaleDataInDbAndWrite(priceDate, source, cropList, parsedData, cb) {
+        var searchQuery = {
+            date: priceDate,
+            source: source
+        };
+
+        var cropLen = cropList.length - 1;
 
         Price
             .findOne(searchQuery)
             .lean()
             .exec(function (err, price) {
                 if (err) {
-                    cb(err);
-                } else {
-                    if (price) {
-                        console.log('not need update');
-                        cb(null, true);
-                    } else {
-
-                        // eachSeries need only in check purpose
-                        async.eachSeries(parsedData, function (item, callback) {
-                            var foundPosition = -1;
-                            var price = parseFloat(item.minPrice) || 0;
-                            //var maxPrice = parseFloat(item.maxPrice) || 0;
-                            //var avgPrice = getAvgPrice(minPrice, maxPrice);
-
-                            var saveOptions;
-                            var price;
-                            var nameOptimize = item.name.replace (/ /g,'');
-                            var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
-
-                            for (var i = cropLen; i >= 0; i--) {
-                                if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
-                                    foundPosition = i;
-                                    i = -1;
-                                }
-                            }
-
-                            saveOptions = {
-                                source: item.url,
-                                price: item.price,
-                                date: priceDate,
-                                name: item.name,
-                                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                                year: moment(priceDate).year(),
-                                month: moment(priceDate).month(),
-                                dayOfYear: moment(priceDate).dayOfYear(),
-                                excellent: !!item.excellent
-                            };
-
-                            if (foundPosition >= 0) {
-                                saveOptions._crop = cropList[foundPosition]._id;
-                                saveOptions.cropListName = cropList[foundPosition].displayName;
-                                saveOptions.pcQuality = cropList[foundPosition].pcQuality;
-                                saveOptions.wsQuality = cropList[foundPosition].wsQuality;
-
-                            } else {
-                                console. log ('New crop detecdet: ', item.name);
-                            }
-
-                            price = new Price(saveOptions);
-                            price
-                                .save(function (err, model) {
-                                    if (err) {
-                                        callback('DB err:' + err);
-                                    } else {
-                                        if (foundPosition < 0) {
-                                            createNewCropNotification (model.toJSON(), callback );
-                                        } else {
-                                            callback();
-                                        }
-                                    }
-                                });
-                        }, function (err) {
-                            if (err) {
-                                cb(err);
-                            } else {
-                                cb(null, false);
-                            }
-                        });
-                    };
+                    return cb(err);
                 }
+
+                if (price) {
+                    console.log('not need update');
+                    return cb(null, true);
+                }
+
+                // eachSeries need only in check purpose
+                async.eachSeries(parsedData, function (item, callback) {
+                    var foundPosition = -1;
+                    var price = parseFloat(item.price) || 0;
+                    var saveOptions;
+                    var nameOptimize = item.name.replace (/ /g,'');
+
+                    for (var i = cropLen; i >= 0; i--) {
+                        if ( cropList[i].wsNameOptimize.indexOf(nameOptimize) >= 0 ) {
+                            foundPosition = i;
+                            i = -1;
+                        }
+                    }
+
+                    saveOptions = {
+                        source: item.url,
+                        price: price,
+                        date: priceDate,
+                        name: item.name,
+                        site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                        year: moment(priceDate).year(),
+                        month: moment(priceDate).month(),
+                        dayOfYear: moment(priceDate).dayOfYear(),
+                        excellent: !!item.excellent
+                    };
+
+                    if (foundPosition >= 0) {
+                        saveOptions._crop = cropList[foundPosition]._id;
+                        saveOptions.cropListName = cropList[foundPosition].displayName;
+                        saveOptions.pcQuality = cropList[foundPosition].pcQuality;
+                        saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                        saveOptions.imported = cropList[foundPosition].imported;
+
+
+                    } else {
+                        console. log ('New crop detected: ', item.name);
+                    }
+
+                    price = new Price(saveOptions);
+                    price
+                        .save(function (err, model) {
+                            if (err) {
+                                return  callback('DB err:' + err);
+                            }
+
+                            if (foundPosition < 0) {
+                                return createNewCropNotification (model.toJSON(), callback );
+                            }
+
+                            callback();
+                        });
+                }, function (err) {
+                    if (err) {
+                        return cb(err);
+                    }
+                    console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
+                    cb(null, false);
+                });
             });
     };
 
@@ -416,7 +528,7 @@ module.exports = function (db) {
         var url = item.url;
         var results = item.results;
 
-            request({url : url, encoding: null, headers: {
+        request({url : url, encoding: null, headers: {
             'User-Agent': 'request'
         }}, function (err, response, body) {
             var date;
@@ -431,7 +543,7 @@ module.exports = function (db) {
             var price;
             var translator = Iconv.decode(body, 'win1255');
 
-            console.log(translator);
+            //console.log(translator);
             body = translator;
 
             if (!body || response.statusCode == '404') {
@@ -445,11 +557,8 @@ module.exports = function (db) {
             console.log('current URL: ', url);
             console.log('next page: ', nextPage);
 
-            //trTagsArray = body.match(/<TR>([.\S\s]*?)<\/TR>/gm);
-
             trTagsArray = body.match(/<TR>([.\S\s]*?)<\/TR>/gm);
 
-            //console.log(trTagsArray[0].match(nameRegExp));
             for (var i = 0, j = trTagsArray.length - 1; j >= 0; j--) {
                 name = trTagsArray[i].match(nameRegExp)[1];
                 price = trTagsArray[i].match(priceRegExp)[1];
@@ -464,19 +573,12 @@ module.exports = function (db) {
                 console.log('price: ', price, ' name: ', name);
                 i++;
             }
-            //console.log('price: ', priceRegExp.exec(trTagsArray));
-            //console.log('price: ', priceRegExp.exec(trTagsArray)[1], ' Name: ', nameRegExp.exec(trTagsArray[1])[1]);
-            //console.log('price: ', priceRegExp.exec(trTagsArray[2])[1], ' Name: ', nameRegExp.exec(trTagsArray[2])[1]);
-            //console.log('price: ', priceRegExp.exec(trTagsArray[3])[1], ' Name: ', nameRegExp.exec(trTagsArray[3])[1]);
-            //}
+
             if (!nextPage) {
                 console.log('parsing ', results.length ,' crops');
-                //results.push(trTagsArray);
-
                 return cb(err, results);
             }
             return parseWholesalesByUrl ({url: nextPage, results: results}, cb);
-
         });
         //});
     };
@@ -519,10 +621,6 @@ module.exports = function (db) {
             console.log('match1: ', match[2].trim());
             console.log('match1: ', match[3].trim());
 
-
-
-            //console.log(trTagsArray[0].match(nameRegExp));
-
             for (var i = 0, j = trTagsArray.length - 1; j >= 0; j--) {
                 name = trTagsArray[i].match(nameRegExp)[1];
                 price = trTagsArray[i].match(priceRegExp)[1];
@@ -537,17 +635,8 @@ module.exports = function (db) {
                 i++;
             }
 
-
-            //console.log('price: ', priceRegExp.exec(trTagsArray));
-            //console.log('price: ', priceRegExp.exec(trTagsArray)[1], ' Name: ', nameRegExp.exec(trTagsArray[1])[1]);
-            //console.log('price: ', priceRegExp.exec(trTagsArray[2])[1], ' Name: ', nameRegExp.exec(trTagsArray[2])[1]);
-            //console.log('price: ', priceRegExp.exec(trTagsArray[3])[1], ' Name: ', nameRegExp.exec(trTagsArray[3])[1]);
-            //}
+            console.log('CALLBACK _________________PlanCouncil');
             cb(err, results);
-
         });
-
-
     };
-
 };

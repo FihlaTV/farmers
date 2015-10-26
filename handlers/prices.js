@@ -190,6 +190,7 @@ var Price = function (db) {
                     // TODO calculate plantsCouncil Price
                     more = [];
                     maxPrice = -1;
+                    maxQuality = '';
 
                     for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
                         if (receivedPriceArray[k].site == "PlantCouncil") {
@@ -220,7 +221,7 @@ var Price = function (db) {
                             type: "PlantCouncil",
                             name: "מועצת הצמחים"
                         },
-                        price: maxPrice,
+                        price: maxPrice > 0 ? maxPrice : 0,
                         quality: maxQuality,
                         data: lastPriceDate,
                         more: more
@@ -229,17 +230,43 @@ var Price = function (db) {
                     // TODO calculate Wholesale Price
                     more = [];
                     maxPrice = -1;
+                    maxQuality = '';
+
+                    for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                        if (receivedPriceArray[k].site == "Wholesale") {
+
+                            if (maxPrice < receivedPriceArray[k].price) {
+                                maxPrice = receivedPriceArray[k].price;
+                                maxQuality =  receivedPriceArray[k].wsQuality
+                            }
+
+                            more.push(
+                                {
+                                    price: receivedPriceArray[k].price,
+                                    quality: receivedPriceArray[k].wsQuality
+                                })
+                        }
+                    }
+
+                    // sort more max -> to -> min
+                    //http://jsperf.com/array-sort-vs-lodash-sort/2
+                    more.sort(function compare(a, b) {
+                        if (a.price < b.price) return 1;
+                        if (a.price > b.price) return -1;
+                        return 0;
+                    });
 
                     wholesalePrices = {
                         source: {
                             type: "Wholesale",
                             name: "שוק סיטונאי"
                         },
-                        price: 0,
-                        quality: '',
+                        price: maxPrice > 0 ? maxPrice : 0,
+                        quality: maxQuality,
                         data: lastPriceDate,
                         more: more
                     };
+
 
                     prices.push(marketeerPrices);
                     prices.push(wholesalePrices);

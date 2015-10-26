@@ -19,6 +19,9 @@ module.exports = function (db) {
             type: ObjectId,
             ref: CONST.MODELS.PRICE
         },
+        cropName: String,
+        source: String,
+
         createdAt: {type: Date, default: Date.now}
     }, {
         collection: CONST.MODELS.NOTIFICATION + 's'

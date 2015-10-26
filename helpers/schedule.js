@@ -18,42 +18,43 @@ module.exports = function (db) {
         console.log('scheduleJob -> syncPlantPrices ' + new Date());
         tasks =[];
 
-        tasks.push(function (cb) {
-            dataParser.getCropList(function (err, result) {
-                if (err) {
-                    logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
-                }
-                cropList = result;
-                console.log('CropList loaded');
-                //console.dir(cropList);
-                cb();
-            });
+        tasks.push(getCropList);
+        tasks.push(parseAndStoreDataFromSites);
+
+        async.series(tasks, function (err, result) {
+            if(err) {
+                console.log('ERROR:  Main Schedule Async ended with ERROR: ', err);
+            } else {
+                console.log('Main Schedule Async ended without error: ', result);
+            }
         });
-
-        tasks.push(parseAndStoreDataFromPlantCouncil);
-
-        async.series(
-            tasks
-            //    [ function (cb){
-            //    dataParser.syncPlantPrices(constants.URL_APIS.PLANTS_URL.API_URL, constants.URL_APIS.PLANTS_URL.SOURCE, function (err, result) {
-            //        if (err) {
-            //            logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
-            //        }
-            //        cb(err, result);
-            //    });
-            //}, function(cb){
-            //    dataParser.syncPlantPrices(constants.URL_APIS.MOAG_URL.API_URL, constants.URL_APIS.MOAG_URL.SOURCE, function (err, result) {
-            //        if (err) {
-            //            logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.MOAG_URL.SOURCE, err);
-            //        }
-            //        cb(err, result);
-            //    });
-            //}]
-        );
     });
 
+    function getCropList (cb){
+        dataParser.getCropList(function (err, result) {
+            if (err) {
+                logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
+            }
+            cropList = result;
+            console.log('CropList loaded');
+            //console.dir(cropList);
+            cb();
+        });
+    }
+
+    function parseAndStoreDataFromSites(cb) {
+        var parallelTasks = [];
+
+        parallelTasks.push(parseAndStoreDataFromPlantCouncil);
+        parallelTasks.push(parseAndStoreDataFromWholeSale);
+
+        async.parallel(parallelTasks,  function (err, result) {
+            cb(err, result);
+        });
+    }
+
     function parseAndStoreDataFromPlantCouncil(cb) {
-        dataParser.syncCropPrices(constants.URL_APIS.PLANTS_URL.API_URL, cropList, function (err, result) {
+        dataParser.syncPlantCouncilCropPrices(cropList, function (err, result) {
             if (err) {
                 logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.PLANTS_URL.SOURCE, err);
             }
@@ -61,36 +62,15 @@ module.exports = function (db) {
         });
     }
 
-    function getWholeSalePrice(cb) {
-        var tasks = [];
-        var startTime = new Date();
+    function parseAndStoreDataFromWholeSale(cb) {
 
-        tasks.push({
-            url: constants.URL_APIS.MOAG_URL.SOURCE_1,
-            results: []
-        });
-
-        tasks.push({
-            url: constants.URL_APIS.MOAG_URL.SOURCE_2,
-            results: []
-        });
-
-        tasks.push({
-            url: constants.URL_APIS.MOAG_URL.SOURCE_3,
-            //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm',
-            results: []
-        });
-        console.log('start time: ', startTime);
-
-        //async.mapSeries(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 10498
-        async.map(tasks, dataParser.parseWholesalesByUrl, function (err, result) { // spend time: 4558
+        dataParser.syncWholeSaleCropPrices(cropList, function (err, result) {
             if (err) {
-                return cb(err);
+                logWriter.log('scheduleJob -> syncPlantPrices -> ' + constants.URL_APIS.MOAG_URL.SOURCE_1, err);
             }
-            console.log('Spend time: ', new Date() - startTime);
-            return cb(err, result);
+            cb(err, result);
         });
-    };
+    }
 
     console.log('Schedule started');
 };
