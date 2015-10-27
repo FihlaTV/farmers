@@ -16,7 +16,7 @@ module.exports = function(db){
     /**
      * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
      *
-     * __URI:__ ___`/getLast`___
+     * __URI:__ ___`prices/getLast`___
      *
      * __METHOD:__ ___`GET`___
      *
@@ -84,6 +84,107 @@ module.exports = function(db){
 
         //TODO del "englishName" field from response after testing
     router.get('/getLast', prices.getLast);
+    /**
+     * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
+     *
+     * __URI:__ ___`prices/getCropPricesForPeriod`___
+     *
+     * __METHOD:__ ___`GET`___ with query: name, startDate, endDate
+     *
+     ** __Request:__
+     * ___`prices/getCropPricesForPeriod?name=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     *
+     *
+     *
+     * __Responses:__
+     *
+     *      status (200) JSON Array of objects: {[ {} , ...]}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      [ ...
+     *      {
+     *      "prices": [
+     *                  {
+     *                      "source": {
+     *                      "type": "marketeer",
+     *                      "name": ""
+     *                                  },
+     *                      "price": 0,
+     *                      "quality": "",
+     *                      "data": "2015-10-27T12:09:12.000Z",
+     *                      "more": []
+     *                  },
+     *                  {
+     *                      "source": {
+     *                      "type": "Wholesale",
+     *                      "name": "שוק סיטונאי"
+     *                              },
+     *                       "price": 13.8,
+     *                       "data": "2015-10-27T12:09:12.000Z",
+     *                       "more": [
+     *                                {
+     *                                "price": 13.8,
+     *                                "quality": "ק' 50-20 א"
+     *                                }
+     *                  ]
+     *      },
+     *      {
+     *      "prices": [
+     *                 {
+     *                        "source": {
+     *                        "type": "marketeer",
+     *                        "name": ""
+     *                                   },
+     *                        "price": 0,
+     *                        "quality": "",
+     *                        "data": "2015-10-23T12:09:12.000Z",
+     *                        "more": []
+     *                        },
+     *                        {
+     *                        "source": {
+     *                        "type": "Wholesale",
+     *                        "name": "שוק סיטונאי"
+     *                                   },
+     *                        "price": 13.8,
+     *                        "quality": "ק' 50-20 א",
+     *                        "data": "2015-10-23T12:09:12.000Z",
+     *                        "more": [
+     *                                 {
+     *                                 "price": 17.15,
+     *                                 "quality": "יבוא"
+     *                                 },
+     *                                 {
+     *                                 "price": 13.8,
+     *                                 "quality": "ק' 50-20 א"
+     *                                 }
+     *                                 ]
+     *                        },
+     *                        {
+     *                         "source": {
+     *                         "type": "PlantCouncil",
+     *                         "name": "מועצת הצמחים"
+     *                                   },
+     *                         "price": 12,
+     *                         "quality": "סוג א",
+     *                         "data": "2015-10-23T12:09:12.000Z",
+     *                         "more": [
+     *                                 {
+     *                                 "price": 12,
+     *                                 "quality": "סוג א"
+     *                                 }
+     *                                 ]
+      *          }...
+     *          ...]
+     *
+     * @method getCropPricesForPeriod
+     * @instance
+     * @for prices
+     * @memberOf prices
+     */
+    router.get('/getCropPricesForPeriod', prices.getCropPricesForPeriod);
+    router.get('/getLastFavorites', prices.getLastFavorites);
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
 

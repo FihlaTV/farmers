@@ -405,6 +405,7 @@ module.exports = function (db) {
                         saveOptions.cropListName = cropList[foundPosition].displayName;
                         saveOptions.pcQuality = cropList[foundPosition].pcQuality;
                         saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                        saveOptions.imported = cropList[foundPosition].imported;
 
                     } else {
                         console. log ('New crop detecdet: ', item.name);

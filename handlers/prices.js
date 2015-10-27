@@ -32,7 +32,7 @@ var Price = function (db) {
                         console.log('error: ', userId);
                         return callback(err);
                     }
-                    console.log('model: ', model);
+                    //console.log('model: ', model);
                     if (model) {
                         userFavorites = model.favorites;
                         userMarketeer = model.marketeer;
@@ -99,42 +99,40 @@ var Price = function (db) {
             });
     }
 
-    function createFnGetPricesByDate(date) {
-        return function (cb) {
-            console.log('date:', lastPriceDate);
+    function GetPricesByLastDate(cb) {
+        console.log('date:', lastPriceDate);
 
-            Price
-                .aggregate([
-                    {
-                        $match: {
-                            date: lastPriceDate
-                            //dayOfYear: dayOfYear
-                        }
-                    }, {
-                        $group: {
-                            _id: '$cropListName',
-                            prices: {
-                                $push: {
-                                    'price': '$price',
-                                    'site': '$site',
-                                    'cropListName': '$cropListName',
-                                    'date': '$date',
-                                    'pcQuality': '$pcQuality',
-                                    'wsQuality': '$wsQuality'
-                                }
+        Price
+            .aggregate([
+                {
+                    $match: {
+                        date: lastPriceDate
+                        //dayOfYear: dayOfYear
+                    }
+                }, {
+                    $group: {
+                        _id: '$cropListName',
+                        prices: {
+                            $push: {
+                                'price': '$price',
+                                'site': '$site',
+                                'cropListName': '$cropListName',
+                                'date': '$date',
+                                'pcQuality': '$pcQuality',
+                                'wsQuality': '$wsQuality'
                             }
                         }
-                    }])
-                .exec(function (err, results) {
-                    if (err) {
-                        cb(err);
-                    } else {
-                        receivedPrices = results;
-                        console.log ('receivedPrices',receivedPrices);
-                        cb();
                     }
-                });
-        };
+                }])
+            .exec(function (err, results) {
+                if (err) {
+                    cb(err);
+                } else {
+                    receivedPrices = results;
+                    console.log ('receivedPrices',receivedPrices);
+                    cb();
+                }
+            });
     }
 
     function syncPricesAndCropList(cb) {
@@ -289,6 +287,235 @@ var Price = function (db) {
 
     }
 
+    function mergeCropPricesByDate(cb) {
+        var cropsLen = cropListMerged.length - 1;
+        var pricedLen = receivedPrices.length - 1;
+        var isInFavorites = false;
+        var wholesalePrices = {};
+        var plantsCouncilPrices = {};
+        var marketeerPrices = [];
+        var prices = [];
+        var maxPrice = -1;
+        var maxQuality = '';
+        var more = [];
+
+        console.log('cropsLen: ', cropsLen);
+        console.log('pricedLen: ', pricedLen);
+
+        resultPriceList = [];
+        for (var j = 0; j < pricedLen; j ++) {
+            receivedPriceArray = receivedPrices[j].prices;
+
+            wholesalePrices = {};
+            plantsCouncilPrices = {};
+            marketeerPrices = {};
+            prices = [];
+
+            // TODO calculate Marketeer Price
+            more = [];
+            maxPrice = -1;
+
+            marketeerPrices = {
+                source: {
+                    type: "marketeer",
+                    name: userMarketeer ? userMarketeer.fullName : '',
+                },
+                price: 0,
+                quality: '',
+                data: receivedPrices[j]._id,
+                more: more
+            };
+
+            // TODO calculate plantsCouncil Price
+            more = [];
+            maxPrice = -1;
+            maxQuality = '';
+
+            for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                if (receivedPriceArray[k].site == "PlantCouncil") {
+
+                    if (maxPrice < receivedPriceArray[k].price) {
+                        maxPrice = receivedPriceArray[k].price;
+                        maxQuality = receivedPriceArray[k].pcQuality
+                    }
+
+                    more.push(
+                        {
+                            price: receivedPriceArray[k].price,
+                            quality: receivedPriceArray[k].pcQuality
+                        })
+                }
+            }
+
+            // sort more max -> to -> min
+            //http://jsperf.com/array-sort-vs-lodash-sort/2
+            more.sort(function compare(a, b) {
+                if (a.price < b.price) return 1;
+                if (a.price > b.price) return -1;
+                return 0;
+            });
+
+            plantsCouncilPrices = {
+                source: {
+                    type: "PlantCouncil",
+                    name: "מועצת הצמחים"
+                },
+                price: maxPrice > 0 ? maxPrice : 0,
+                quality: maxQuality,
+                data: receivedPrices[j]._id,
+                more: more
+            };
+
+            // TODO calculate Wholesale Price
+            more = [];
+            maxPrice = -1;
+            maxQuality = '';
+
+            for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                if (receivedPriceArray[k].site == "Wholesale") {
+                    more.push(
+                        {
+                            price: receivedPriceArray[k].price,
+                            quality: receivedPriceArray[k].wsQuality,
+                            imported: receivedPriceArray[k].imported
+                        })
+                }
+            }
+
+            // sort more max -> to -> min
+            //http://jsperf.com/array-sort-vs-lodash-sort/2
+            more.sort(function compare(a, b) {
+                if (a.price < b.price) return 1;
+                if (a.price > b.price) return -1;
+                return 0;
+            });
+
+            maxPrice = more.length ? more[more.length - 1].price : '';
+            maxQuality = more.length ? more[more.length - 1].quality : '';
+
+            for (var k = more.length - 1; k >= 0; k--) {
+                if (!more[k].imported) {
+                    if (maxPrice < more[k].price) {
+                        maxPrice = more[k].price;
+                        maxQuality = more[k].wsQuality
+                    }
+                }
+                delete(more[k].imported);
+            }
+
+            wholesalePrices = {
+                source: {
+                    type: "Wholesale",
+                    name: "שוק סיטונאי"
+                },
+                price: maxPrice > 0 ? maxPrice : 0,
+                quality: maxQuality,
+                data: receivedPrices[j]._id,
+                more: more
+            };
+
+
+            prices.push(marketeerPrices);
+            prices.push(wholesalePrices);
+            prices.push(plantsCouncilPrices);
+
+            resultPriceList.push({
+                //_crop: cropListMerged[i]._id,
+                ////englishName: cropListMerged[i].englishName,
+                ////displayName: cropListMerged[i].displayName,
+                ////isInFavorites: isInFavorites,
+                //image: cropListMerged[i].image,
+                prices: prices
+            });
+        }
+        cb()
+    }
+
+    function getLastPricesOfFavorites(cb) {
+
+        console.log('date:', lastPriceDate);
+
+        Price
+            .aggregate([
+                {
+                    $match: {
+                        "cropListName": { $in: userFavorites}
+                        //dayOfYear: dayOfYear
+                    }
+                }, {
+                    $group: {
+                        _id: '$cropListName',
+                        prices: {
+                            $push: {
+                                'price': '$price',
+                                'site': '$site',
+                                'cropListName': '$cropListName',
+                                'date': '$date',
+                                'pcQuality': '$pcQuality',
+                                'wsQuality': '$wsQuality'
+                            }
+                        }
+                    }
+                },
+                // -1 menas first newest date in upper
+                //TODO check sort function, dont work
+                { $sort: { "prices.date": 1 } }
+            ])
+            .exec(function (err, results) {
+                if (err) {
+                    cb(err);
+                } else {
+                    receivedPrices = results;
+                    console.log ('receivedPrices: ',receivedPrices);
+                    cb(err, results);
+                }
+            });
+    }
+
+    function createFnGetPricesForCropByPeriod(cropName, startDate, endDate) {
+        return function (cb) {
+
+            Price
+                .aggregate([
+                    {
+                        $match: {
+                            cropListName: cropName,
+                            date: {$gte: endDate , $lt: startDate}
+                            //date: {$gte: startDate ISODate("2013-01-01T00:00:00.0Z"), $lt: ISODate("2013-02-01T00:00:00.0Z")}
+                            //dayOfYear: dayOfYear
+                        }
+                    }, {
+                        $group: {
+                            _id: '$date',
+                            prices: {
+                                $push: {
+                                    'price': '$price',
+                                    'site': '$site',
+                                    'cropListName': '$cropListName',
+                                    'date': '$date',
+                                    'pcQuality': '$pcQuality',
+                                    'wsQuality': '$wsQuality',
+                                    'imported': '$imported'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $sort: {_id: -1 }
+                    }
+                ])
+                .exec(function (err, results) {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        receivedPrices = results;
+                        console.log('receivedPrices: ', receivedPrices);
+                        cb(err, results);
+                    }
+                });
+        }
+    }
+
     this.getLast = function (req, res, next) {
         var tasks = [];
         var userId = req.session.uId;
@@ -296,7 +523,7 @@ var Price = function (db) {
         tasks.push(getCropList);
         tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
         tasks.push(getLastPriceDate);
-        tasks.push(createFnGetPricesByDate(lastPriceDate));
+        tasks.push(GetPricesByLastDate);
         tasks.push(syncPricesAndCropList);
 
         async.series(tasks, function (err, results) {
@@ -310,9 +537,83 @@ var Price = function (db) {
             //return res.status(200).send(receivedPrices);
 
         });
-    }
+    };
 
-    // TODO Test parse date from wholesale
+    this.getCropPricesForPeriod = function (req, res, next) {
+        var tasks = [];
+        var userId = req.session.uId;
+        var today =  new Date();
+        var lastWeekDate = (new Date(today)).setDate((today.getDate() - 7));
+        //lastWeekDate = lastWeekDate.setDate((today.getDate() - 7));
+
+        var startDate = req.query.startDate || today;
+        var endDate = req.query.endDate || new Date(lastWeekDate);
+        var cropName = req.query.name;
+
+        console.log('Name: ',cropName,' startDate: ', startDate ,' ', typeof (startDate),' endDate: ', "" + endDate , typeof (endDate));
+
+        if (!startDate || !endDate || !cropName || startDate < endDate ) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+        startDate = new Date (startDate);
+        endDate = new Date (endDate);
+
+        startDate.setHours(23);
+        startDate.setMinutes(55);
+
+        endDate.setHours(0);
+        endDate.setMinutes(0);
+
+        //var d = new Date(endDate);
+        //console.log(d.getTimezoneOffset());
+
+        console.log('startDate: ', startDate ,'endDate: ', endDate);
+
+        tasks.push(getCropList);
+        tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
+        //tasks.push(getLastPriceDate);
+        tasks.push(createFnGetPricesForCropByPeriod(cropName, startDate, endDate));
+        tasks.push(mergeCropPricesByDate);
+
+        async.series(tasks, function (err, results) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+
+            //return res.status(200).send({success: receivedPrices});
+            console.log('resultPriceList Len: ', receivedPrices.length);
+            console.log('resultPriceList Len: ', resultPriceList.length);
+            return res.status(200).send(resultPriceList);
+            //return res.status(200).send(receivedPrices);
+
+        });
+    };
+
+    this.getLastFavorites = function (req, res, next) {
+        var tasks = [];
+        var userId = req.session.uId;
+
+        tasks.push(getCropList);
+        tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
+        tasks.push(getLastPricesOfFavorites);
+        //tasks.push(getLastPriceDate);
+        //tasks.push(createFnGetPricesByDate(lastPriceDate));
+        //tasks.push(syncPricesAndCropList);
+
+        async.series(tasks, function (err, results) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+
+            //return res.status(200).send({success: receivedPrices});
+            console.log('resultPriceList Len: ', results.length);
+            return res.status(200).send(results);
+            //return res.status(200).send(receivedPrices);
+
+        });
+    };
+
+// TODO Test parse date from wholesale
     this.getWholeSalePrice = function (req, res, next) {
         var tasks = [];
         var startTime = new Date();

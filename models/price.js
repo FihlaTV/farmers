@@ -21,6 +21,7 @@ module.exports = function (db) {
         cropListName: String,
         site: String,
         excellent: {type: Boolean, default: false},
+        imported: {type: Boolean, default: false},
         minPrice: {type: Number, default: 0 },
         maxPrice: {type: Number, default: 0 },
         avgPrice: {type: Number, default: 0 }
