@@ -175,7 +175,7 @@ module.exports = function(db){
      *                                 "quality": "סוג א"
      *                                 }
      *                                 ]
-      *          }...
+     *          }...
      *          ...]
      *
      * @method getCropPricesForPeriod
@@ -187,6 +187,5 @@ module.exports = function(db){
     router.get('/getLastFavorites', prices.getLastFavorites);
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
-
     return router;
 };
