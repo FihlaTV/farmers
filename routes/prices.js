@@ -89,10 +89,10 @@ module.exports = function(db){
      *
      * __URI:__ ___`prices/getCropPricesForPeriod`___
      *
-     * __METHOD:__ ___`GET`___ with query: name, startDate, endDate
+     * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
      *
      ** __Request:__
-     * ___`prices/getCropPricesForPeriod?name=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     * ___`prices/getCropPricesForPeriod?cropName=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
      *
      *
      *
@@ -187,5 +187,8 @@ module.exports = function(db){
     router.get('/getLastFavorites', prices.getLastFavorites);
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
+
+    //router.post('/addFarmerPrice/', )
+
     return router;
 };

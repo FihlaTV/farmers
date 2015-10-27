@@ -548,7 +548,7 @@ var Price = function (db) {
 
         var startDate = req.query.startDate || today;
         var endDate = req.query.endDate || new Date(lastWeekDate);
-        var cropName = req.query.name;
+        var cropName = req.query.cropName;
 
         console.log('Name: ',cropName,' startDate: ', startDate ,' ', typeof (startDate),' endDate: ', "" + endDate , typeof (endDate));
 
@@ -596,6 +596,39 @@ var Price = function (db) {
         tasks.push(getCropList);
         tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
         tasks.push(getLastPricesOfFavorites);
+        //tasks.push(getLastPriceDate);
+        //tasks.push(createFnGetPricesByDate(lastPriceDate));
+        //tasks.push(syncPricesAndCropList);
+
+        async.series(tasks, function (err, results) {
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+
+            //return res.status(200).send({success: receivedPrices});
+            console.log('resultPriceList Len: ', results.length);
+            return res.status(200).send(results);
+            //return res.status(200).send(receivedPrices);
+
+        });
+    };
+
+    this.addFarferPrices = function (req, res, next) {
+        var tasks = [];
+        var userId = req.session.uId;
+        var date = req.body.date;
+        var cropName = req.body.cropName;
+        var prices = req.body.prices; /// [ {price: , userQuality: }
+
+        if (!date || !cropName || !prices || !prices.length) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+
+
+        //TODO check cropName in cropList
+        //tasks.push(getCropList);
+        tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
+        //tasks.push(getLastPricesOfFavorites);
         //tasks.push(getLastPriceDate);
         //tasks.push(createFnGetPricesByDate(lastPriceDate));
         //tasks.push(syncPricesAndCropList);
