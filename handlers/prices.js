@@ -287,148 +287,177 @@ var Price = function (db) {
 
     }
 
-    function mergeCropPricesByDate(cb) {
-        var cropsLen = cropListMerged.length - 1;
-        var pricedLen = receivedPrices.length - 1;
-        var isInFavorites = false;
-        var wholesalePrices = {};
-        var plantsCouncilPrices = {};
-        var marketeerPrices = [];
-        var prices = [];
-        var maxPrice = -1;
-        var maxQuality = '';
-        var more = [];
+    function createFnMergeCropPricesByDate (userId) {
+        return function (cb) {
+            var cropsLen = cropListMerged.length - 1;
+            var pricedLen = receivedPrices.length - 1;
+            var wholesalePrices = {};
+            var plantsCouncilPrices = {};
+            var marketeerPrices = [];
+            var prices = [];
+            var maxPrice = -1;
+            var maxQuality = '';
+            var more = [];
 
-        console.log('cropsLen: ', cropsLen);
-        console.log('pricedLen: ', pricedLen);
+            console.log('cropsLen: ', cropsLen);
+            console.log('pricedLen: ', pricedLen);
 
-        resultPriceList = [];
-        for (var j = 0; j < pricedLen; j ++) {
-            receivedPriceArray = receivedPrices[j].prices;
 
-            wholesalePrices = {};
-            plantsCouncilPrices = {};
-            marketeerPrices = {};
-            prices = [];
 
-            // TODO calculate Marketeer Price
-            more = [];
-            maxPrice = -1;
 
-            marketeerPrices = {
-                source: {
-                    type: "marketeer",
-                    name: userMarketeer ? userMarketeer.fullName : '',
-                },
-                price: 0,
-                quality: '',
-                data: receivedPrices[j]._id,
-                more: more
-            };
+            resultPriceList = [];
+            for (var j = 0; j < pricedLen; j++) {
+                receivedPriceArray = receivedPrices[j].prices;
 
-            // TODO calculate plantsCouncil Price
-            more = [];
-            maxPrice = -1;
-            maxQuality = '';
+                console.log('receivedPrices: ', receivedPrices[j]._id);
+                console.dir(receivedPrices[j].prices);
 
-            for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
-                if (receivedPriceArray[k].site == "PlantCouncil") {
+                wholesalePrices = {};
+                plantsCouncilPrices = {};
+                marketeerPrices = {};
+                prices = [];
 
-                    if (maxPrice < receivedPriceArray[k].price) {
-                        maxPrice = receivedPriceArray[k].price;
-                        maxQuality = receivedPriceArray[k].pcQuality
-                    }
+                // TODO calculate Marketeer Price
+                more = [];
+                maxPrice = -1;
+                maxQuality = '';
 
-                    more.push(
-                        {
-                            price: receivedPriceArray[k].price,
-                            quality: receivedPriceArray[k].pcQuality
-                        })
-                }
-            }
-
-            // sort more max -> to -> min
-            //http://jsperf.com/array-sort-vs-lodash-sort/2
-            more.sort(function compare(a, b) {
-                if (a.price < b.price) return 1;
-                if (a.price > b.price) return -1;
-                return 0;
-            });
-
-            plantsCouncilPrices = {
-                source: {
-                    type: "PlantCouncil",
-                    name: "מועצת הצמחים"
-                },
-                price: maxPrice > 0 ? maxPrice : 0,
-                quality: maxQuality,
-                data: receivedPrices[j]._id,
-                more: more
-            };
-
-            // TODO calculate Wholesale Price
-            more = [];
-            maxPrice = -1;
-            maxQuality = '';
-
-            for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
-                if (receivedPriceArray[k].site == "Wholesale") {
-                    more.push(
-                        {
-                            price: receivedPriceArray[k].price,
-                            quality: receivedPriceArray[k].wsQuality,
-                            imported: receivedPriceArray[k].imported
-                        })
-                }
-            }
-
-            // sort more max -> to -> min
-            //http://jsperf.com/array-sort-vs-lodash-sort/2
-            more.sort(function compare(a, b) {
-                if (a.price < b.price) return 1;
-                if (a.price > b.price) return -1;
-                return 0;
-            });
-
-            maxPrice = more.length ? more[more.length - 1].price : '';
-            maxQuality = more.length ? more[more.length - 1].quality : '';
-
-            for (var k = more.length - 1; k >= 0; k--) {
-                if (!more[k].imported) {
-                    if (maxPrice < more[k].price) {
-                        maxPrice = more[k].price;
-                        maxQuality = more[k].wsQuality
+                for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                    if (receivedPriceArray[k]._marketeer && receivedPriceArray[k]._marketeer == userMarketeer._id && receivedPriceArray[k]._user == userId) {
+                        more.push(
+                            {
+                                price: receivedPriceArray[k].price,
+                                quality: receivedPriceArray[k].userQuality
+                            })
                     }
                 }
-                delete(more[k].imported);
+
+                // sort more max -> to -> min
+                //http://jsperf.com/array-sort-vs-lodash-sort/2
+                more.sort(function compare(a, b) {
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    return 0;
+                });
+
+                maxPrice = more.length ? more[0].price : 0;
+                maxQuality = more.length ? more[0].quality: '';
+
+                marketeerPrices = {
+                    source: {
+                        type: "marketeer",
+                        name: userMarketeer ? userMarketeer.fullName : ''
+                    },
+                    price: maxPrice,
+                    quality: maxQuality,
+                    data: receivedPrices[j]._id,
+                    more: more
+                };
+
+                // TODO calculate plantsCouncil Price
+                more = [];
+                maxPrice = -1;
+                maxQuality = '';
+
+                for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                    if (receivedPriceArray[k].site == "PlantCouncil") {
+
+                        if (maxPrice < receivedPriceArray[k].price) {
+                            maxPrice = receivedPriceArray[k].price;
+                            maxQuality = receivedPriceArray[k].pcQuality
+                        }
+
+                        more.push(
+                            {
+                                price: receivedPriceArray[k].price,
+                                quality: receivedPriceArray[k].pcQuality
+                            })
+                    }
+                }
+
+                // sort more max -> to -> min
+                //http://jsperf.com/array-sort-vs-lodash-sort/2
+                more.sort(function compare(a, b) {
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    return 0;
+                });
+
+                plantsCouncilPrices = {
+                    source: {
+                        type: "PlantCouncil",
+                        name: "מועצת הצמחים"
+                    },
+                    price: maxPrice > 0 ? maxPrice : 0,
+                    quality: maxQuality,
+                    data: receivedPrices[j]._id,
+                    more: more
+                };
+
+                // TODO calculate Wholesale Price
+                more = [];
+                maxPrice = -1;
+                maxQuality = '';
+
+                for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
+                    if (receivedPriceArray[k].site == "Wholesale") {
+                        more.push(
+                            {
+                                price: receivedPriceArray[k].price,
+                                quality: receivedPriceArray[k].wsQuality,
+                                imported: receivedPriceArray[k].imported
+                            })
+                    }
+                }
+
+                // sort more max -> to -> min
+                //http://jsperf.com/array-sort-vs-lodash-sort/2
+                more.sort(function compare(a, b) {
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    return 0;
+                });
+
+                maxPrice = more.length ? more[more.length - 1].price : '';
+                maxQuality = more.length ? more[more.length - 1].quality : '';
+
+                for (var k = more.length - 1; k >= 0; k--) {
+                    if (!more[k].imported) {
+                        if (maxPrice < more[k].price) {
+                            maxPrice = more[k].price;
+                            maxQuality = more[k].wsQuality
+                        }
+                    }
+                    delete(more[k].imported);
+                }
+
+                wholesalePrices = {
+                    source: {
+                        type: "Wholesale",
+                        name: "שוק סיטונאי"
+                    },
+                    price: maxPrice > 0 ? maxPrice : 0,
+                    quality: maxQuality,
+                    data: receivedPrices[j]._id,
+                    more: more
+                };
+
+
+                prices.push(marketeerPrices);
+                prices.push(wholesalePrices);
+                prices.push(plantsCouncilPrices);
+
+                resultPriceList.push({
+                    //_crop: cropListMerged[i]._id,
+                    ////englishName: cropListMerged[i].englishName,
+                    ////displayName: cropListMerged[i].displayName,
+                    ////isInFavorites: isInFavorites,
+                    //image: cropListMerged[i].image,
+                    prices: prices
+                });
             }
-
-            wholesalePrices = {
-                source: {
-                    type: "Wholesale",
-                    name: "שוק סיטונאי"
-                },
-                price: maxPrice > 0 ? maxPrice : 0,
-                quality: maxQuality,
-                data: receivedPrices[j]._id,
-                more: more
-            };
-
-
-            prices.push(marketeerPrices);
-            prices.push(wholesalePrices);
-            prices.push(plantsCouncilPrices);
-
-            resultPriceList.push({
-                //_crop: cropListMerged[i]._id,
-                ////englishName: cropListMerged[i].englishName,
-                ////displayName: cropListMerged[i].displayName,
-                ////isInFavorites: isInFavorites,
-                //image: cropListMerged[i].image,
-                prices: prices
-            });
-        }
-        cb()
+            cb()
+        };
     }
 
     function getLastPricesOfFavorites(cb) {
@@ -491,10 +520,13 @@ var Price = function (db) {
                                 $push: {
                                     'price': '$price',
                                     'site': '$site',
+                                    '_user': '$_user',
+                                    '_marketeer': '$_marketeer',
                                     'cropListName': '$cropListName',
                                     'date': '$date',
                                     'pcQuality': '$pcQuality',
                                     'wsQuality': '$wsQuality',
+                                    'userQuality': '$userQuality',
                                     'imported': '$imported'
                                 }
                             }
@@ -532,8 +564,8 @@ var Price = function (db) {
                     date: item.date,
                     userQuality: item.userQuality,
                     _user: userId,
-                    marketeer: userMarketeer._id,
-                    cropListName: item.cropName,
+                    _marketeer: userMarketeer._id,
+                    cropListName: item.cropListName,
                     year: moment(item.date).year(),
                     month: moment(item.date).month(),
                     dayOfYear: moment(item.date).dayOfYear()
@@ -604,7 +636,7 @@ var Price = function (db) {
         endDate.setHours(0);
         endDate.setMinutes(0);
 
-        //var d = new Date(endDate);
+
         //console.log(d.getTimezoneOffset());
 
         console.log('startDate: ', startDate ,'endDate: ', endDate);
@@ -613,7 +645,7 @@ var Price = function (db) {
         tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
         //tasks.push(getLastPriceDate);
         tasks.push(createFnGetPricesForCropByPeriod(cropName, startDate, endDate));
-        tasks.push(mergeCropPricesByDate);
+        tasks.push(createFnMergeCropPricesByDate (userId));
 
         async.series(tasks, function (err, results) {
             if (err) {
