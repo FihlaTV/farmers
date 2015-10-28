@@ -597,3 +597,47 @@ SyntaxError: Unexpected token ]
     at _stream_readable.js:908:16
     at process._tickCallback (node.js:355:11)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:00:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:03:30 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:06:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:12:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:16:10 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:21:24 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:36:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:39:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:42:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 12:57:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Oct 28 2015 13:00:22 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
