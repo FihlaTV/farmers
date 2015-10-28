@@ -164,6 +164,193 @@
         <dl>
             
 <dt>
+    <h4 class="name" id="addFarmerPrices"><span class="type-signature"></span>addFarmerPrices<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for ADD PRICE SCREEN. User add prices and quallity for marketeer</p>
+<p><strong>URI:</strong> <strong><em><code>prices/addFarmerPrice</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<ul>
+<li><p><strong>Request:</strong></p>
+<p>   Body:</p>
+<pre class="prettyprint source"><code>   date//the date chosen by the user
+   cropName // display crop name
+   prices // []Array of prices and qualityes [ .. {&quot;price&quot;: ..., &quot;userQuality&quot;: &quot;..&quot;}...]</code></pre></li>
+</ul>
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         &quot;date&quot;:&quot;2015-10-27 12:09:12.000Z&quot;,         &quot;cropName&quot;:&quot;תפוזים טבורי&quot;,         &quot;prices&quot;: [                    {                         &quot;price&quot;: 5.3,                         &quot;userQuality&quot;: &quot;excellent&quot;                     },                    {                       &quot;price&quot;: 5.5,                      &quot;userQuality&quot;: &quot;excellent 50-70&quot;                    }                     ]       }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getCropPricesForPeriod"><span class="type-signature"></span>getCropPricesForPeriod<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for All Crop Prices  Screen. Get all last Crop prices (in Calendar order)</p>
+<p><strong>URI:</strong> <strong><em><code>prices/getCropPricesForPeriod</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong> with query: cropName, startDate, endDate</p>
+<ul>
+<li><strong>Request:</strong>
+<strong><em><code>prices/getCropPricesForPeriod?cropName=שום&amp;startDate=2016-10-27T12:09:12.000Z&amp;endDate=2014-10-24T12:09:12.000Z</code></em></strong></li>
+</ul>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON Array of objects: {[ {} , ...]}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">[ ...     {     &quot;prices&quot;: [                 {                     &quot;source&quot;: {                     &quot;type&quot;: &quot;marketeer&quot;,                     &quot;name&quot;: &quot;&quot;                                 },                     &quot;price&quot;: 0,                     &quot;quality&quot;: &quot;&quot;,                     &quot;data&quot;: &quot;2015-10-27T12:09:12.000Z&quot;,                     &quot;more&quot;: []                 },                 {                     &quot;source&quot;: {                     &quot;type&quot;: &quot;Wholesale&quot;,                     &quot;name&quot;: &quot;שוק סיטונאי&quot;                             },                      &quot;price&quot;: 13.8,                      &quot;data&quot;: &quot;2015-10-27T12:09:12.000Z&quot;,                      &quot;more&quot;: [                               {                               &quot;price&quot;: 13.8,                               &quot;quality&quot;: &quot;ק&#x27; 50-20 א&quot;                               }                 ]     },     {     &quot;prices&quot;: [                {                       &quot;source&quot;: {                       &quot;type&quot;: &quot;marketeer&quot;,                       &quot;name&quot;: &quot;&quot;                                  },                       &quot;price&quot;: 0,                       &quot;quality&quot;: &quot;&quot;,                       &quot;data&quot;: &quot;2015-10-23T12:09:12.000Z&quot;,                       &quot;more&quot;: []                       },                       {                       &quot;source&quot;: {                       &quot;type&quot;: &quot;Wholesale&quot;,                       &quot;name&quot;: &quot;שוק סיטונאי&quot;                                  },                       &quot;price&quot;: 13.8,                       &quot;quality&quot;: &quot;ק&#x27; 50-20 א&quot;,                       &quot;data&quot;: &quot;2015-10-23T12:09:12.000Z&quot;,                       &quot;more&quot;: [                                {                                &quot;price&quot;: 17.15,                                &quot;quality&quot;: &quot;יבוא&quot;                                },                                {                                &quot;price&quot;: 13.8,                                &quot;quality&quot;: &quot;ק&#x27; 50-20 א&quot;                                }                                ]                       },                       {                        &quot;source&quot;: {                        &quot;type&quot;: &quot;PlantCouncil&quot;,                        &quot;name&quot;: &quot;מועצת הצמחים&quot;                                  },                        &quot;price&quot;: 12,                        &quot;quality&quot;: &quot;סוג א&quot;,                        &quot;data&quot;: &quot;2015-10-23T12:09:12.000Z&quot;,                        &quot;more&quot;: [                                {                                &quot;price&quot;: 12,                                &quot;quality&quot;: &quot;סוג א&quot;                                }                                ]         }...         ...]</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="getLast"><span class="type-signature"></span>getLast<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
@@ -173,7 +360,7 @@
     
     <div class="description">
         <p>This <strong>method</strong>  for Main Screen. Get all last Crop prices (in CropList order)</p>
-<p><strong>URI:</strong> <strong><em><code>/getLast</code></em></strong></p>
+<p><strong>URI:</strong> <strong><em><code>prices/getLast</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
 <p><strong>Responses:</strong></p>
 <pre class="prettyprint source"><code> status (200) JSON Array of objects: {[ {} , ...]}
@@ -287,7 +474,7 @@
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a>
-	on Thu Oct 22nd 2015 using the <a
+	on Wed Oct 28th 2015 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>

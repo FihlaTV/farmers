@@ -18,9 +18,12 @@ module.exports = function (db) {
         price: Number,
         pcQuality: String,
         wsQuality: String,
+        userQuality: String,
         cropListName: String,
+        marketeer: String,
         site: String,
         excellent: {type: Boolean, default: false},
+        imported: {type: Boolean, default: false},
         minPrice: {type: Number, default: 0 },
         maxPrice: {type: Number, default: 0 },
         avgPrice: {type: Number, default: 0 }
