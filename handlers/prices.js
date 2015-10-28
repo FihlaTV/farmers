@@ -516,6 +516,46 @@ var Price = function (db) {
         }
     }
 
+    function createFnSaveFarmerPrices(userId, prices) {
+        return function (cb) {
+            // eachSeries need only in check purpose
+            if (!userMarketeer) {
+                return cb('User dont has marketeer');
+            }
+
+            async.eachSeries(prices, function (item, callback) {
+                var price = parseFloat(item.price) || 0;
+                var saveOptions;
+
+                saveOptions = {
+                    price: price,
+                    date: item.date,
+                    userQuality: item.userQuality,
+                    _user: userId,
+                    marketeer: userMarketeer._id,
+                    cropListName: item.cropName,
+                    year: moment(item.date).year(),
+                    month: moment(item.date).month(),
+                    dayOfYear: moment(item.date).dayOfYear()
+                };
+
+                price = new Price(saveOptions);
+                price
+                    .save(function (err, model) {
+                        if (err) {
+                            return  callback('DB err:' + err);
+                        }
+                        callback();
+                    });
+            }, function (err) {
+                if (err) {
+                    return cb(err);
+                }
+                cb();
+            });
+        }
+    }
+
     this.getLast = function (req, res, next) {
         var tasks = [];
         var userId = req.session.uId;
@@ -613,7 +653,7 @@ var Price = function (db) {
         });
     };
 
-    this.addFarferPrices = function (req, res, next) {
+    this.addFarmerPrices = function (req, res, next) {
         var tasks = [];
         var userId = req.session.uId;
         var date = req.body.date;
@@ -624,25 +664,24 @@ var Price = function (db) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
 
+        //TODO set good date format with correct time and timezone
+        date = new Date(date);
+
+        for(var i = prices.length - 1; i >= 0; i--){
+            prices[i].date = date;
+            prices[i].cropListName = cropName;
+        }
 
         //TODO check cropName in cropList
         //tasks.push(getCropList);
         tasks.push(createFnGetUserFavoritesAndMarketeerById(userId));
-        //tasks.push(getLastPricesOfFavorites);
-        //tasks.push(getLastPriceDate);
-        //tasks.push(createFnGetPricesByDate(lastPriceDate));
-        //tasks.push(syncPricesAndCropList);
+        tasks.push(createFnSaveFarmerPrices(userId, prices));
 
         async.series(tasks, function (err, results) {
             if (err) {
                 return res.status(500).send({error: err});
             }
-
-            //return res.status(200).send({success: receivedPrices});
-            console.log('resultPriceList Len: ', results.length);
-            return res.status(200).send(results);
-            //return res.status(200).send(receivedPrices);
-
+            return res.status(200).send({'success': RESPONSE.ON_ACTION.SUCCESS});
         });
     };
 

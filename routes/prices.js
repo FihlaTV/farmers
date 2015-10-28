@@ -85,7 +85,7 @@ module.exports = function(db){
         //TODO del "englishName" field from response after testing
     router.get('/getLast', prices.getLast);
     /**
-     * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
+     * This __method__  for All Crop Prices  Screen. Get all last Crop prices (in Calendar order)
      *
      * __URI:__ ___`prices/getCropPricesForPeriod`___
      *
@@ -188,7 +188,48 @@ module.exports = function(db){
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
 
-    //router.post('/addFarmerPrice/', )
+    /**
+     * This __method__  for ADD PRICE SCREEN. User add prices and quallity for marketeer
+     *
+     * __URI:__ ___`prices/addFarmerPrice`___
+     *
+     * __METHOD:__ ___`POST`___
+     *
+     * * __Request:__
+     *
+     *      Body:
+     *          date//the date chosen by the user
+     *          cropName // display crop name
+     *          prices // []Array of prices and qualityes [ .. {"price": ..., "userQuality": ".."}...]
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: { success: 'success'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      {
+     *          "date":"2015-10-27 12:09:12.000Z",
+     *          "cropName":"תפוזים טבורי",
+     *          "prices": [
+     *                     {
+     *                          "price": 5.3,
+     *                          "userQuality": "excellent"
+     *                      },
+     *                     {
+     *                        "price": 5.5,
+     *                       "userQuality": "excellent 50-70"
+     *                     }
+     *                      ]
+     *        }
+     *
+     * @method addFarmerPrices
+     * @instance
+     * @for prices
+     * @memberOf prices
+     */
+    router.post('/addFarmerPrice/', prices.addFarmerPrices);
 
     return router;
 };
