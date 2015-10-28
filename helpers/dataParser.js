@@ -405,6 +405,7 @@ module.exports = function (db) {
                         saveOptions.cropListName = cropList[foundPosition].displayName;
                         saveOptions.pcQuality = cropList[foundPosition].pcQuality;
                         saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                        saveOptions.imported = cropList[foundPosition].imported;
 
                     } else {
                         console. log ('New crop detecdet: ', item.name);
@@ -534,17 +535,18 @@ module.exports = function (db) {
             var nameRegExp = /(?:<FONT face='Arial' size=\d color='BLUE'>)([.\S\s]*?)(?:<)/m;
             var priceRegExp = /(?:<FONT face='Arial' size=1 color='DARKBLUE'>)([.\S\s]*?)(?:<)/m;
             var nextPageRegExp = /(?:<a href=)(.*)(?:>לדף הבא _<\/a>)/m;
-
             var name;
             var price;
-            var translator = Iconv.decode(body, 'win1255');
+            var translator;
 
             //console.log(translator);
-            body = translator;
 
             if (!body || response.statusCode == '404') {
                 return cb('body is empty (check your connection to internet)');
             }
+
+            translator = Iconv.decode(body, 'win1255');
+            body = translator;
 
             date = body.match(dateRegExp)[0];
             nextPage = body.match(nextPageRegExp) ? (body.match(nextPageRegExp)[1]).replace(/\\/g,"/") : '';

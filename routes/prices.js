@@ -16,7 +16,7 @@ module.exports = function(db){
     /**
      * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
      *
-     * __URI:__ ___`/getLast`___
+     * __URI:__ ___`prices/getLast`___
      *
      * __METHOD:__ ___`GET`___
      *
@@ -84,8 +84,152 @@ module.exports = function(db){
 
         //TODO del "englishName" field from response after testing
     router.get('/getLast', prices.getLast);
+    /**
+     * This __method__  for All Crop Prices  Screen. Get all last Crop prices (in Calendar order)
+     *
+     * __URI:__ ___`prices/getCropPricesForPeriod`___
+     *
+     * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
+     *
+     ** __Request:__
+     * ___`prices/getCropPricesForPeriod?cropName=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     *
+     *
+     *
+     * __Responses:__
+     *
+     *      status (200) JSON Array of objects: {[ {} , ...]}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      [ ...
+     *      {
+     *      "prices": [
+     *                  {
+     *                      "source": {
+     *                      "type": "marketeer",
+     *                      "name": ""
+     *                                  },
+     *                      "price": 0,
+     *                      "quality": "",
+     *                      "data": "2015-10-27T12:09:12.000Z",
+     *                      "more": []
+     *                  },
+     *                  {
+     *                      "source": {
+     *                      "type": "Wholesale",
+     *                      "name": "שוק סיטונאי"
+     *                              },
+     *                       "price": 13.8,
+     *                       "data": "2015-10-27T12:09:12.000Z",
+     *                       "more": [
+     *                                {
+     *                                "price": 13.8,
+     *                                "quality": "ק' 50-20 א"
+     *                                }
+     *                  ]
+     *      },
+     *      {
+     *      "prices": [
+     *                 {
+     *                        "source": {
+     *                        "type": "marketeer",
+     *                        "name": ""
+     *                                   },
+     *                        "price": 0,
+     *                        "quality": "",
+     *                        "data": "2015-10-23T12:09:12.000Z",
+     *                        "more": []
+     *                        },
+     *                        {
+     *                        "source": {
+     *                        "type": "Wholesale",
+     *                        "name": "שוק סיטונאי"
+     *                                   },
+     *                        "price": 13.8,
+     *                        "quality": "ק' 50-20 א",
+     *                        "data": "2015-10-23T12:09:12.000Z",
+     *                        "more": [
+     *                                 {
+     *                                 "price": 17.15,
+     *                                 "quality": "יבוא"
+     *                                 },
+     *                                 {
+     *                                 "price": 13.8,
+     *                                 "quality": "ק' 50-20 א"
+     *                                 }
+     *                                 ]
+     *                        },
+     *                        {
+     *                         "source": {
+     *                         "type": "PlantCouncil",
+     *                         "name": "מועצת הצמחים"
+     *                                   },
+     *                         "price": 12,
+     *                         "quality": "סוג א",
+     *                         "data": "2015-10-23T12:09:12.000Z",
+     *                         "more": [
+     *                                 {
+     *                                 "price": 12,
+     *                                 "quality": "סוג א"
+     *                                 }
+     *                                 ]
+     *          }...
+     *          ...]
+     *
+     * @method getCropPricesForPeriod
+     * @instance
+     * @for prices
+     * @memberOf prices
+     */
+    router.get('/getCropPricesForPeriod', prices.getCropPricesForPeriod);
+    router.get('/getLastFavorites', prices.getLastFavorites);
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
+
+    /**
+     * This __method__  for ADD PRICE SCREEN. User add prices and quallity for marketeer
+     *
+     * __URI:__ ___`prices/addFarmerPrice`___
+     *
+     * __METHOD:__ ___`POST`___
+     *
+     * * __Request:__
+     *
+     *      Body:
+     *          date//the date chosen by the user
+     *          cropName // display crop name
+     *          prices // []Array of prices and qualityes [ .. {"price": ..., "userQuality": ".."}...]
+     *
+     * __Response:__
+     *
+     *      status (200) JSON object: { success: 'success'}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      {
+     *          "date":"2015-10-27 12:09:12.000Z",
+     *          "cropName":"תפוזים טבורי",
+     *          "prices": [
+     *                     {
+     *                          "price": 5.3,
+     *                          "userQuality": "excellent"
+     *                      },
+     *                     {
+     *                        "price": 5.5,
+     *                       "userQuality": "excellent 50-70"
+     *                     }
+     *                      ]
+     *        }
+     *
+     * @method addFarmerPrices
+     * @instance
+     * @for prices
+     * @memberOf prices
+     */
+    router.post('/addFarmerPrice/', prices.addFarmerPrices);
 
     return router;
 };

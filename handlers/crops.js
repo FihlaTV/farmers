@@ -247,7 +247,10 @@ var Crop = function (db) {
                 //parsedData[0] - table heads
                 i = 1;
 
-                wsName = (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : '');
+                //wsName = (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : '');
+                //pcName =  parsedData[i][2];
+
+                wsName = parsedData[i][4].trim();
                 pcName =  parsedData[i][2];
 
                 parsedObj = {
@@ -275,8 +278,9 @@ var Crop = function (db) {
                         order ++;
                     }
 
-                    wsName = (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : '');
-                    pcName =  parsedData[i][2];
+                    //wsName = (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : '');
+                    wsName = parsedData[i][4];
+                    pcName = parsedData[i][2];
 
                     mergedData.push({
                         englishName: parsedData[i][0].trim(),
