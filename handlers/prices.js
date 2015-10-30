@@ -698,6 +698,11 @@ var Price = function (db) {
 
         //TODO set good date format with correct time and timezone
         date = new Date(date);
+        date.setUTCHours(12);
+        date.setUTCMinutes(0);
+        date.setUTCSeconds(0);
+        date.setUTCMilliseconds(0);
+        //console.log(date);
 
         for(var i = prices.length - 1; i >= 0; i--){
             prices[i].date = date;

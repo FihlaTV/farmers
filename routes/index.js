@@ -4,6 +4,7 @@ module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
     var cropsRouter = require('./crops')(db);
+    var notificationsRouter = require('./notifications')(db);
     var usersRouter = require('./users')(db);
     var marketeersRouter = require('./marketeers')(db);
     var adminRouter = require('./admin')(db);
@@ -16,6 +17,7 @@ module.exports = function(app, db){
     });
 
     app.use('/crops', cropsRouter);
+    app.use('/notifications', notificationsRouter);
     app.use('/users', usersRouter);
     app.use('/marketeers', marketeersRouter);
     app.use('/admin', adminRouter);

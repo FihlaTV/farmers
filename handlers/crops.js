@@ -219,21 +219,10 @@ var Crop = function (db) {
         var csvFileName =  CONST.CSV_FILES.CROP_LIST;
         var mergedData = [];
         var parsedObj;
-        var englishName;
-        var displayName;
-        var wholeSaleName;
-        var kind;
-        var varieties;
-        var cropType;
-        var plantCouncilName;
-        var image;
         var order = 0;
         var pcName;
         var wsName;
-
-
         var j = 0;
-        var i;
 
         fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
             if (err) {
@@ -244,6 +233,7 @@ var Crop = function (db) {
                 if (err) {
                     return res.status(500).send({error: err});
                 }
+                db.collections['Crops'].drop();
                 //parsedData[0] - table heads
                 i = 1;
 

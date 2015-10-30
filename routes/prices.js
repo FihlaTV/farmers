@@ -9,9 +9,11 @@
 var express = require( 'express' );
 var router = express.Router();
 var PricesHandler = require('../handlers/prices');
+var DataParser = require('../helpers/dataParser');
 
 module.exports = function(db){
     var prices = new PricesHandler(db);
+    var dataParser = new DataParser(db);
 
     /**
      * This __method__  for Main Screen. Get all last Crop prices (in CropList order)
@@ -230,6 +232,10 @@ module.exports = function(db){
      * @memberOf prices
      */
     router.post('/addFarmerPrice/', prices.addFarmerPrices);
+
+    // pc2012.csv /pc2013.csv /pc2014.csv  without CSV
+    router.get('/importPcHistoryFromCsv/:filename', dataParser.importPcHistoryFromCsv);
+    router.get('/importWsHistoryFromCsv/:filename', dataParser.importWsHistoryFromCsv);
 
     return router;
 };
