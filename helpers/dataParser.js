@@ -7,6 +7,8 @@ var mailer = require('../helpers/mailer');
 var $ = require('../public/js/libs/jquery/dist/jquery.js');
 var Iconv = require('iconv-lite');
 var http = require('http');
+var fs = require('fs');
+var csv = require('csv');
 
 module.exports = function (db) {
     var Plant = db.model('Plant');
@@ -47,8 +49,32 @@ module.exports = function (db) {
         if (date[2].length === 2) {
             date[2] = 20 + date[2];
         }
+        if (date[1].length === 1) {
+            date[1] = 0 + date[1];
+        }
+        if (date[0].length === 1) {
+            date[0] = 0 + date[0];
+        }
+        //console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
 
-        return new Date(date[2] + '/' + date[1] + '/' + date[0] + ' 12:12:12 GMT+3');
+        return new Date(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
+    }
+
+    function getTransformedDateOjecForMonthWs(date) {
+        date = date.split('/');
+
+        if (!date[2]) {
+            date[2] = '01';
+        }
+        if (date[1].length === 1) {
+            date[1] = 0 + date[1];
+        }
+        if (date[0].length === 1) {
+            date[0] = 0 + date[0];
+        }
+        //console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
+
+        return new Date(date[0] + '-' + date[1] + '-' + date[2] + 'T12:00:00.000Z');
     }
 
     function savePlantPrice(plant, newPlantPriceObj, cb) {
@@ -317,6 +343,13 @@ module.exports = function (db) {
             .exec(cb);
     };
 
+    getCropList = function (cb) {
+        Crop
+            .find({})
+            .lean()
+            .exec(cb);
+    };
+
     function getAvgPrice (minPrice, maxPrice) {
 
         if ((minPrice === 0) || (maxPrice === 0)) {
@@ -336,7 +369,8 @@ module.exports = function (db) {
             cropName: model.name
         };
 
-        mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
+        //TODO switch ON
+        //mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
 
         notification = new Notification(saveOptions);
         notification
@@ -632,4 +666,293 @@ module.exports = function (db) {
             cb(err, results);
         });
     };
+
+    this.importPcHistoryFromCsv = function (req, res, next) {
+        var tasks = [];
+        var self = this;
+        var csvFileName = req.params.filename;
+        var startTime = new Date();
+
+        if (!csvFileName) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+        csvFileName = 'csv/' + csvFileName;
+
+        tasks.push(getCropList);
+        tasks.push(createFnReadPcHistoryFromCsv(csvFileName));
+        tasks.push(filterByCropListAndSaveImportedPCData);
+
+        async.waterfall(tasks, function (err, result) {
+            if(err) {
+                console.log('ERROR:  Import PcHistory Error: ', err);
+                return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
+            } else {
+                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+            }
+        });
+
+    };
+
+    //function getCropList (cb){
+    //    this.getCropList(function (err, result) {
+    //        if (err) {
+    //            logWriter.log('scheduleJob -> getMergedCropList-> ' + err);
+    //        }
+    //        //cropList = result;
+    //        console.log('CropList loaded');
+    //        //console.dir(cropList);
+    //        cb(null, result);
+    //    });
+    //}
+    function createFnReadPcHistoryFromCsv(csvFileName){
+        return function readPcHistoryFromCsv(cropList, cb) {
+
+            var source = CONST.URL_APIS.PLANTS_URL.SOURCE;
+            var importedData = [];
+
+            fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
+                    if (err) {
+                        return res.status(500).send({error: err});
+                    }
+                    //parsedData[0] - table heads
+
+                    for (var i = parsedData.length - 1; i >= 1; i--) {
+
+                        if (parsedData[i][3].trim()) {
+                            importedData.push(
+                                {
+                                    price: parsedData[i][3].trim(),
+                                    name: parsedData[i][1].trim(),
+                                    url: source,
+                                    date: parsedData[i][0].trim(),
+                                    excellent: true
+                                }
+                            )
+                        }
+
+                        importedData.push(
+                            {
+                                price: parsedData[i][2].trim(),
+                                name: parsedData[i][1].trim(),
+                                date: parsedData[i][0].trim(),
+                                url: source
+                            }
+                        );
+                    }
+
+                    console.log('parsedData.length ', parsedData.length);
+                    console.log('importedData.length ', importedData.length);
+
+                    cb(null, cropList, importedData);
+                });
+            });
+        }
+    };
+
+    function createFnReadWsHistoryFromCsv(csvFileName){
+        return function readWsHistoryFromCsv(cropList, cb) {
+
+            var source = CONST.URL_APIS.MOAG_URL.SOURCE_1;
+            var importedData = [];
+            var name;
+
+            fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
+                    if (err) {
+                        return res.status(500).send({error: err});
+                    }
+                    //parsedData[0] - table heads
+
+                    for (var i = parsedData.length - 1; i >= 1; i--) {
+                        name = (parsedData[i][1] ? parsedData[i][1] : '') + (parsedData[i][2] ? ' ' + parsedData[i][2] : '') + (parsedData[i][3] ? ' ' + parsedData[i][3] : '');
+                        name = name.replace(/\.$/g,'');
+
+                        importedData.push(
+                            {
+                                price: parsedData[i][4].trim(),
+                                name: name.trim(),
+                                url: source,
+                                date: parsedData[i][0].trim()
+                            }
+                        )
+                    }
+                    console.log('parsedData.length ', parsedData.length);
+                    console.log('importedData.length ', importedData.length);
+                    console.log(importedData[0]);
+
+                    cb(null, cropList, importedData);
+
+                });
+            });
+        }
+    };
+
+    function filterByCropListAndSaveImportedPCData(cropList, parsedData, cb) {
+        var cropLen = cropList.length - 1;
+
+        // eachSeries need only in check purpose
+        async.eachSeries(parsedData, function (item, callback) {
+
+            var foundPosition = -1;
+            var price = parseFloat(item.price) || 0;
+            var saveOptions;
+            var date = getTransformedDateOject(item.date);
+            //console.log(date);
+            var nameOptimize = item.name.replace (/ /g,'');
+            var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
+
+            for (var i = cropLen; i >= 0; i--) {
+                if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
+                    foundPosition = i;
+                    i = -1;
+                }
+            }
+
+            saveOptions = {
+                source: item.url,
+                price: price,
+                date: date,
+                name: item.name,
+                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year: moment(date).year(),
+                month: moment(date).month(),
+                dayOfYear: moment(date).dayOfYear(),
+                excellent: !!item.excellent
+            };
+
+            if (foundPosition >= 0) {
+                saveOptions._crop = cropList[foundPosition]._id;
+                saveOptions.cropListName = cropList[foundPosition].displayName;
+                saveOptions.pcQuality = cropList[foundPosition].pcQuality;
+                saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                saveOptions.imported = cropList[foundPosition].imported;
+
+            } else {
+                console. log ('New crop detecdet: ', item.name);
+            }
+
+            price = new Price(saveOptions);
+            price
+                .save(function (err, model) {
+                    if (err) {
+                        return  callback('DB err:' + err);
+                    }
+
+                    if (foundPosition < 0) {
+                        return createNewCropNotification (model.toJSON(), callback );
+                    }
+
+                    callback();
+                });
+        }, function (err) {
+            if (err) {
+                return cb(err);
+            }
+            //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
+            cb(null, 'Success');
+        });
+    }
+
+    function filterByCropListAndSaveImportedWsData(cropList, parsedData, cb) {
+        var cropLen = cropList.length - 1;
+
+        // eachSeries need only in check purpose
+        async.eachSeries(parsedData, function (item, callback) {
+
+            var foundPosition = -1;
+            var price = parseFloat(item.price) || 0;
+            var saveOptions;
+            var date = getTransformedDateOjecForMonthWs(item.date);
+            //console.log(date);
+            var nameOptimize = item.name.replace (/ /g,'');
+
+            for (var i = cropLen; i >= 0; i--) {
+                if ( cropList[i].wsNameOptimize.indexOf(nameOptimize) >= 0 ) {
+                    foundPosition = i;
+                    i = -1;
+                }
+            }
+
+            saveOptions = {
+                source: item.url,
+                price: price,
+                date: date,
+                name: item.name,
+                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year: moment(date).year(),
+                month: moment(date).month(),
+                dayOfYear: moment(date).dayOfYear(),
+            };
+
+            if (foundPosition >= 0) {
+                saveOptions._crop = cropList[foundPosition]._id;
+                saveOptions.cropListName = cropList[foundPosition].displayName;
+                saveOptions.pcQuality = cropList[foundPosition].pcQuality;
+                saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                saveOptions.imported = cropList[foundPosition].imported;
+
+            } else {
+                console. log ('New crop detecdet: ', item.name);
+            }
+
+            price = new Price(saveOptions);
+            price
+                .save(function (err, model) {
+                    if (err) {
+                        return  callback('DB err:' + err);
+                    }
+
+                    if (foundPosition < 0) {
+                        return createNewCropNotification (model.toJSON(), callback );
+                    }
+
+                    callback();
+                });
+        }, function (err) {
+            if (err) {
+                return cb(err);
+            }
+            //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
+            cb(null, 'Success');
+        });
+    }
+
+    this.importWsHistoryFromCsv = function (req, res, next) {
+        var tasks = [];
+        var self = this;
+        var csvFileName = req.params.filename;
+        var startTime = new Date();
+
+        if (!csvFileName) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+        csvFileName = 'csv/' + csvFileName;
+
+        tasks.push(getCropList);
+        tasks.push(createFnReadWsHistoryFromCsv(csvFileName));
+        tasks.push(filterByCropListAndSaveImportedWsData);
+
+        async.waterfall(tasks, function (err, cropList, result) {
+            if(err) {
+                console.log('ERROR:  Import PcHistory Error: ', err);
+                return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
+            } else {
+                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+            }
+        });
+
+    };
+
+
 };

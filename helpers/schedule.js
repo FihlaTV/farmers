@@ -1,7 +1,8 @@
 var logWriter = require('../modules/logWriter')();
 var async = require('async');
 var schedule = require('node-schedule');
-var DataParser = require('../helpers/dataParser');
+//var DataParser = require('../helpers/dataParser');
+var DataParser = require('./dataParser');
 var moment = require("moment");
 var constants = require("../constants/constants");
 
@@ -15,6 +16,7 @@ module.exports = function (db) {
 
     //schedule.scheduleJob('*/3 * * * *', function() {
     schedule.scheduleJob('*/3 * * * *', function() {
+    //schedule.scheduleJob('* 3 * * *', function() {
         console.log('scheduleJob -> syncPlantPrices ' + new Date());
         tasks =[];
 
