@@ -306,7 +306,7 @@ var Price = function (db) {
 
 
             resultPriceList = [];
-            for (var j = 0; j < pricedLen; j++) {
+            for (var j = 0; j <= pricedLen; j++) {
                 receivedPriceArray = receivedPrices[j].prices;
 
                 console.log('receivedPrices: ', receivedPrices[j]._id);
@@ -425,7 +425,7 @@ var Price = function (db) {
                     if (!more[k].imported) {
                         if (maxPrice < more[k].price) {
                             maxPrice = more[k].price;
-                            maxQuality = more[k].wsQuality
+                            maxQuality = more[k].quality
                         }
                     }
                     delete(more[k].imported);
@@ -542,6 +542,7 @@ var Price = function (db) {
                     } else {
                         receivedPrices = results;
                         console.log('receivedPrices: ', receivedPrices);
+                        console.log('receivedPrices[0]: ', receivedPrices[0].prices);
                         cb(err, results);
                     }
                 });
@@ -630,11 +631,11 @@ var Price = function (db) {
         startDate = new Date (startDate);
         endDate = new Date (endDate);
 
-        startDate.setHours(23);
-        startDate.setMinutes(55);
+        startDate.setUTCHours(23);
+        startDate.setUTCMinutes(55);
 
-        endDate.setHours(0);
-        endDate.setMinutes(0);
+        endDate.setUTCHours(0);
+        endDate.setUTCMinutes(0);
 
 
         //console.log(d.getTimezoneOffset());
