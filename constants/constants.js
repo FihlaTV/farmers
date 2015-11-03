@@ -39,6 +39,7 @@ module.exports = {
         NOTIFICATION: 'Notification',
         PLANT: 'Plant',
         PRICE: 'Price',
+        MONTH_AVERAGE_PRICE: 'MonthAveragePrice',
         CROP: 'Crop',
         SESSION: 'Session',
         IMAGE: 'Image',
