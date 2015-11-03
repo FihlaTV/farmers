@@ -14,6 +14,7 @@ module.exports = function (db) {
     var Plant = db.model('Plant');
     var Crop = db.model(CONST.MODELS.CROP);
     var Price = db.model(CONST.MODELS.PRICE);
+    var MonthAveragePrice = db.model(CONST.MODELS.MONTH_AVERAGE_PRICE);
     var Notification = db.model(CONST.MODELS.NOTIFICATION);
 
     var ParsedBody = db.model(CONST.MODELS.PARSED_BODY);
@@ -370,7 +371,7 @@ module.exports = function (db) {
         };
 
         //TODO switch ON
-        //mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
+        mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
 
         notification = new Notification(saveOptions);
         notification
@@ -801,7 +802,7 @@ module.exports = function (db) {
         var cropLen = cropList.length - 1;
 
         // eachSeries need only in check purpose
-        async.eachSeries(parsedData, function (item, callback) {
+        async.each(parsedData, function (item, callback) {
 
             var foundPosition = -1;
             var price = parseFloat(item.price) || 0;
@@ -891,7 +892,7 @@ module.exports = function (db) {
                 site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
                 year: moment(date).year(),
                 month: moment(date).month(),
-                dayOfYear: moment(date).dayOfYear(),
+                dayOfYear: moment(date).dayOfYear()
             };
 
             if (foundPosition >= 0) {
@@ -905,7 +906,11 @@ module.exports = function (db) {
                 console. log ('New crop detecdet: ', item.name);
             }
 
-            price = new Price(saveOptions);
+            // for dayly price
+            //price = new Price(saveOptions);
+
+            // for Month Average prices
+            price = new MonthAveragePrice (saveOptions);
             price
                 .save(function (err, model) {
                     if (err) {

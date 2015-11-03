@@ -5,6 +5,7 @@ module.exports = function(db){
     require('./plant')(db);
     require('./crop')(db);
     //require('./sessions')(db);
+    require('./monthAveragePrice')(db);
     require('./price')(db);
     require('./parsedBody')(db);
     require('./marketeer')(db);

@@ -14,8 +14,11 @@ module.exports = function (db) {
     var tasks = [];
     var cropList;
 
+    //http://www.codexpedia.com/javascript/nodejs-cron-schedule-examples/
+
+
     //schedule.scheduleJob('*/3 * * * *', function() {
-    schedule.scheduleJob('*/3 * * * *', function() {
+    schedule.scheduleJob('0 */15 * * * *', function() {
     //schedule.scheduleJob('* 3 * * *', function() {
         console.log('scheduleJob -> syncPlantPrices ' + new Date());
         tasks =[];
