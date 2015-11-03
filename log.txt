@@ -680,3 +680,7 @@ MongoError: exception: FieldPath 'source' doesn't start with $
     at Socket.Readable.push (_stream_readable.js:126:10)
     at TCP.onread (net.js:538:20)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 02 2015 11:57:52 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------

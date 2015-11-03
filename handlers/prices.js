@@ -161,7 +161,6 @@ var Price = function (db) {
                     plantsCouncilPrices = {};
                     marketeerPrices = {};
                     prices = [];
-
                     isInFavorites = false;
                     receivedPriceArray = receivedPrices[j].prices;
 
@@ -284,7 +283,6 @@ var Price = function (db) {
             }
         }
         cb()
-
     }
 
     function createFnMergeCropPricesByDate (userId) {
@@ -301,9 +299,6 @@ var Price = function (db) {
 
             console.log('cropsLen: ', cropsLen);
             console.log('pricedLen: ', pricedLen);
-
-
-
 
             resultPriceList = [];
             for (var j = 0; j <= pricedLen; j++) {
@@ -542,7 +537,7 @@ var Price = function (db) {
                     } else {
                         receivedPrices = results;
                         console.log('receivedPrices: ', receivedPrices);
-                        console.log('receivedPrices[0]: ', receivedPrices[0].prices);
+                        //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
                         cb(err, results);
                     }
                 });
