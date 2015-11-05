@@ -1,5 +1,3 @@
-
-
 module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
