@@ -417,7 +417,7 @@ module.exports = function (db) {
                     var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
 
                     for (var i = cropLen; i >= 0; i--) {
-                        if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcQuality === nameOptimize) {
+                        if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcNameOptimize === nameOptimize) {
                             foundPosition = i;
                             i = -1;
                         }
