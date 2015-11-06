@@ -263,8 +263,8 @@ var Crop = function (db) {
                 //MERGE loaded by display Name
                 mergedData.push(parsedObj);
 
-                for (var i = 2, len = parsedData.length; i < len; i++){
-                    if (parsedData[i - 1][1] !== parsedData[i][1]) {
+                for (var i = 2, len = parsedData.length -1 ; i <= len; i++){
+                    if (parsedData[i - 1][1].trim() !== parsedData[i][1].trim()) {
                         order ++;
                     }
 
@@ -278,7 +278,8 @@ var Crop = function (db) {
                         plantCouncilName: pcName,
                         pcNameOptimize: pcName ? pcName.replace(/ /g, '') : '',
                         pcQuality: parsedData[i][3],
-                        wholeSaleName:  (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : ''),
+                        //wholeSaleName:  (parsedData[i][5] ? parsedData[i][5] : '') + (parsedData[i][6] ? ' ' + parsedData[i][6] : '') + (parsedData[i][7] ? ' ' + parsedData[i][7] : ''),
+                        wholeSaleName: wsName,
                         wsNameOptimize: wsName ? wsName.replace(/ /g, '') : '',
                         kind: parsedData[i][5],
                         varieties: parsedData[i][6],
