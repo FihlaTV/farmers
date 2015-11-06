@@ -27,7 +27,9 @@ module.exports = function (db) {
         imported: {type: Boolean, default: false},
         minPrice: {type: Number, default: 0 },
         maxPrice: {type: Number, default: 0 },
-        avgPrice: {type: Number, default: 0 }
+        avgPrice: {type: Number, default: 0 },
+        createdAt: {type: Date, default: Date.now},
+        updatedAt: {type: Date, default: Date.now}
     }, {
         collection: CONST.MODELS.PRICE + 's'
     });
