@@ -93,7 +93,7 @@ module.exports = function(db){
      *
      * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
      *
-     ** __Request:__
+     * __Request:__
      * ___`prices/getCropPricesForPeriod?cropName=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
      *
      *
@@ -197,7 +197,7 @@ module.exports = function(db){
      *
      * __METHOD:__ ___`POST`___
      *
-     * * __Request:__
+     * __Responses:__
      *
      *      Body:
      *          date//the date chosen by the user
