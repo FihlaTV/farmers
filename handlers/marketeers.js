@@ -92,6 +92,7 @@ var Marketeer = function (db) {
         var userId = req.session.uId;
         var notification;
 
+
         Marketeer
             .findOne({"fullName": marketeerFullName})
             .lean()
@@ -106,7 +107,7 @@ var Marketeer = function (db) {
                     console.log(userId);
 
                     User
-                        .findOneAndUpdate({'_id': userId}, {'marketeer': model._id})
+                        .findOneAndUpdate({'_id': userId}, {'marketeer': model._id, updatedAt: new Date()})
                         .exec(function (err, model) {
                             if (err) {
                                 return res.status(500).send({error: err});
@@ -117,7 +118,7 @@ var Marketeer = function (db) {
                 } else {
                     console.log(userId);
                     User
-                        .findOneAndUpdate({'_id': userId}, {'newMarketeer': true})
+                        .findOneAndUpdate({'_id': userId}, {'newMarketeer': true, updatedAt: new Date(), marketeer: null})
                         .exec(function (err, model) {
                             if (err) {
                                 return res.status(500).send({error: err});

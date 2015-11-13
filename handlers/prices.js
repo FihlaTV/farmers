@@ -440,7 +440,7 @@ var Price = function (db) {
                         }
                     }
 
-                    isInFavorites = (userFavorites.indexOf(receivedPrices[j]._id) >= 0);
+                    isInFavorites = userFavorites.indexOf(receivedPrices[j]._id) >= 0;
 
                     if (findIndex >= 0 ){
 
