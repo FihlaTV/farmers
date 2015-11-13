@@ -186,8 +186,11 @@ module.exports = function(db){
      * @memberOf prices
      */
     router.get('/getCropPricesForPeriod', prices.getCropPricesForPeriod);
-    router.get('/getLastFavorites', prices.getLastFavorites);
+    //router.get('/getLastFavorites', prices.getLastFavorites);
+
+    // for test  run parser
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
+    // for test  run parser
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
 
     /**

@@ -54,8 +54,10 @@ mainDb.once('open', function callback() {
             port: process.env.DB_PORT,
             db: process.env.DB_NAME,
             autoReconnect: true,
-            ssl: false
-        })
+            ssl: false,
+            expires: new Date(Date.now() + (5 * 8760 * 60 * 60 * 1000))
+        }),
+        cookie  : { maxAge  : new Date(Date.now() + (5 * 8760 * 60 * 60 * 1000))}
     }));
 
     require('./routes')(app, mainDb);
