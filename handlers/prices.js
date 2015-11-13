@@ -725,7 +725,7 @@ var Price = function (db) {
                     return cb(RESPONSE.NOT_MARKETEER);
                 }
 
-                //console.log(options);
+                console.log(options);
 
                 Price
                     .find(
@@ -955,8 +955,9 @@ var Price = function (db) {
 
             checkOptions = {
                 date: date,
-                cropListName: cropName
-            }
+                cropListName: cropName,
+                _user: UserId
+            };
 
             //TODO Validate check cropName in cropList for
 
