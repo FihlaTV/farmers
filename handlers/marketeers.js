@@ -178,9 +178,10 @@ var Marketeer = function (db) {
                 console.log('Update marketeer: ', model);
                  if (model.marketeer) {
                      resultObj._marketeer = model.marketeer._id;
-                     resultObj.fullName = model.marketeer.fullName;
-                     resultObj.location = model.marketeer.location;
                  }
+                     resultObj.fullName =  model.marketeer ? model.marketeer.fullName : null;
+                     resultObj.location = model.marketeer ? model.marketeer.location : null;
+
                 resultObj.newMarketeer = model.newMarketeer;
                 resultObj.canChangeMarketeer = model.canChangeMarketeer;
                 return res.status(200).send(resultObj);

@@ -4,6 +4,9 @@ module.exports = {
     NOT_ENOUGH_PARAMS: 'Not enough incoming parameters',
     NOT_VALID_EMAIL: 'Email field should contain a valid email address',
     NOT_VALID_PASS: 'Password field value is incorrect. It should contain only (6-35) the following symbols: A-Z, a-z, 0-9',
+    NOT_MARKETEER: 'You dont have marketeer. Please select marketeer first',
+    NOT_ALLOW_ADD_PRICE_OTHER_MARKETEER: 'You can not add cost, because you have already given to another marketeer',
+    NOT_ALLOW_TOO_MUCH_PRICE_FOR_DAY: 'Too much price for 1 day for 1 crop',
 
     AUTH: {
         UN_AUTHORIZED: 'Un Authorized',

@@ -230,6 +230,14 @@ var Crop = function (db) {
             }
 
             csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
+
+                // sort by display name
+                parsedData.sort(function compare(a, b) {
+                    if (a[1].trim() < b[1].trim()) return -1;
+                    if (a[1].trim() > b[1].trim()) return 1;
+                    return 0;
+                });
+
                 if (err) {
                     return res.status(500).send({error: err});
                 }

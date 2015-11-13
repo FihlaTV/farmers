@@ -20,7 +20,7 @@ module.exports = function (db) {
         wsQuality: String,
         userQuality: String,
         cropListName: String,
-        _marketeer: String,
+        _marketeer: { type: ObjectId, ref: CONST.MODELS.CROP, default: null },
         _user: String,
         site: String,
         excellent: {type: Boolean, default: false},
