@@ -53,7 +53,7 @@ module.exports = function(db){
     router.get('/', crops.getMergedCropList);
     router.get('/cropQualitys', crops.getMergedCropList); // ?cropName=שום  response: ['pcQua.. ', 'WsQua '.... ]
 
-    router.get('/prices', plants.getPlantsWithPrices);
+    //router.get('/prices', plants.getPlantsWithPrices);
 
     //import "cropList.csv" from /csv/ folder... TODO it on new server
     //router.get('/import', session.isAdmin, crops.adminImportFromCsv);

@@ -44,7 +44,7 @@ module.exports = function (db) {
         Plant.find({}).exec(cb);
     }
 
-    function getTransformedDateOject(date) {
+    function getTransformedDateObject(date) {
         date = date.split('/');
 
         if (date[2].length === 2) {
@@ -61,7 +61,7 @@ module.exports = function (db) {
         return new Date(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
     }
 
-    function getTransformedDateOjecForMonthWs(date) {
+    function getTransformedDateObjectForMonthWs(date) {
         date = date.split('/');
 
         if (!date[2]) {
@@ -78,50 +78,50 @@ module.exports = function (db) {
         return new Date(date[0] + '-' + date[1] + '-' + date[2] + 'T12:00:00.000Z');
     }
 
-    function savePlantPrice(plant, newPlantPriceObj, cb) {
-        var maxPrice = parseFloat(newPlantPriceObj.maxPrice) || 0;
-        var minPrice = parseFloat(newPlantPriceObj.minPrice) || 0;
-        var date = getTransformedDateOject(newPlantPriceObj.date);
-        var avgPrice = plantsHelper.getAvgPrice(minPrice, maxPrice);
-        var saveOptions;
+    //function savePlantPrice(plant, newPlantPriceObj, cb) {
+    //    var maxPrice = parseFloat(newPlantPriceObj.maxPrice) || 0;
+    //    var minPrice = parseFloat(newPlantPriceObj.minPrice) || 0;
+    //    var date = getTransformedDateObject(newPlantPriceObj.date);
+    //    var avgPrice = plantsHelper.getAvgPrice(minPrice, maxPrice);
+    //    var saveOptions;
+    //
+    //    saveOptions = {
+    //        _plant: plant._id,
+    //        source: newPlantPriceObj.url,
+    //        minPrice: minPrice,
+    //        maxPrice: maxPrice,
+    //        avgPrice: avgPrice,
+    //
+    //        date: date,
+    //        year: moment(date).year(),
+    //        dayOfYear: moment(date).dayOfYear()
+    //    };
+    //
+    //    Price.create(saveOptions, function (err, res) {
+    //        cb(err)
+    //    });
+    //}
 
-        saveOptions = {
-            _plant: plant._id,
-            source: newPlantPriceObj.url,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            avgPrice: avgPrice,
-
-            date: date,
-            year: moment(date).year(),
-            dayOfYear: moment(date).dayOfYear()
-        };
-
-        Price.create(saveOptions, function (err, res) {
-            cb(err)
-        });
-    }
-
-    function createNewPlant(newPlantPriceObj, cb) {
-        var saveOptions;
-
-        saveOptions = {
-            englishName: "No Name",
-            jewishNames: [newPlantPriceObj.jewishName]
-        };
-
-        if (newPlantPriceObj.isNewPlant) {
-            saveOptions.isNewPlant = true;
-        }
-
-        Plant.create(saveOptions, function (err, plant) {
-            if (err) {
-                cb(err);
-            } else {
-                savePlantPrice(plant, newPlantPriceObj, cb)
-            }
-        });
-    }
+    //function createNewPlant(newPlantPriceObj, cb) {
+    //    var saveOptions;
+    //
+    //    saveOptions = {
+    //        englishName: "No Name",
+    //        jewishNames: [newPlantPriceObj.jewishName]
+    //    };
+    //
+    //    if (newPlantPriceObj.isNewPlant) {
+    //        saveOptions.isNewPlant = true;
+    //    }
+    //
+    //    Plant.create(saveOptions, function (err, plant) {
+    //        if (err) {
+    //            cb(err);
+    //        } else {
+    //            savePlantPrice(plant, newPlantPriceObj, cb)
+    //        }
+    //    });
+    //}
 
     function prepareData(apiUrl, cb) {
         async.parallel([
@@ -143,85 +143,85 @@ module.exports = function (db) {
         });
     }
 
-    function findPlantAndSavePrice(plants, newPlantPrice, cb) {
-        var plantFound = false;
-        async.each(plants, function (plant, cb) {
-            if (plant.jewishNames.indexOf(newPlantPrice.jewishName) !== -1) {
-                savePlantPrice(plant, newPlantPrice, cb);
-                plantFound = true;
-            } else {
-                cb();
-            }
-        }, function (err, res) {
-            if (err) {
-                cb(err);
-            } else {
-                if (!plantFound) {
-                    newPlantPrice.isNewPlant = true;
-                    createNewPlant(newPlantPrice, cb);
-                } else {
-                    cb();
-                }
-            }
-        });
-    }
+    //function findPlantAndSavePrice(plants, newPlantPrice, cb) {
+    //    var plantFound = false;
+    //    async.each(plants, function (plant, cb) {
+    //        if (plant.jewishNames.indexOf(newPlantPrice.jewishName) !== -1) {
+    //            savePlantPrice(plant, newPlantPrice, cb);
+    //            plantFound = true;
+    //        } else {
+    //            cb();
+    //        }
+    //    }, function (err, res) {
+    //        if (err) {
+    //            cb(err);
+    //        } else {
+    //            if (!plantFound) {
+    //                newPlantPrice.isNewPlant = true;
+    //                createNewPlant(newPlantPrice, cb);
+    //            } else {
+    //                cb();
+    //            }
+    //        }
+    //    });
+    //}
 
-    function checkIfPricesSynced(source, cb) {
-        var date = new Date();
+    //function checkIfPricesSynced(source, cb) {
+    //    var date = new Date();
+    //
+    //    Price
+    //        .findOne({
+    //            year: moment(date).year(),
+    //            dayOfYear: moment(date).dayOfYear(),
+    //            source: source
+    //        })
+    //        .exec(function (err, price) {
+    //            if (err) {
+    //                cb(err);
+    //            } else {
+    //                if (price) {
+    //                    cb(null, true);
+    //                } else {
+    //                    cb(null, false);
+    //                }
+    //            }
+    //        });
+    //}
 
-        Price
-            .findOne({
-                year: moment(date).year(),
-                dayOfYear: moment(date).dayOfYear(),
-                source: source
-            })
-            .exec(function (err, price) {
-                if (err) {
-                    cb(err);
-                } else {
-                    if (price) {
-                        cb(null, true);
-                    } else {
-                        cb(null, false);
-                    }
-                }
-            });
-    }
+    //function isTodayDate(dateString) {
+    //
+    //    var date = getTransformedDateObject(dateString);
+    //    var todayDate = new Date();
+    //
+    //    return (moment(date).format('YYYY/MM/DD') === moment(todayDate).format('YYYY/MM/DD'));
+    //}
 
-    function isTodayDate(dateString) {
-
-        var date = getTransformedDateOject(dateString);
-        var todayDate = new Date();
-
-        return (moment(date).format('YYYY/MM/DD') === moment(todayDate).format('YYYY/MM/DD'));
-    }
-
-    this.syncPlantPrices = function (apiUrl, source, cb) {
-        checkIfPricesSynced(source, function (err, isSynced) {
-            if (err) {
-                cb(err);
-            } else {
-                if (isSynced) {
-                    cb();
-                } else {
-                    prepareData(apiUrl, function (err, resultObj) {
-                        if (err) {
-                            cb(err);
-                        } else {
-                            if (isTodayDate(resultObj.newPlantsPrice.results.priceDate[0].date)) {
-                                async.each(resultObj.newPlantsPrice.results.prices, function (newPlantPrice, cb) {
-                                    newPlantPrice.date = resultObj.newPlantsPrice.results.priceDate[0].date;
-                                    findPlantAndSavePrice(resultObj.plants, newPlantPrice, cb);
-                                }, cb);
-                            } else {
-                                cb();
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    };
+    //this.syncPlantPrices = function (apiUrl, source, cb) {
+    //    checkIfPricesSynced(source, function (err, isSynced) {
+    //        if (err) {
+    //            cb(err);
+    //        } else {
+    //            if (isSynced) {
+    //                cb();
+    //            } else {
+    //                prepareData(apiUrl, function (err, resultObj) {
+    //                    if (err) {
+    //                        cb(err);
+    //                    } else {
+    //                        if (isTodayDate(resultObj.newPlantsPrice.results.priceDate[0].date)) {
+    //                            async.each(resultObj.newPlantsPrice.results.prices, function (newPlantPrice, cb) {
+    //                                newPlantPrice.date = resultObj.newPlantsPrice.results.priceDate[0].date;
+    //                                findPlantAndSavePrice(resultObj.plants, newPlantPrice, cb);
+    //                            }, cb);
+    //                        } else {
+    //                            cb();
+    //                        }
+    //                    }
+    //                });
+    //            }
+    //        }
+    //    });
+    //};
 
 
     // process getting date is different for sites that is why need different function
@@ -255,7 +255,7 @@ module.exports = function (db) {
                 return cb(err + ' or now results');
             }
 
-            priceDate =  getTransformedDateOject(results.results.priceDate[0].date);
+            priceDate =  getTransformedDateObject(results.results.priceDate[0].date);
             source =  results.results.priceDate[0].url;
             tempArray = results.results.prices;
 
@@ -325,7 +325,7 @@ module.exports = function (db) {
 
             resultPricesArray = [].concat(result[0] ? result[0] : [], result[1] ? result[1] : [], result[2] ? result[2] : [] );
 
-            priceDate = getTransformedDateOject(resultPricesArray[0].date);
+            priceDate = getTransformedDateObject(resultPricesArray[0].date);
             source = resultPricesArray[0].url;
 
             console.log('received price date: ', resultPricesArray[0].date);
@@ -765,12 +765,12 @@ module.exports = function (db) {
 
             fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
                 if (err) {
-                    return res.status(500).send({error: err});
+                    return cb(err);
                 }
 
                 csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
                     if (err) {
-                        return res.status(500).send({error: err});
+                        return cb(err);
                     }
                     //parsedData[0] - table heads
 
@@ -807,13 +807,13 @@ module.exports = function (db) {
             var foundPosition = -1;
             var price = parseFloat(item.price) || 0;
             var saveOptions;
-            var date = getTransformedDateOject(item.date);
+            var date = getTransformedDateObject(item.date);
             //console.log(date);
             var nameOptimize = item.name.replace (/ /g,'');
             var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
 
             for (var i = cropLen; i >= 0; i--) {
-                if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
+                if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcNameOptimize === nameOptimize) {
                     foundPosition = i;
                     i = -1;
                 }
@@ -873,7 +873,7 @@ module.exports = function (db) {
             var foundPosition = -1;
             var price = parseFloat(item.price) || 0;
             var saveOptions;
-            var date = getTransformedDateOjecForMonthWs(item.date);
+            var date = getTransformedDateObjectForMonthWs(item.date);
             //console.log(date);
             var nameOptimize = item.name.replace (/ /g,'');
 

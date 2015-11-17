@@ -186,6 +186,111 @@ module.exports = function(db){
      * @memberOf prices
      */
     router.get('/getCropPricesForPeriod', prices.getCropPricesForPeriod);
+
+    /**
+     * This __method__  for All Marketeer Prices  Screen. Get all Marketeer Crop prices (in Calendar order)
+     *
+     * __URI:__ ___`prices/getMarketeerCropPricesForPeriod`___
+     *
+     * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
+     *
+     * __Request:__
+     * ___`prices/getMarketeerCropPricesForPeriod?cropName=שום&startDate=2015-11-16T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     *
+     *
+     *
+     * __Responses:__
+     *
+     *      status (200) JSON Array of objects: {[ {} , ...]}
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      [ ...
+     *      {
+     *       "data": "2015-11-13T12:00:00.000Z",
+     *      "prices": [
+     *                  {
+     *                      "name": "חברת יוסף אופנהיימר (1986)",
+     *                      "location": "שוק צריפין",
+     *                      "price": null,
+     *                      "quality": "",
+     *                      "more": []
+     *                  },
+     *                  {
+     *                      "name":  "שיווק המאה (מסחר) 2002",
+     *                      "location": "השרון",
+     *                      "price": 10.3,
+     *                      "quality": "supper",
+     *                      "more": [
+     *                                  {
+     *                                      "price": 10.3,
+     *                                      "quality": "supper"
+     *                                  }
+     *                                  {
+     *                                      "price": 8,
+     *                                      "quality": "old"
+     *                                  }
+     *                                  {
+     *                                      "price": 10,
+     *                                      "quality": "excellent"
+     *                                  }
+     *                             ]
+     *                  },
+     *                  {
+     *                      "name": "וסף אופנהיימר ",
+     *                      "location": "שוק צ",
+     *                      "price": 9,
+     *                      "quality": "no bad",
+     *                      "more": [
+     *                                  {
+     *                                      "price": 9,
+     *                                      "quality": "no bad"
+     *                                  },
+     *                                  {
+     *                                      "price": 5,
+     *                                      "quality": "bad"
+     *                                  },
+     *                              ]
+     *                  }
+     *              ]
+     *      },
+     *
+     *      {
+     *       "data": "2015-11-13T12:00:00.000Z",
+     *      "prices": [
+     *                  {
+     *                      "name": "חברת יוסף אופנהיימר (1986)",
+     *                      "location": "שוק צריפין",
+     *                      "price": 10,
+     *                      "quality": "user quality",
+     *                      "more": [
+     *                                  {
+     *                                      "price": 10,
+     *                                      "quality": "user quality"
+     *                                  }
+     *                      ]
+     *                  },
+     *                  {
+     *                      "name":  "שיווק המאה",
+     *                      "location": "השרון",
+     *                      "price": 10.3,
+     *                      "quality": "supper",
+     *                      "more": [....
+     *                              ]
+     *                   }
+     *          },...
+     *          ...]
+     *
+     * @method getMarketeerCropPricesForPeriod
+     * @instance
+     * @for prices
+     * @memberOf prices
+     */
+    router.get('/getMarketeerCropPricesForPeriod', prices.getMarketeerCropPricesForPeriod);
+
+
+    // not need
     //router.get('/getLastFavorites', prices.getLastFavorites);
 
     // for test  run parser
