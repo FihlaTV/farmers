@@ -190,7 +190,7 @@ module.exports = function(db){
     /**
      * This __method__  for All Marketeer Prices  Screen. Get all Marketeer Crop prices (in Calendar order)
      *
-     * __URI:__ ___`prices/getCropPricesForPeriod`___
+     * __URI:__ ___`prices/getMarketeerCropPricesForPeriod`___
      *
      * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
      *

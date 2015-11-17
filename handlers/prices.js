@@ -1083,7 +1083,7 @@ var Price = function (db) {
 
             UserId = req.session.uId;
 
-            console.log('Name: ', cropName, ' startDate: ', startDate, ' ', typeof (startDate), ' endDate: ', "" + endDate, typeof (endDate));
+            //console.log('Name: ', cropName, ' startDate: ', startDate, ' ', typeof (startDate), ' endDate: ', "" + endDate, typeof (endDate));
 
             if (!startDate || !endDate || !cropName || startDate < endDate) {
                 return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
@@ -1155,14 +1155,21 @@ var Price = function (db) {
             var startTime = new Date();
 
 
+
             UserId = req.session.uId;
 
             if (!date || !cropName || !prices || !prices.length) {
                 return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
             }
 
+
             //TODO set good date format with correct time and timezone
             date = new Date(date);
+
+            if (date.getDay() === 5 || date.getDay() === 6 ){
+                return res.status(400).send({error: RESPONSE.NOT_ALLOW_DATE_SELECTED});
+            }
+
             date.setUTCHours(12);
             date.setUTCMinutes(0);
             date.setUTCSeconds(0);

@@ -7,6 +7,7 @@ module.exports = {
     NOT_MARKETEER: 'You dont have marketeer. Please select marketeer first',
     NOT_ALLOW_ADD_PRICE_OTHER_MARKETEER: 'You can not add cost, because you have already given to another marketeer',
     NOT_ALLOW_TOO_MUCH_PRICE_FOR_DAY: 'Too much price for 1 day for 1 crop',
+    NOT_ALLOW_DATE_SELECTED: 'Can not save price for selected day of week. Markets not work on Friday and on Saturday',
 
     AUTH: {
         UN_AUTHORIZED: 'Un Authorized',
