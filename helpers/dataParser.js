@@ -960,4 +960,76 @@ module.exports = function (db) {
     };
 
 
+
+
+    this.getAveragePriceMonthly = function (req, res, next) {
+        var yearUrlParam = req.params.year;
+        var avaragePriceList = [];
+        Price.aggregate(
+            [ {
+                $match : {year : parseInt(yearUrlParam),site:"PlantCouncil"}
+            },
+                {
+                    $group: {
+                        _id: {
+                            month: {$month: "$date"},
+                            year: {$year: "$date"},
+                            source:"$source",
+                            crop:"$_crop",
+                            pcQuality:"$pcQuality",
+                            name: "$name",
+                            site:"$site",
+                            imported:"$imported",
+                            cropListName:"$cropListName",
+                            wsQuality:"$wsQuality",
+                            excellent: "$excellent"},
+                        averagePrice: {$avg: "$price"},
+                    },
+                },
+                {$sort: {"_id.year": 1, "_id.month": 1}}
+
+            ]
+        ). exec(function (err, list) {
+
+           var arrLen = list.length;
+            for(var i=0; i < arrLen; i++) {
+                var date = moment.utc([list[i]._id.year, list[i]._id.month - 1, 1]).hour(12);
+
+
+                var saveOptions = {
+                    source: list[i]._id.source,
+                    price: list[i].averagePrice,
+                    date: date.toDate(),
+                    cropListName:list[i]._id.cropListName,
+                    name: list[i]._id.name,
+                    site: list[i]._id.site,
+                    year: date.year(),
+                    month: date.month(),
+                    dayOfYear: date.dayOfYear(),
+                    pcQuality: list[i]._id.pcQuality,
+                    wsQuality: list[i]._id.wsQuality,
+                    imported: list[i]._id.imported,
+                    excellent:list[i]._id.excellent,
+                    _crop:  list[i]._id.crop
+                };
+                avaragePriceList.push(saveOptions);
+            };
+
+            MonthAveragePrice.collection.insert(avaragePriceList,{}, onInsert);
+            function onInsert(err, docs) {
+                if (err) {
+                    res.status(500).send({error:err });
+
+                } else {
+                    console.info('%d objects successfully stored.', docs.length);
+                    res.status(200).send(
+                        {
+                             avaregePriceList:avaragePriceList ,
+                            avaregePriceListTotal:avaragePriceList.length});
+
+                }
+            }
+        });
+    };
+
 };

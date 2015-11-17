@@ -51,6 +51,7 @@ module.exports = function(db){
 
     //TODO del "englishName" field from response after testing
     router.get('/', crops.getMergedCropList);
+    router.get('/cropQualitys', crops.getMergedCropList); // ?cropName=שום  response: ['pcQua.. ', 'WsQua '.... ]
 
     router.get('/prices', plants.getPlantsWithPrices);
 

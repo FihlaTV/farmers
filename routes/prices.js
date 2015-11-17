@@ -239,6 +239,8 @@ module.exports = function(db){
     // pc2012.csv /pc2013.csv /pc2014.csv  without CSV
     router.get('/importPcHistoryFromCsv/:filename', dataParser.importPcHistoryFromCsv);
     router.get('/importWsHistoryFromCsv/:filename', dataParser.importWsHistoryFromCsv);
+    router.get('/getAveragePriceMonthly/:year', dataParser.getAveragePriceMonthly);
+
 
     return router;
 };
