@@ -630,6 +630,128 @@ var Price = function (db) {
             cb();
         }
 
+        function mergeMarketeerCropPricesByDate(cb) {
+            var pricedLen = receivedPrices.length - 1;
+            var marketeersPrices = [];
+            var prices = [];
+            var more = [];
+            var usersDailyMarketeer; // _marketteer
+            var tempObj;
+            var unSeeArea;
+
+
+            console.log('pricedLen: ', pricedLen);
+
+            resultPriceList = [];
+
+            for (var j = 0; j <= pricedLen; j++) {
+                receivedPriceArray = receivedPrices[j].prices;
+
+                // sort by marketeer max -> to -> min
+                //http://jsperf.com/array-sort-vs-lodash-sort/2
+                receivedPriceArray.sort(function compare(a, b) {
+                    if (a._marketeer < b._marketeer) return 1;
+                    if (a._marketeer > b._marketeer) return -1;
+                    return 0;
+                });
+
+                usersDailyMarketeer = null;  // if usersDailyMarketeer = null user not sell on this day
+
+                marketeersPrices = [];
+                for (var i = receivedPriceArray.length - 1; i >= 0; i--) {
+                    more = [];
+                    //console.log('if: ',(receivedPriceArray[i + 1] && receivedPriceArray[i]._marketeer != receivedPriceArray[i + 1]._marketeer) || (!receivedPriceArray[i + 1]));
+
+
+                    if ( (receivedPriceArray[i + 1] && (receivedPriceArray[i]._marketeer).toString() != (receivedPriceArray[i + 1]._marketeer).toString()) || (!receivedPriceArray[i + 1])) {
+                        for (var k = i; k >= 0; k--) {
+                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[i]._user).toString() === (UserId).toString()) {
+                                usersDailyMarketeer = receivedPriceArray[k]._marketeer;
+                                console.log('usersDailyMarketeer: ',usersDailyMarketeer);
+                            }
+
+                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString()) {
+                                more.push(
+                                    {
+                                        price: receivedPriceArray[k].price,
+                                        quality: receivedPriceArray[k].userQuality
+                                    });
+                            }
+
+                        }
+
+                        // sort more max -> to -> min
+                        //http://jsperf.com/array-sort-vs-lodash-sort/2
+                        more.sort(function compare(a, b) {
+                            if (a.price < b.price) return 1;
+                            if (a.price > b.price) return -1;
+                            return 0;
+                        });
+
+
+                        marketeersPrices.push({
+                            name: marketeerList[(receivedPriceArray[i]._marketeer).toString()].fullName,
+                            location: marketeerList[(receivedPriceArray[i]._marketeer).toString()].location,
+                            price: more[0].price,
+                            quality: more[0].quality,
+                            more: more
+                        });
+                    }
+
+                }
+
+                marketeersPrices.sort(function compare(a, b) {
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    return 0;
+                });
+
+                //TODO userMarketeer move to top if is or add
+                //TODO check if marketeer exist in list
+
+                tempObj = null;
+
+                if (userMarketeer) {
+
+                    for (var m = marketeersPrices.length - 1; m >= 0; m--) {
+                        if (marketeersPrices[m].name === userMarketeer.fullName) {
+                            tempObj = marketeersPrices.splice(m, 1);
+                        }
+                    }
+
+                    if (tempObj) {
+                        marketeersPrices.unshift(tempObj[0])
+                    } else {
+                        marketeersPrices.unshift({
+                            name: marketeerList[(userMarketeer._id).toString()].fullName,
+                            location: marketeerList[(userMarketeer._id).toString()].location,
+                            price: null,
+                            quality: '',
+                            more: []
+                        })
+                    }
+
+                }
+
+                if (!usersDailyMarketeer) {
+                    unSeeArea = marketeersPrices.length;
+
+
+                }
+
+
+                resultPriceList.push({
+                    data: receivedPrices[j]._id,
+                    prices: marketeersPrices
+                });
+
+                //console.log('receivedPrices: ', receivedPrices[j]._id);
+                //console.dir(receivedPrices[j].prices);
+
+            }
+            cb();
+        }
+
         function getLastPricesOfFavorites(cb) {
 
             console.log('date:', lastPriceDate);
@@ -700,6 +822,54 @@ var Price = function (db) {
                                         'wsQuality': '$wsQuality',
                                         'userQuality': '$userQuality',
                                         'imported': '$imported'
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $sort: {_id: -1}
+                        }
+                    ])
+                    .exec(function (err, results) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            receivedPrices = results;
+                            console.log('receivedPrices: ', receivedPrices);
+                            //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
+                            cb(err, results);
+                        }
+                    });
+            }
+        }
+
+        function createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate) {
+            return function (cb) {
+
+                Price
+                    .aggregate([
+                        {
+                            $match: {
+                                $and: [
+                                    {cropListName: cropName, date: {$gte: endDate, $lt: startDate}},
+                                    {site: {$exists: false}}
+                                ]
+                            }
+                        }, {
+                            $group: {
+                                _id: '$date',
+                                prices: {
+                                    $push: {
+                                        'price': '$price',
+                                        //'site': '$site',
+                                        '_user': '$_user',
+                                        '_marketeer': '$_marketeer',
+                                        //'cropListName': '$cropListName',
+                                        //'date': '$date',
+                                        'pcQuality': '$pcQuality',
+                                        'wsQuality': '$wsQuality',
+                                        'userQuality': '$userQuality',
+                                        //'imported': '$imported'
                                     }
                                 }
                             }
@@ -903,6 +1073,54 @@ var Price = function (db) {
             });
         };
 
+        this.getMarketeerCropPricesForPeriod = function (req, res, next) {
+            var tasks = [];
+            var today = new Date();
+            var lastWeekDate = (new Date(today)).setDate((today.getDate() - 7));
+            var startDate = req.query.startDate || today;
+            var endDate = req.query.endDate || new Date(lastWeekDate);
+            var cropName = req.query.cropName;
+
+            UserId = req.session.uId;
+
+            console.log('Name: ', cropName, ' startDate: ', startDate, ' ', typeof (startDate), ' endDate: ', "" + endDate, typeof (endDate));
+
+            if (!startDate || !endDate || !cropName || startDate < endDate) {
+                return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+            }
+
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+
+            startDate.setUTCHours(23);
+            startDate.setUTCMinutes(55);
+
+            endDate.setUTCHours(0);
+            endDate.setUTCMinutes(0);
+
+
+            console.log('startDate: ', startDate, 'endDate: ', endDate);
+
+            tasks.push(getCropList);
+            tasks.push(getMarketeerList);
+            tasks.push(getUserFavoritesAndMarketeerById);
+            tasks.push(createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate));
+            tasks.push(mergeMarketeerCropPricesByDate);
+
+            async.series(tasks, function (err, results) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                //return res.status(200).send({success: receivedPrices});
+                console.log('resultPriceList Len: ', receivedPrices.length);
+                console.log('resultPriceList Len: ', resultPriceList.length);
+                return res.status(200).send(resultPriceList);
+                //return res.status(200).send(receivedPrices);
+
+            });
+        };
+
         this.getLastFavorites = function (req, res, next) {
             var tasks = [];
             UserId = req.session.uId;
@@ -974,7 +1192,7 @@ var Price = function (db) {
             async.series(tasks, function (err, results) {
                 console.log(startTime);
                 if (err) {
-                    return res.status(500).send({error: err});
+                    return res.status(400).send({error: err});
                 }
                 return res.status(200).send({'success': RESPONSE.ON_ACTION.SUCCESS});
             });

@@ -52,7 +52,7 @@ module.exports = function(db){
     //TODO del "englishName" field from response after testing
     router.get('/', crops.getMergedCropList);
 
-    router.get('/prices', plants.getPlantsWithPrices);
+    //router.get('/prices', plants.getPlantsWithPrices);
 
     //import "cropList.csv" from /csv/ folder... TODO it on new server
     //router.get('/import', session.isAdmin, crops.adminImportFromCsv);

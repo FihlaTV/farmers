@@ -175,14 +175,11 @@
         <p>This <strong>method</strong>  for ADD PRICE SCREEN. User add prices and quallity for marketeer</p>
 <p><strong>URI:</strong> <strong><em><code>prices/addFarmerPrice</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
-<ul>
-<li><p><strong>Request:</strong></p>
-<p>   Body:</p>
-<pre class="prettyprint source"><code>   date//the date chosen by the user
-   cropName // display crop name
-   prices // []Array of prices and qualityes [ .. {&quot;price&quot;: ..., &quot;userQuality&quot;: &quot;..&quot;}...]</code></pre></li>
-</ul>
-<p><strong>Response:</strong></p>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> Body:
+     date//the date chosen by the user
+     cropName // display crop name
+     prices // []Array of prices and qualityes [ .. {&quot;price&quot;: ..., &quot;userQuality&quot;: &quot;..&quot;}...]</code></pre><p><strong>Response:</strong></p>
 <pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
     </div>
@@ -270,10 +267,8 @@
         <p>This <strong>method</strong>  for All Crop Prices  Screen. Get all last Crop prices (in Calendar order)</p>
 <p><strong>URI:</strong> <strong><em><code>prices/getCropPricesForPeriod</code></em></strong></p>
 <p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong> with query: cropName, startDate, endDate</p>
-<ul>
-<li><strong>Request:</strong>
-<strong><em><code>prices/getCropPricesForPeriod?cropName=שום&amp;startDate=2016-10-27T12:09:12.000Z&amp;endDate=2014-10-24T12:09:12.000Z</code></em></strong></li>
-</ul>
+<p><strong>Request:</strong>
+<strong><em><code>prices/getCropPricesForPeriod?cropName=שום&amp;startDate=2016-10-27T12:09:12.000Z&amp;endDate=2014-10-24T12:09:12.000Z</code></em></strong></p>
 <p><strong>Responses:</strong></p>
 <pre class="prettyprint source"><code> status (200) JSON Array of objects: {[ {} , ...]}
  status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
@@ -436,6 +431,96 @@
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="getMarketeerCropPricesForPeriod"><span class="type-signature"></span>getMarketeerCropPricesForPeriod<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for All Marketeer Prices  Screen. Get all Marketeer Crop prices (in Calendar order)</p>
+<p><strong>URI:</strong> <strong><em><code>prices/getCropPricesForPeriod</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong> with query: cropName, startDate, endDate</p>
+<p><strong>Request:</strong>
+<strong><em><code>prices/getMarketeerCropPricesForPeriod?cropName=שום&amp;startDate=2015-11-16T12:09:12.000Z&amp;endDate=2014-10-24T12:09:12.000Z</code></em></strong></p>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON Array of objects: {[ {} , ...]}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">[ ...     {      &quot;data&quot;: &quot;2015-11-13T12:00:00.000Z&quot;,     &quot;prices&quot;: [                 {                     &quot;name&quot;: &quot;חברת יוסף אופנהיימר (1986)&quot;,                     &quot;location&quot;: &quot;שוק צריפין&quot;,                     &quot;price&quot;: null,                     &quot;quality&quot;: &quot;&quot;,                     &quot;more&quot;: []                 },                 {                     &quot;name&quot;:  &quot;שיווק המאה (מסחר) 2002&quot;,                     &quot;location&quot;: &quot;השרון&quot;,                     &quot;price&quot;: 10.3,                     &quot;quality&quot;: &quot;supper&quot;,                     &quot;more&quot;: [                                 {                                     &quot;price&quot;: 10.3,                                     &quot;quality&quot;: &quot;supper&quot;                                 }                                 {                                     &quot;price&quot;: 8,                                     &quot;quality&quot;: &quot;old&quot;                                 }                                 {                                     &quot;price&quot;: 10,                                     &quot;quality&quot;: &quot;excellent&quot;                                 }                            ]                 },                 {                     &quot;name&quot;: &quot;וסף אופנהיימר &quot;,                     &quot;location&quot;: &quot;שוק צ&quot;,                     &quot;price&quot;: 9,                     &quot;quality&quot;: &quot;no bad&quot;,                     &quot;more&quot;: [                                 {                                     &quot;price&quot;: 9,                                     &quot;quality&quot;: &quot;no bad&quot;                                 },                                 {                                     &quot;price&quot;: 5,                                     &quot;quality&quot;: &quot;bad&quot;                                 },                             ]                 }             ]     },     {      &quot;data&quot;: &quot;2015-11-13T12:00:00.000Z&quot;,     &quot;prices&quot;: [                 {                     &quot;name&quot;: &quot;חברת יוסף אופנהיימר (1986)&quot;,                     &quot;location&quot;: &quot;שוק צריפין&quot;,                     &quot;price&quot;: 10,                     &quot;quality&quot;: &quot;user quality&quot;,                     &quot;more&quot;: [                                 {                                     &quot;price&quot;: 10,                                     &quot;quality&quot;: &quot;user quality&quot;                                 }                     ]                 },                 {                     &quot;name&quot;:  &quot;שיווק המאה&quot;,                     &quot;location&quot;: &quot;השרון&quot;,                     &quot;price&quot;: 10.3,                     &quot;quality&quot;: &quot;supper&quot;,                     &quot;more&quot;: [....                             ]                  }         },...         ...]</pre>
+
+
+    
+</dd>
+
         </dl>
     
 
@@ -474,7 +559,7 @@
 
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a>
-	on Wed Oct 28th 2015 using the <a
+	on Tue Nov 17th 2015 using the <a
 	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 </span>
 </footer>
