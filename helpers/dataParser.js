@@ -765,12 +765,12 @@ module.exports = function (db) {
 
             fs.readFile(csvFileName, 'utf8', function (err, stringFileData) {
                 if (err) {
-                    return res.status(500).send({error: err});
+                    return cb(err);
                 }
 
                 csv.parse(stringFileData, {delimiter: ',', relax: true}, function (err, parsedData) {
                     if (err) {
-                        return res.status(500).send({error: err});
+                        return cb(err);
                     }
                     //parsedData[0] - table heads
 
