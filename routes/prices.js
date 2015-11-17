@@ -295,6 +295,7 @@ module.exports = function(db){
 
     // for test  run parser
     router.get('/getWholeSalePrice', prices.getWholeSalePrice);
+
     // for test  run parser
     router.get('/getPlantCouncilPrice', prices.getPlantCouncilPrice);
 
