@@ -990,8 +990,10 @@ module.exports = function (db) {
 
             ]
         ). exec(function (err, list) {
-
-           var arrLen = list.length;
+            if (err) {
+              return  res.status(500).send({error:err });
+            }
+            var arrLen = list.length;
             for(var i=0; i < arrLen; i++) {
                 var date = moment.utc([list[i]._id.year, list[i]._id.month - 1, 1]).hour(12);
 

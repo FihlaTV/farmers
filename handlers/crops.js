@@ -1,4 +1,5 @@
 var CONST = require('../constants/constants');
+var RESPONSE = require('../constants/response');
 var _ = require('lodash');
 var csv = require('csv');
 var fs = require('fs');
@@ -326,6 +327,59 @@ var Crop = function (db) {
             });
         });
     };
+
+
+   this.getCropQualitys = function (req, res, next) {
+
+       var cropName = req.query.cropName;
+       var outArrayQualitys = [];
+       if ( !cropName ) {
+           return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+       }
+
+       function uniqFast(a) {
+           var out = [];
+           for(var i = a.length-1; i >=0; i--) {
+               if(out.indexOf(a[i]) < 0) {
+                   out.push(a[i]);
+               }
+           }
+           return out;
+       }
+       
+       Crop.aggregate(
+           [ {
+               $match : {displayName:cropName}
+           },
+               {
+                   $group: {
+                       _id: {
+                           pcQuality:"$pcQuality",
+                           wsQuality:"$wsQuality",
+                           },
+
+                   },
+               },
+
+           ]
+       ). exec(function (err, list) {
+
+           if(err){
+            return   res.status(500).send({error:err});
+           }
+           var  arrLen = list.length;
+           for(var i = arrLen -1; i >= 0; i--){
+               if(list[i]._id.pcQuality!="") {
+                   outArrayQualitys.push(list[i]._id.pcQuality)
+               }
+               if(list[i]._id.wsQuality!="") {
+                   outArrayQualitys.push(list[i]._id.wsQuality)
+               }
+           }
+           res.status(200).send(uniqFast(outArrayQualitys));
+       });
+
+   };
 
 
 };
