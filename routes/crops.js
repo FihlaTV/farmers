@@ -51,7 +51,39 @@ module.exports = function(db){
 
     //TODO del "englishName" field from response after testing
     router.get('/', crops.getMergedCropList);
-    router.get('/cropQualitys', crops.getMergedCropList); // ?cropName=שום  response: ['pcQua.. ', 'WsQua '.... ]
+
+    /**
+     * This __method__  for get cropQualitys Array
+     *
+     * __URI:__ ___`/crops/cropQualitys`___
+     *
+     * __METHOD:__ ___`GET`___
+     *
+     * __Request:__
+     *
+     *      Query:
+     *      cropName // required string
+     * ___`crops/cropQualitys?cropName=שום`___
+     *
+     *
+     * __Responses:__
+     *
+     *      status (200) JSON Array of strings: [ ... , ...]
+     *      status (400, 500) JSON object: {error: 'Text about error'} or {error: object}
+     *
+     *
+     * @example
+     *      [
+     *      "firstString",
+     *      "secondString"
+     *      ]
+     *
+     * @method cropQualitys
+     * @instance
+     * @for crops
+     * @memberOf crops
+     */
+    router.get('/cropQualitys', crops.getCropQualitys); // ?cropName=שום  response: ['pcQua.. ', 'WsQua '.... ]
 
     //router.get('/prices', plants.getPlantsWithPrices);
 
