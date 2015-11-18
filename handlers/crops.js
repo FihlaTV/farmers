@@ -331,30 +331,22 @@ var Crop = function (db) {
 
    this.getCropQualitys = function (req, res, next) {
 
-
-
-
        var cropName = req.query.cropName;
        var outArrayQualitys = [];
        if ( !cropName ) {
            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
        }
 
-
        function uniqFast(a) {
            var out = [];
-           var len = a.length;
-           var item;
            for(var i = a.length-1; i >=0; i--) {
-                item = a[i];
-               if(out.indexOf(item) < 0) {
-                   out.push(item);
+               if(out.indexOf(a[i]) < 0) {
+                   out.push(a[i]);
                }
            }
            return out;
        }
-
-
+       
        Crop.aggregate(
            [ {
                $match : {displayName:cropName}
