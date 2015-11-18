@@ -637,7 +637,9 @@ var Price = function (db) {
             var more = [];
             var usersDailyMarketeer; // _marketteer
             var tempObj;
-            var unSeeArea;
+            var tempArray;
+            var tempFlag = false;
+            var unSeeAreaStartIndex;
 
 
             console.log('pricedLen: ', pricedLen);
@@ -665,9 +667,9 @@ var Price = function (db) {
 
                     if ( (receivedPriceArray[i + 1] && (receivedPriceArray[i]._marketeer).toString() != (receivedPriceArray[i + 1]._marketeer).toString()) || (!receivedPriceArray[i + 1])) {
                         for (var k = i; k >= 0; k--) {
-                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[i]._user).toString() === (UserId).toString()) {
+                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[k]._user).toString() === UserId.toString()) {
                                 usersDailyMarketeer = receivedPriceArray[k]._marketeer;
-                                console.log('usersDailyMarketeer: ',usersDailyMarketeer);
+                                console.log(j,' ||| usersDailyMarketeer: ',usersDailyMarketeer);
                             }
 
                             if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString()) {
@@ -682,11 +684,32 @@ var Price = function (db) {
 
                         // sort more max -> to -> min
                         //http://jsperf.com/array-sort-vs-lodash-sort/2
+
                         more.sort(function compare(a, b) {
                             if (a.price < b.price) return 1;
                             if (a.price > b.price) return -1;
                             return 0;
                         });
+
+
+                        // Merge same quality
+                        tempArray = [];
+                        tempArray.push(more[0]);
+
+                        for (var k = 1, len = more.length - 1; k <= len; k++) {
+
+                            tempFlag = false;
+
+                            for(var h = tempArray.length - 1; h >=0; h--){
+                                tempFlag = !tempFlag ? (more[k].quality === tempArray[h].quality) : true;
+                            }
+
+                            if (!tempFlag) {
+                                tempArray.push(more[k])
+                            }
+                        }
+                        more = tempArray;
+
 
 
                         marketeersPrices.push({
@@ -730,15 +753,20 @@ var Price = function (db) {
                             more: []
                         })
                     }
-
                 }
+
+                console.log(j,' ---- usersDailyMarketeer: ',usersDailyMarketeer);
 
                 if (!usersDailyMarketeer) {
-                    unSeeArea = marketeersPrices.length;
+                    unSeeAreaStartIndex = marketeersPrices.length - Math.floor(marketeersPrices.length * 1.4/3);
+                    console.log(' ------------marketeersPrices.length: ',  marketeersPrices.length,' unSeeAreaStartIndex: ',unSeeAreaStartIndex,'---------------');
 
+                    for (var k = 0, len = unSeeAreaStartIndex - 1; k <= len; k++) {
+                        marketeersPrices[k].price = null;
+                        marketeersPrices[k].more = [];
+                    }
 
                 }
-
 
                 resultPriceList.push({
                     data: receivedPrices[j]._id,
@@ -883,7 +911,7 @@ var Price = function (db) {
                             cb(err);
                         } else {
                             receivedPrices = results;
-                            console.log('receivedPrices: ', receivedPrices);
+                            //console.log('receivedPrices: ', receivedPrices);
                             //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
                             cb(err, results);
                         }
@@ -1113,8 +1141,8 @@ var Price = function (db) {
                 }
 
                 //return res.status(200).send({success: receivedPrices});
-                console.log('resultPriceList Len: ', receivedPrices.length);
-                console.log('resultPriceList Len: ', resultPriceList.length);
+                //console.log('resultPriceList Len: ', receivedPrices.length);
+                //console.log('resultPriceList Len: ', resultPriceList.length);
                 return res.status(200).send(resultPriceList);
                 //return res.status(200).send(receivedPrices);
 

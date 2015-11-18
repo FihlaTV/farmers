@@ -1028,3 +1028,7 @@ Error: Arguments must be aggregate pipeline operators
     at router (c:\thinkmobiles\farmers\node_modules\express\lib\router\index.js:46:12)
     at Layer.handle [as handle_request] (c:\thinkmobiles\farmers\node_modules\express\lib\router\layer.js:95:5)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Wed Nov 18 2015 12:45:10 GMT+0200 (Финляндия (зима))
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
