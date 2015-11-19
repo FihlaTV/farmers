@@ -311,7 +311,7 @@ var Price = function (db) {
 
                     receivedPrices = results;
 
-                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime - lastTime * 1000) /1000);
+                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime ) /1000);
 
 
                     //TODO when optimize agregation > dell this
@@ -824,6 +824,7 @@ var Price = function (db) {
 
                     for (var k = 0, len = unSeeAreaStartIndex - 1; k <= len; k++) {
                         marketeersPrices[k].price = null;
+                        marketeersPrices[k].quality = '';
                         marketeersPrices[k].more = [];
                     }
 

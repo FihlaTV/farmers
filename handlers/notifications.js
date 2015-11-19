@@ -21,6 +21,7 @@ var Notification = function (db) {
                 }, {
                     $group: {
                         _id: '$cropName',
+
                         duplicate: {
                             $push: {
                                 'source': '$source',
@@ -39,7 +40,7 @@ var Notification = function (db) {
                 }
 
                 for (var i = results.length - 1; i >= 0; i-- ){
-                    mergedNewCrops.push ( results[i]._id );
+                    mergedNewCrops.push ( {cropName: results[i]._id,  source: /moag/.test(results[i].duplicate[0].source) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL  } );
                 }
 
                 console.log('cropListMerged.length: ', mergedNewCrops.length);
