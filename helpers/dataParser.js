@@ -56,7 +56,7 @@ module.exports = function (db) {
         if (date[0].length === 1) {
             date[0] = 0 + date[0];
         }
-        console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
+        //console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
 
         return new Date(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
     }
@@ -877,7 +877,7 @@ module.exports = function (db) {
                 return cb(err);
             }
             //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
-            cb(null, 'Success');
+            cb(null, 'Success' );
         });
     }
 

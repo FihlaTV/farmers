@@ -341,7 +341,7 @@ module.exports = function(db){
      */
     router.post('/addFarmerPrice/', prices.addFarmerPrices);
 
-    // pc2012.csv /pc2013.csv /pc2014.csv
+    // pc2012.csv /pc2013.csv /pc2014.csv /pc2015.csv
     router.get('/importPcHistoryFromCsv/:filename', dataParser.importPcHistoryFromCsv);
 
     //wsDailyPrices2014-20.9.15.csv

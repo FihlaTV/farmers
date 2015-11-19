@@ -188,7 +188,7 @@ var Price = function (db) {
         function GetPricesByLastDate(cb) {
             var startTime = new Date();
             var lastTime;
-            var tempArray = []
+            var tempArray = [];
             var agregation = Price
                 .aggregate(
                 [
@@ -262,22 +262,22 @@ var Price = function (db) {
                             }
                         }
                     },
+                    {
+                        $sort: {
+                            '_id.lastDate': -1,
+                            '_id.cropListName': 1
+                        }
+                    },
 
                     {
                         "$project": {
-                            //"cropListName": "$_id",
                             'lastDate': '$_id.lastDate',
                             _id: '$_id.cropListName',
                             prices: '$prices'
                         }
 
                     },
-                    {
-                        $sort: {
-                            lastDate: -1,
-                            _id: 1
-                        }
-                    },
+
                     //{
                     //    $out : "randomAggregates"
                     //}
@@ -287,11 +287,11 @@ var Price = function (db) {
             ).allowDiskUse(true)
             //agregation.options = {allowDiskUse: true};
 
-            // with sort time=600? without sort used  time=400
-            // with price pus and sort time=1725  without sort used  time=1460
+
                 .exec(function (err, results) {
                 if (err) {
                     return cb(err);
+                }
 
 
                     lastTime =  (new Date() - startTime) /1000;
@@ -311,34 +311,19 @@ var Price = function (db) {
 
                     receivedPrices = results;
 
-                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime - lastTime*1000) /1000);
+                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime - lastTime * 1000) /1000);
 
-                    return cb();
+
                     //TODO when optimize agregation > dell this
 
                     // get no lastDate information
 
-                    for (var i = results.length - 1; i >= 0; i--) {
-
-                        receivedPrices[i] = {
-                            _id: results[i]._id,
-                            lastDate: results[i].lastDate,
-                            prices: []
-                        };
-
-                        for (var j = results[i].prices.length - 1; j >= 0; j--) {
-
-                            if (results[i].prices[j].date.valueOf() == results[i].lastDate.valueOf()) {
-                                receivedPrices[i].prices.push(results[i].prices[j])
-                            }
-                        }
-                    }
 
                     //receivedPrices = results;
                     console.log('Main screen unique Crop: ', receivedPrices.length);
-                    console.log('Spend time: ', new Date - startTime);
+                    //console.log('Spend time: ', new Date - startTime);
                     cb();
-                }
+
             });
         }
 
@@ -1109,7 +1094,7 @@ var Price = function (db) {
             //tasks.push(getLastPriceDate);
             //tasks.push(GeCropsAndLastDate);
             tasks.push(GetPricesByLastDate);
-            //tasks.push(syncPricesAndCropList);
+            tasks.push(syncPricesAndCropList);
 
             async.series(tasks, function (err, results) {
                 if (err) {
@@ -1118,9 +1103,9 @@ var Price = function (db) {
 
                 //return res.status(200).send({success: receivedPrices});
                 //console.log('resultPriceList Len: ', resultPriceList.length);
-                //return res.status(200).send(resultPriceList);
+                return res.status(200).send(resultPriceList);
                 //return res.status(200).send(marketeerList);
-                return res.status(200).send(receivedPrices);
+                //return res.status(200).send(receivedPrices);
 
             });
         };
