@@ -7,6 +7,8 @@ module.exports = {
     WHOLE_SALE_MARKET: 'Wholesale',
     PLANT_COUNCIL: 'PlantCouncil',
 
+    START_STATISTICS_YEAR: 2012,
+
     URL_APIS: {
         PLANTS_URL: {
             //API_URL: 'https://www.kimonolabs.com/api/4fv5re1i?apikey=bG2G9Y4cVggvVGxEV3gSVEyatTIjbHP4',   // old API KEY by Ivan Kornik

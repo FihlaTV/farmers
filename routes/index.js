@@ -7,6 +7,7 @@ module.exports = function(app, db){
     var marketeersRouter = require('./marketeers')(db);
     var adminRouter = require('./admin')(db);
     var pricesRouter = require('./prices')(db);
+    var statisticsRouter = require('./statistics')(db);
     var importRouter = require('./import')(db);
 
 
@@ -20,6 +21,8 @@ module.exports = function(app, db){
     app.use('/marketeers', marketeersRouter);
     app.use('/admin', adminRouter);
     app.use('/prices', pricesRouter);
+    app.use('/statistics', statisticsRouter);
+
     app.use('/importFromCsv', importRouter);
 
 
