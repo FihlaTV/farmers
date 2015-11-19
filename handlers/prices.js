@@ -83,6 +83,7 @@ var Price = function (db) {
                     }
                 });
         }
+
         function getMarketeerList(cb) {
             Marketeer
                 .find()
@@ -106,7 +107,7 @@ var Price = function (db) {
 
                         marketeerList = {};
 
-                        for (var i = docs.length - 1; i >= 0; i -- ){
+                        for (var i = docs.length - 1; i >= 0; i--) {
                             marketeerList[(docs[i]._id).toString()] = docs[i]
                         }
                         //marketeerList = docs;
@@ -133,82 +134,97 @@ var Price = function (db) {
                 });
         }
 
-        function GetPricesByLastDate(cb) {
+        function GeCropsAndLastDate(cb) {
             var startTime = new Date();
-
-            Price
+            var agregation = Price
                 .aggregate(
                 [
                     {
                         $match: {
-                            $or: [ {site: {$exists: true}}, {"_user": UserId} ]
+                            $or: [{site: {$exists: true}}, {"_user": UserId}]
                         }
+                    },
 
+                    {
+                        $sort: {
+                            cropListName: 1,
+                            date: -1
+                        }
                     },
 
                     {
                         $group: {
                             '_id': '$cropListName',
-                            'lastDate': { $last: "$date" },
+                            'date': {$max: "$date"}
+                        }
+                    },
+                    {
+                        "$project": {
+                            "cropListName": "$_id",
+                            'date': '$date',
+                            _id: false
+                        }
+                    },
+                ]
+            );
+            agregation.options = {allowDiskUse: true};
 
+                // with sort time=600? without sort used  time=400
+                // with price pus and sort time=1725  without sort used  time=1460
+            agregation.exec(function (err, results) {
+                    if (err) {
+                        cb(err);
+                    } else {
 
-                            //finalTotal: {
-                            //    $let: {
-                            //        vars: {
-                            //            total: { $add: [ '$price', '$tax' ] },
-                            //            discounted: { $cond: { if: '$applyDiscount', then: 0.9, else: 1 } }
-                            //        },
-                            //        in: { $multiply: [ "$$total", "$$discounted" ] }
-                            //    }
-                            //}
-                            //prices:
-                            //{
-                            //    $let:
-                            //    {
-                            //        vars: { lastSalesDate: {$last: "$date"}},
-                            //        in: {
-                            //            "defects": {
-                            //                "$sum": { "$cond": [
-                            //                    { "$eq": [ "$date", '$$lastSalesDate'] },
-                            //                    1,
-                            //                    0
-                            //                ]}
-                            //            } }
-                            //    }
-                            //},
-                            //$let: {lastSalesDate: },
-                            //result: { "$cond": [ {$eq : [ "$date",   {$last: "$date"} ]}, 1, 0]}
-                            //resultatat: { "$cond": [ {$eq : [ "$date", 'lastSalesDate']}, 1, 0]}
-                            //"defects": {
-                            //    "$sum": { "$cond": [
-                            //        { "$eq": [ "$date", {$last: "$date"} ] },
-                            //        1,
-                            //        0
-                            //    ]}
-                            //}
-                            //prices: {
-                            //    $push:  {
-                            //        k: function(doc, lastSalesDate) {
-                            //            if (doc.date == lastSalesDate) {
-                            //                return {
-                            //                    'price': doc.price,
-                            //                    'site': doc.site,
-                            //                    'cropListName': doc.cropListName,
-                            //                    'date': doc.date,
-                            //                    'pcQuality': doc.pcQuality,
-                            //                    'wsQuality': doc.wsQuality,
-                            //                    'userQuality': doc.userQuality,
-                            //                    '_marketeer': doc._marketeer,
-                            //                    '_user': doc._user,
-                            //                    'imported': doc.imported
-                            //                }
-                            //            }
-                            //        }
-                            //    }
-                            //}
+                        console.log('Spend time for GeCropsAndLastDate: ', (new Date() - startTime) /1000);
+
+                        receivedPrices = results;
+                            return cb();
+
+                    }
+                });
+        }
+
+        function GetPricesByLastDate(cb) {
+            var startTime = new Date();
+            var lastTime;
+            var tempArray = [];
+            var agregation = Price
+                .aggregate(
+                [
+                    {
+                        $match: {
+                            $or: [{site: {$exists: true}}, {"_user": UserId}]
+                        }
+                    },
+                    //
+                    //{
+                    //    $match: {
+                    //
+                    //        $and:[
+                    //            {
+                    //                $or: receivedPrices
+                    //            },
+                    //
+                    //{$or: [{site: {$exists: true}}, {"_user": UserId}]}
+                    //        ]
+                    //
+                    //    }
+                    //},
+                    //{
+                    //    $sort: {
+                    //        cropListName: 1,
+                    //        date: -1
+                    //    }
+                    //},
+
+                    {
+                        $group: {
+                            '_id': '$cropListName',
+                            'lastDate': {$max: "$date"},
 
                             prices: {
-                                $push:  {
+                                $push: {
                                     'price': '$price',
                                     'site': '$site',
                                     'cropListName': '$cropListName',
@@ -223,48 +239,92 @@ var Price = function (db) {
                             }
                         }
                     },
+
+                    { $unwind: '$prices'},
                     {
-                        $sort: {
-                            lastDate: -1,
-                            _id: 1
-                        }
-                    }
+                        $group: {
+                            '_id': { cropListName:'$_id',
+                            'lastDate': "$lastDate"},
 
-                ]
-            )
-
-                // with sort time=600? without sort used  time=400
-                // with price pus and sort time=1725  without sort used  time=1460
-                .exec(function (err, results) {
-                    if (err) {
-                        cb(err);
-                    } else {
-                        //TODO when optimize agregation > dell this
-
-                        // get no lastDate information
-
-                        for (var i = results.length - 1 ; i >= 0; i--){
-
-                            receivedPrices[i] = {
-                                _id : results[i]._id,
-                                lastDate : results[i].lastDate,
-                                prices : []
-                            };
-
-                            for(var j =  results[i].prices.length - 1; j >= 0; j--){
-
-                                if (results[i].prices[j].date.valueOf() == results[i].lastDate.valueOf()){
-                                    receivedPrices[i].prices.push(results[i].prices[j])
-                                }
+                            prices: {
+                                $push: {  $cond : [ { $eq : ['$prices.date', '$lastDate' ]}, {
+                                    'price': '$prices.price',
+                                    'site': '$prices.site',
+                                    'cropListName': '$prices.cropListName',
+                                    'date': '$prices.date',
+                                    'pcQuality': '$prices.pcQuality',
+                                    'wsQuality': '$prices.wsQuality',
+                                    'userQuality': '$prices.userQuality',
+                                    '_marketeer': '$prices._marketeer',
+                                    '_user': '$prices._user',
+                                    'imported': '$prices.imported'
+                                }, null]}
                             }
                         }
+                    },
+                    {
+                        $sort: {
+                            '_id.lastDate': -1,
+                            '_id.cropListName': 1
+                        }
+                    },
 
-                        //receivedPrices = results;
-                        console.log('Main screen unique Crop: ', receivedPrices.length);
-                        console.log('Spend time: ', new Date - startTime);
-                        cb();
+                    {
+                        "$project": {
+                            'lastDate': '$_id.lastDate',
+                            _id: '$_id.cropListName',
+                            prices: '$prices'
+                        }
+
+                    },
+
+                    //{
+                    //    $out : "randomAggregates"
+                    //}
+
+
+                ]
+            ).allowDiskUse(true)
+            //agregation.options = {allowDiskUse: true};
+
+
+                .exec(function (err, results) {
+                if (err) {
+                    return cb(err);
+                }
+
+
+                    lastTime =  (new Date() - startTime) /1000;
+                    console.log('Spend time for GetPricesByLastDate: ', lastTime);
+
+                    //Filter empty
+                    for (var i = 0, len = results.length - 1; i <= len; i++){
+                        tempArray = [];
+                        for (var j =  results[i].prices.length - 1; j >= 0; j--){
+                            if (results[i].prices[j]) {
+                                tempArray.push(results[i].prices[j]);
+                            }
+                        }
+                        results[i].prices = tempArray;
                     }
-                });
+
+
+                    receivedPrices = results;
+
+                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime - lastTime * 1000) /1000);
+
+
+                    //TODO when optimize agregation > dell this
+
+                    // get no lastDate information
+
+
+                    //receivedPrices = results;
+                    console.log('Main screen unique Crop: ', receivedPrices.length);
+                    //console.log('Spend time: ', new Date - startTime);
+                    cb();
+
+            });
         }
 
         function syncPricesAndCropList(cb) {
@@ -287,7 +347,7 @@ var Price = function (db) {
             resultPriceList = [];
 
             for (var j = 0; j <= pricedLen - 1; j++) {
-                if (receivedPrices[j]._id ) {
+                if (receivedPrices[j]._id) {
                     receivedPriceArray = receivedPrices[j].prices;
 
                     //console.log('receivedPrices: ', receivedPrices[j]._id);
@@ -442,7 +502,7 @@ var Price = function (db) {
 
                     isInFavorites = userFavorites.indexOf(receivedPrices[j]._id) >= 0;
 
-                    if (findIndex >= 0 ){
+                    if (findIndex >= 0) {
 
                         resultPriceList.push({
                             _crop: cropListMerged[findIndex]._id,
@@ -512,7 +572,7 @@ var Price = function (db) {
                 maxPrice = more.length ? more[0].price : 0;
                 maxQuality = more.length ? more[0].quality : '';
 
-                tempName =  tempName ? tempName : (userMarketeer ? userMarketeer.fullName : '');
+                tempName = tempName ? tempName : (userMarketeer ? userMarketeer.fullName : '');
 
                 marketeerPrices = {
                     source: {
@@ -637,7 +697,9 @@ var Price = function (db) {
             var more = [];
             var usersDailyMarketeer; // _marketteer
             var tempObj;
-            var unSeeArea;
+            var tempArray;
+            var tempFlag = false;
+            var unSeeAreaStartIndex;
 
 
             console.log('pricedLen: ', pricedLen);
@@ -663,11 +725,11 @@ var Price = function (db) {
                     //console.log('if: ',(receivedPriceArray[i + 1] && receivedPriceArray[i]._marketeer != receivedPriceArray[i + 1]._marketeer) || (!receivedPriceArray[i + 1]));
 
 
-                    if ( (receivedPriceArray[i + 1] && (receivedPriceArray[i]._marketeer).toString() != (receivedPriceArray[i + 1]._marketeer).toString()) || (!receivedPriceArray[i + 1])) {
+                    if ((receivedPriceArray[i + 1] && (receivedPriceArray[i]._marketeer).toString() != (receivedPriceArray[i + 1]._marketeer).toString()) || (!receivedPriceArray[i + 1])) {
                         for (var k = i; k >= 0; k--) {
-                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[i]._user).toString() === (UserId).toString()) {
+                            if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[k]._user).toString() === UserId.toString()) {
                                 usersDailyMarketeer = receivedPriceArray[k]._marketeer;
-                                console.log('usersDailyMarketeer: ',usersDailyMarketeer);
+                                console.log(j, ' ||| usersDailyMarketeer: ', usersDailyMarketeer);
                             }
 
                             if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString()) {
@@ -682,11 +744,31 @@ var Price = function (db) {
 
                         // sort more max -> to -> min
                         //http://jsperf.com/array-sort-vs-lodash-sort/2
+
                         more.sort(function compare(a, b) {
                             if (a.price < b.price) return 1;
                             if (a.price > b.price) return -1;
                             return 0;
                         });
+
+
+                        // Merge same quality
+                        tempArray = [];
+                        tempArray.push(more[0]);
+
+                        for (var k = 1, len = more.length - 1; k <= len; k++) {
+
+                            tempFlag = false;
+
+                            for (var h = tempArray.length - 1; h >= 0; h--) {
+                                tempFlag = !tempFlag ? (more[k].quality === tempArray[h].quality) : true;
+                            }
+
+                            if (!tempFlag) {
+                                tempArray.push(more[k])
+                            }
+                        }
+                        more = tempArray;
 
 
                         marketeersPrices.push({
@@ -730,15 +812,20 @@ var Price = function (db) {
                             more: []
                         })
                     }
-
                 }
+
+                console.log(j, ' ---- usersDailyMarketeer: ', usersDailyMarketeer);
 
                 if (!usersDailyMarketeer) {
-                    unSeeArea = marketeersPrices.length;
+                    unSeeAreaStartIndex = marketeersPrices.length - Math.floor(marketeersPrices.length * 1.4 / 3);
+                    console.log(' ------------marketeersPrices.length: ', marketeersPrices.length, ' unSeeAreaStartIndex: ', unSeeAreaStartIndex, '---------------');
 
+                    for (var k = 0, len = unSeeAreaStartIndex - 1; k <= len; k++) {
+                        marketeersPrices[k].price = null;
+                        marketeersPrices[k].more = [];
+                    }
 
                 }
-
 
                 resultPriceList.push({
                     data: receivedPrices[j]._id,
@@ -802,7 +889,7 @@ var Price = function (db) {
                             $match: {
                                 $and: [
                                     {cropListName: cropName, date: {$gte: endDate, $lt: startDate}},
-                                    { $or: [ {site: {$exists: true}}, {"_user": UserId}]}
+                                    {$or: [{site: {$exists: true}}, {"_user": UserId}]}
                                 ]
                                 //date: {$gte: startDate ISODate("2013-01-01T00:00:00.0Z"), $lt: ISODate("2013-02-01T00:00:00.0Z")}
                                 //dayOfYear: dayOfYear
@@ -883,7 +970,7 @@ var Price = function (db) {
                             cb(err);
                         } else {
                             receivedPrices = results;
-                            console.log('receivedPrices: ', receivedPrices);
+                            //console.log('receivedPrices: ', receivedPrices);
                             //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
                             cb(err, results);
                         }
@@ -906,7 +993,7 @@ var Price = function (db) {
                         $and: [options,
                             {
                                 _marketeer: {
-                                    $ne : userMarketeer._id
+                                    $ne: userMarketeer._id
                                 }
                             }
                         ]
@@ -996,7 +1083,6 @@ var Price = function (db) {
         }
 
 
-
         this.getLast = function (req, res, next) {
             var tasks = [];
 
@@ -1006,6 +1092,7 @@ var Price = function (db) {
             tasks.push(getMarketeerList);
             tasks.push(getUserFavoritesAndMarketeerById);
             //tasks.push(getLastPriceDate);
+            //tasks.push(GeCropsAndLastDate);
             tasks.push(GetPricesByLastDate);
             tasks.push(syncPricesAndCropList);
 
@@ -1113,8 +1200,8 @@ var Price = function (db) {
                 }
 
                 //return res.status(200).send({success: receivedPrices});
-                console.log('resultPriceList Len: ', receivedPrices.length);
-                console.log('resultPriceList Len: ', resultPriceList.length);
+                //console.log('resultPriceList Len: ', receivedPrices.length);
+                //console.log('resultPriceList Len: ', resultPriceList.length);
                 return res.status(200).send(resultPriceList);
                 //return res.status(200).send(receivedPrices);
 
@@ -1155,7 +1242,6 @@ var Price = function (db) {
             var startTime = new Date();
 
 
-
             UserId = req.session.uId;
 
             if (!date || !cropName || !prices || !prices.length) {
@@ -1166,7 +1252,7 @@ var Price = function (db) {
             //TODO set good date format with correct time and timezone
             date = new Date(date);
 
-            if (date.getDay() === 5 || date.getDay() === 6 ){
+            if (date.getDay() === 5 || date.getDay() === 6) {
                 return res.status(400).send({error: RESPONSE.NOT_ALLOW_DATE_SELECTED});
             }
 

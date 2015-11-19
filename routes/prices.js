@@ -341,9 +341,15 @@ module.exports = function(db){
      */
     router.post('/addFarmerPrice/', prices.addFarmerPrices);
 
-    // pc2012.csv /pc2013.csv /pc2014.csv  without CSV
+    // pc2012.csv /pc2013.csv /pc2014.csv /pc2015.csv
     router.get('/importPcHistoryFromCsv/:filename', dataParser.importPcHistoryFromCsv);
-    router.get('/importWsMonthHistoryFromCsv/:filename', dataParser.importWsHistoryFromCsv);
+
+    //wsDailyPrices2014-20.9.15.csv
+    router.get('/importWsHistoryFromCsv/:filename', dataParser.importWsHistoryFromCsv);
+
+    // ws_months11_15.csv
+    router.get('/importWsMonthHistoryFromCsv/:filename', dataParser.importWsMonthHistoryFromCsv);
+
     router.get('/getAveragePriceMonthly/:year', dataParser.getAveragePriceMonthly);
 
 
