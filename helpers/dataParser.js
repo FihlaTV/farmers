@@ -56,9 +56,26 @@ module.exports = function (db) {
         if (date[0].length === 1) {
             date[0] = 0 + date[0];
         }
-        //console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
+        console.log(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
 
         return new Date(date[2] + '-' + date[1] + '-' + date[0] + 'T12:00:00.000Z');
+    }
+
+    function getTransformedDateObjectForWsDayli(date) {
+        date = date.split('/');
+
+        if (date[2].length === 2) {
+            date[2] = 20 + date[2];
+        }
+        if (date[1].length === 1) {
+            date[1] = 0 + date[1];
+        }
+        if (date[0].length === 1) {
+            date[0] = 0 + date[0];
+        }
+        //console.log(date[2] + '-' + date[0] + '-' + date[1] + 'T12:00:00.000Z');
+
+        return new Date(date[2] + '-' + date[0] + '-' + date[1] + 'T12:00:00.000Z');
     }
 
     function getTransformedDateObjectForMonthWs(date) {
@@ -371,7 +388,7 @@ module.exports = function (db) {
         };
 
         //TODO switch ON
-        mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
+        //mailer.sendEmailNotificationToAdmin('4Farmers. New crop detected ', 'Hello.<br>New crop was detected. Name:  ' + model.name + '<br>Source:  ' +   model.source + ' <br>Excelent class for Plant Council: ' + model.excellent);
 
         notification = new Notification(saveOptions);
         notification
@@ -813,7 +830,7 @@ module.exports = function (db) {
             var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
 
             for (var i = cropLen; i >= 0; i--) {
-                if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcNameOptimize === nameOptimize) {
+                if (cropList[i].pcNameOptimize === nameOptimize && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
                     foundPosition = i;
                     i = -1;
                 }
@@ -873,12 +890,80 @@ module.exports = function (db) {
             var foundPosition = -1;
             var price = parseFloat(item.price) || 0;
             var saveOptions;
+            var date = getTransformedDateObjectForWsDayli(item.date);
+            //console.log(date);
+            var nameOptimize = item.name.replace (/ /g,'');
+
+            for (var i = cropLen; i >= 0; i--) {
+                if ( cropList[i].wsNameOptimize === nameOptimize) {
+                    foundPosition = i;
+                    i = -1;
+                }
+            }
+
+            saveOptions = {
+                source: item.url,
+                price: price,
+                date: date,
+                name: item.name,
+                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year: moment(date).year(),
+                month: moment(date).month(),
+                dayOfYear: moment(date).dayOfYear()
+            };
+
+            if (foundPosition >= 0) {
+                saveOptions._crop = cropList[foundPosition]._id;
+                saveOptions.cropListName = cropList[foundPosition].displayName;
+                saveOptions.pcQuality = cropList[foundPosition].pcQuality;
+                saveOptions.wsQuality = cropList[foundPosition].wsQuality;
+                saveOptions.imported = cropList[foundPosition].imported;
+
+            } else {
+                console. log ('New crop detecdet: ', item.name);
+            }
+
+            // for dayly price
+            //price = new Price(saveOptions);
+
+            // for Month Average prices
+            price = new Price (saveOptions);
+            price
+                .save(function (err, model) {
+                    if (err) {
+                        return  callback('DB err:' + err);
+                    }
+
+                    if (foundPosition < 0) {
+                        return createNewCropNotification (model.toJSON(), callback );
+                    }
+
+                    callback();
+                });
+        }, function (err) {
+            if (err) {
+                return cb(err);
+            }
+            //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
+            cb(null, 'Success');
+        });
+    }
+
+    function filterByCropListAndSaveMonthImportedWsData(cropList, parsedData, cb) {
+        var cropLen = cropList.length - 1;
+
+        // eachSeries need only in check purpose
+        async.eachSeries(parsedData, function (item, callback) {
+
+            var foundPosition = -1;
+            var price = parseFloat(item.price) || 0;
+            var saveOptions;
             var date = getTransformedDateObjectForMonthWs(item.date);
             //console.log(date);
             var nameOptimize = item.name.replace (/ /g,'');
 
             for (var i = cropLen; i >= 0; i--) {
-                if ( cropList[i].wsNameOptimize.indexOf(nameOptimize) >= 0 ) {
+                if ( cropList[i].wsNameOptimize === nameOptimize) {
                     foundPosition = i;
                     i = -1;
                 }
@@ -932,6 +1017,33 @@ module.exports = function (db) {
         });
     }
 
+    this.importWsMonthHistoryFromCsv = function (req, res, next) {
+        var tasks = [];
+        var self = this;
+        var csvFileName = req.params.filename;
+        var startTime = new Date();
+
+        if (!csvFileName) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+        csvFileName = 'csv/' + csvFileName;
+
+        tasks.push(getCropList);
+        tasks.push(createFnReadWsHistoryFromCsv(csvFileName));
+        tasks.push(filterByCropListAndSaveMonthImportedWsData);
+
+        async.waterfall(tasks, function (err, cropList, result) {
+            if(err) {
+                console.log('ERROR:  Import PcHistory Error: ', err);
+                return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
+            } else {
+                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+            }
+        });
+
+    };
+
     this.importWsHistoryFromCsv = function (req, res, next) {
         var tasks = [];
         var self = this;
@@ -958,6 +1070,7 @@ module.exports = function (db) {
         });
 
     };
+
 
 
 
