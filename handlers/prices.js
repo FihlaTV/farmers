@@ -775,6 +775,7 @@ var Price = function (db) {
                             name: marketeerList[(receivedPriceArray[i]._marketeer).toString()].fullName,
                             location: marketeerList[(receivedPriceArray[i]._marketeer).toString()].location,
                             price: more[0].price,
+                            data: receivedPrices[j]._id,
                             quality: more[0].quality,
                             more: more
                         });
@@ -808,6 +809,7 @@ var Price = function (db) {
                             name: marketeerList[(userMarketeer._id).toString()].fullName,
                             location: marketeerList[(userMarketeer._id).toString()].location,
                             price: null,
+                            data: receivedPrices[j]._id,
                             quality: '',
                             more: []
                         })
