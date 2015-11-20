@@ -1,3 +1,5 @@
+var SessionHandler = require('../handlers/sessions');
+
 module.exports = function(app, db){
     var logWriter = require('../modules/logWriter')();
     var models = require('../models/index')(db);
@@ -10,17 +12,20 @@ module.exports = function(app, db){
     var statisticsRouter = require('./statistics')(db);
     var importRouter = require('./import')(db);
 
+    var session = new SessionHandler(db);
+
+
 
     app.get('/', function(req, res, next){
         res.status(200).send( 'Express start succeed' );
     });
 
-    app.use('/crops', cropsRouter);
+    app.use('/crops', session.isAuthenticatedUser, cropsRouter);
     app.use('/notifications', notificationsRouter);
     app.use('/users', usersRouter);
-    app.use('/marketeers', marketeersRouter);
+    app.use('/marketeers',session.isAuthenticatedUser, marketeersRouter);
     app.use('/admin', adminRouter);
-    app.use('/prices', pricesRouter);
+    app.use('/prices',session.isAuthenticatedUser,pricesRouter);
     app.use('/statistics', statisticsRouter);
 
     app.use('/importFromCsv', importRouter);

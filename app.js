@@ -41,7 +41,8 @@ connectOptions = {
 
 mainDb = mongoose.createConnection(process.env.DB_HOST, process.env.DB_NAME, process.env.DB_PORT, connectOptions);
 
-mainDb.on('error', console.error.bind(console, 'connection error:'));
+mainDb.on('error', function() {console.error.bind(console, 'connection error:'); process.exit()});
+
 mainDb.once('open', function callback() {
     console.log("Connection to " + process.env.DB_NAME + " is success");
 
@@ -68,4 +69,5 @@ mainDb.once('open', function callback() {
         console.log('Server up successfully - host: ' + process.env.HOST + ' port: ' + process.env.PORT);
     });
 });
+
 

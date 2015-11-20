@@ -1032,3 +1032,87 @@ Error: Arguments must be aggregate pipeline operators
 Wed Nov 18 2015 12:45:10 GMT+0200 (Финляндия (зима))
 body is empty (check your connection to internet)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:48:47 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at Server.connect.destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:48:47 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at Server.connect.destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:48:47 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at Server.connect.destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:48:47 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at Server.connect.destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:56:57 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Fri Nov 20 2015 15:56:57 GMT+0200 (Финляндия (зима))
+no connection available for operation
+MongoError: no connection available for operation
+    at Function.MongoError.create (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\error.js:31:11)
+    at Store.flush (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\topology_base.js:68:43)
+    at destroyHandler (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\lib\server.js:257:18)
+    at g (events.js:199:16)
+    at emit (events.js:107:17)
+    at Server.destroy (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:658:24)
+    at reconnectServer (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:157:17)
+    at null._onTimeout (d:\Projects\farmers\node_modules\connect-mongo\node_modules\mongodb\node_modules\mongodb-core\lib\topologies\server.js:267:7)
+    at Timer.listOnTimeout (timers.js:119:15)
+---------------------------------------------------------------------------------------------------------
