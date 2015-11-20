@@ -35,6 +35,7 @@ var Notification = function (db) {
                 }
             ])
             .exec(function (err, results) {
+                mergedNewCrops = [];
                 if (err) {
                     return next(err);
                 }
