@@ -13,7 +13,6 @@ var StatisticsHandler = require('../handlers/statistics');
 var SessionHandler = require('../handlers/sessions');
 
 module.exports = function(db){
-    var plants = new PlantHandler(db);
     var statistics = new StatisticsHandler(db);
     var session = new SessionHandler(db);
 

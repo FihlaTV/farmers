@@ -66,7 +66,7 @@ var Statistics = function (db) {
             var monthListPc = [];
             var monthListWs = [];
             var avrPrices= [];
-            var outObj={}
+            var outObj={};
             var prices;
             var totalPrice;
             for (var k = 0; k < 12; k++) {
@@ -163,7 +163,7 @@ var Statistics = function (db) {
         }
 
 
-        var findOpts={}
+        var findOpts={};
 
         var findOrOpts = {};
 
