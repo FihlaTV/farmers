@@ -29,9 +29,6 @@ module.exports = function(app, db){
     app.use('/statistics', statisticsRouter);
     app.use('/importFromCsv', importRouter);
 
-
-
-
     function notFound(req, res, next){
         next();
     }

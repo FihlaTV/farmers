@@ -16,6 +16,79 @@ var Marketeer = function (db) {
     var Notification = db.model(CONST.MODELS.NOTIFICATION);
     var User = db.model(CONST.MODELS.USER);
     var session = new SessionHandler(db);
+    var UserId = null;
+    var inputMarketeerName = null;
+
+    function getUserProfile(cb) {
+        User
+            .findById(UserId)
+            .lean()
+            .exec(function (err, model) {
+                if (err) {
+                    return cb(err)
+                }
+                return cb(null, model);
+            })
+    }
+
+    function checkFlagCanChangeMarketeer(userProfile, cb) {
+        if (!userProfile.canChangeMarketeer) {
+            return cb({blocked:true})
+        }
+        return cb(null, userProfile);
+    }
+
+    function checkIfExistMarketer(userProfile, cb) {
+        Marketeer
+            .findOne({"fullName": inputMarketeerName})
+            .lean()
+            .exec(function (err, model) {
+
+                if (err) {
+                    return cb(err)
+                }
+
+                if (model) {
+                    return cb(null, userProfile, model, {inNewMarketeer: false})
+                }
+                return cb(null, userProfile, model, {inNewMarketeer: true})
+            })
+    }
+    function updateUserProfileAndCreateNotification (userProfile, marketeerModel, marketeerStatus, cb) {
+        var notification;
+        var updateOptions ={
+            newMarketeer: marketeerStatus.inNewMarketeer,
+            marketeer: marketeerStatus.inNewMarketeer ? marketeerModel._id : null,
+            updatedAt: new Date()
+        };
+
+        User
+            .findOneAndUpdate({'_id': UserId}, updateOptions)
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                if (marketeerStatus.inNewMarketeer){
+                   //TODO
+                   // mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User ' + userProfile.fullName +' add marketeer that is not in Marketeers list. Added name:  ' + inputMarketeerName);
+                } else {
+                    //TODO
+                    //mailer.sendEmailNotificationToAdmin('4Farmers. User change marketeer ', 'Hello. User ' + userProfile.fullName +' change marketeer. New name:  ' + inputMarketeerName);
+                }
+
+                notification = new Notification({'user': UserId, 'marketeerName': inputMarketeerName, type: marketeerStatus.inNewMarketeer ? 'newMarketeer' : 'changeMarketeer'});
+                notification
+                    .save(function (err, model) {
+                        if (err) {
+                            return cb(err);
+                        }
+                        return cb(null);
+                    });
+            });
+    }
+
+
 
     this.adminCreateNewMarketeer = function (req, res, next) {
         var fullName = req.body.fullName;
@@ -87,57 +160,31 @@ var Marketeer = function (db) {
     };
 
 
+
     this.addMarketeer = function (req, res, next) {
-        var marketeerFullName = req.body.fullName;
-        var userId = req.session.uId;
-        var notification;
+        var tasks = [];
 
+        UserId = req.session.uId;
+        inputMarketeerName = req.body.fullName;
+        console.log(inputMarketeerName);
 
-        Marketeer
-            .findOne({"fullName": marketeerFullName})
-            .lean()
-            .exec(function (err, model) {
-                var newMarketeer;
+        if (!inputMarketeerName) {
+            return res.status(400).send(RESPONSE.ON_ACTION.BAD_REQUEST);
+        }
 
-                if (err) {
-                    return res.status(500).send({error: err});
-                }
-
-                if (model) {
-                    console.log(userId);
-
-                    User
-                        .findOneAndUpdate({'_id': userId}, {'marketeer': model._id, updatedAt: new Date()})
-                        .exec(function (err, model) {
-                            if (err) {
-                                return res.status(500).send({error: err});
-                            }
-                            console.log('Update marketeer: ', model);
-                            return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
-                        });
-                } else {
-                    console.log(userId);
-                    User
-                        .findOneAndUpdate({'_id': userId}, {'newMarketeer': true, updatedAt: new Date(), marketeer: null})
-                        .exec(function (err, model) {
-                            if (err) {
-                                return res.status(500).send({error: err});
-                            }
-                            console.log('New marketeer: ', model);
-
-                            mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User add marketeer that is not in marketeers list. Added name:  ' + marketeerFullName);
-
-                            notification = new Notification({'user': userId, 'marketeerName': marketeerFullName, type: 'newMarketeer'});
-                            notification
-                                .save(function (err, model) {
-                                    if (err) {
-                                        return res.status(500).send({error: err});
-                                    }
-                                    return res.status(201).send({success: RESPONSE.ON_ACTION.SUCCESS});
-                                });
-                        });
-                }
-            });
+        tasks.push(getUserProfile);
+        tasks.push(checkFlagCanChangeMarketeer);
+        tasks.push(checkIfExistMarketer);
+        tasks.push(updateUserProfileAndCreateNotification);
+        async.waterfall(tasks,function (err) {
+            if(err && err.blocked) {
+                return res.status(400).send(RESPONSE.NOT_ALLOW_CHANGE_MARKETEER);
+            }
+            if(err) {
+                return res.status(500).send(err);
+            }
+            return res.status(200).send(RESPONSE.ON_ACTION.SUCCESS);
+        });
     };
 
     this.getMarketeerList = function (req, res, next) {
@@ -159,7 +206,7 @@ var Marketeer = function (db) {
                     marketeerList.push(models[len - i].fullName);
                 }
 
-                console.log(marketeerList);
+                //console.log(marketeerList);
                 return res.status(200).send(marketeerList);
             })
     };
@@ -177,11 +224,11 @@ var Marketeer = function (db) {
                     return res.status(500).send({error: err});
                 }
                 console.log('Update marketeer: ', model);
-                 if (model.marketeer) {
-                     resultObj._marketeer = model.marketeer._id;
-                 }
-                     resultObj.fullName =  model.marketeer ? model.marketeer.fullName : null;
-                     resultObj.location = model.marketeer ? model.marketeer.location : null;
+                if (model.marketeer) {
+                    resultObj._marketeer = model.marketeer._id;
+                }
+                resultObj.fullName =  model.marketeer ? model.marketeer.fullName : null;
+                resultObj.location = model.marketeer ? model.marketeer.location : null;
 
                 resultObj.newMarketeer = model.newMarketeer;
                 resultObj.canChangeMarketeer = model.canChangeMarketeer;
