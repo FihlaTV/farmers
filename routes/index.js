@@ -27,7 +27,6 @@ module.exports = function(app, db){
     app.use('/admin', adminRouter);
     app.use('/prices',session.isAuthenticatedUser,pricesRouter);
     app.use('/statistics', statisticsRouter);
-
     app.use('/importFromCsv', importRouter);
 
 
