@@ -1128,7 +1128,7 @@ module.exports = function (db) {
                     _crop:  list[i]._id.crop
                 };
                 avaragePriceList.push(saveOptions);
-            };
+            }
 
             MonthAveragePrice.collection.insert(avaragePriceList,{}, onInsert);
             function onInsert(err, docs) {
