@@ -346,7 +346,7 @@ var Crop = function (db) {
            }
            return out;
        }
-       
+
        Crop.aggregate(
            [ {
                $match : {displayName:cropName}
