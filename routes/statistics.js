@@ -131,8 +131,6 @@ module.exports = function(db){
 
     router.get('/price', statistics.getPrice);
 
-    //router.get('/prices', plants.getPlantsWithPrices);
-
 
 
     return router;
