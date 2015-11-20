@@ -923,9 +923,6 @@ module.exports = function (db) {
                 console. log ('New crop detecdet: ', item.name);
             }
 
-            // for dayly price
-            //price = new Price(saveOptions);
-
             // for Month Average prices
             price = new Price (saveOptions);
             price
@@ -991,8 +988,6 @@ module.exports = function (db) {
                 console. log ('New crop detecdet: ', item.name);
             }
 
-            // for dayly price
-            //price = new Price(saveOptions);
 
             // for Month Average prices
             price = new MonthAveragePrice (saveOptions);
