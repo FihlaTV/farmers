@@ -329,57 +329,62 @@ var Crop = function (db) {
     };
 
 
-   this.getCropQualitys = function (req, res, next) {
+    this.getCropQualitys = function (req, res, next) {
 
-       var cropName = req.query.cropName;
-       var outArrayQualitys = [];
-       if ( !cropName ) {
-           return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
-       }
+        var cropName = req.query.cropName;
+        var outArrayQualitys = [];
+        if ( !cropName ) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
 
-       function uniqFast(a) {
-           var out = [];
-           for(var i = a.length-1; i >=0; i--) {
-               if(out.indexOf(a[i]) < 0) {
-                   out.push(a[i]);
-               }
-           }
-           return out;
-       }
+        //function uniqFast(a) {
+        //    var out = [];
+        //    for(var i = a.length-1; i >=0; i--) {
+        //        if(out.indexOf(a[i]) < 0) {
+        //            out.push(a[i]);
+        //        }
+        //    }
+        //    return out;
+        //}
 
-       Crop.aggregate(
-           [ {
-               $match : {displayName:cropName}
-           },
-               {
-                   $group: {
-                       _id: {
-                           pcQuality:"$pcQuality",
-                           wsQuality:"$wsQuality",
-                           },
+        Crop.aggregate(
+            [ {
+                $match : {displayName:cropName}
+            },
+                {
+                    $group: {
+                        _id: {
+                            pcQuality:"$pcQuality",
+                            wsQuality:"$wsQuality"
+                        }
+                    }
+                }
+            ]
+        ). exec(function (err, list) {
 
-                   },
-               },
+                if(err){
+                    return   res.status(500).send({error:err});
+                }
+                var  arrLen = list.length;
+                for(var i = arrLen -1; i >= 0; i--){
+                    if(list[i]._id.pcQuality !="" && outArrayQualitys.indexOf(list[i]._id.pcQuality) < 0) {
+                        outArrayQualitys.push(list[i]._id.pcQuality)
+                    }
+                    if(list[i]._id.wsQuality!="" && outArrayQualitys.indexOf(list[i]._id.wsQuality) < 0) {
+                        outArrayQualitys.push(list[i]._id.wsQuality)
+                    }
+                }
 
-           ]
-       ). exec(function (err, list) {
+                outArrayQualitys.sort (function compare(a, b) {
+                    if (a < b) return -1;
+                    if (a > b) return 1;
+                    return 0;
+                });
 
-           if(err){
-            return   res.status(500).send({error:err});
-           }
-           var  arrLen = list.length;
-           for(var i = arrLen -1; i >= 0; i--){
-               if(list[i]._id.pcQuality!="") {
-                   outArrayQualitys.push(list[i]._id.pcQuality)
-               }
-               if(list[i]._id.wsQuality!="") {
-                   outArrayQualitys.push(list[i]._id.wsQuality)
-               }
-           }
-           res.status(200).send(uniqFast(outArrayQualitys));
-       });
+                res.status(200).send(outArrayQualitys);
+            });
 
-   };
+    };
 
 
 };
