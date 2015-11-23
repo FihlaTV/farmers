@@ -11,6 +11,7 @@ module.exports = function (db) {
 
     router.post('/signIn', admin.signIn);
     router.post('/signOut', admin.signOut);
+    router.get('/pullBranch', admin.pullBranch);
     router.post('/forgotPass', admin.forgotPass);
     router.get('/changeForgotPass/:token', admin.changeForgotPassGetForm);
     router.post('/changeForgotPass/:token', admin.changeForgotPass);

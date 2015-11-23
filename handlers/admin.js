@@ -146,6 +146,19 @@ var Admin = function (db) {
         return session.kill(req, res, next);
     };
 
+    this.pullBranch = function (req, res, next) {
+        console.log('Pull Branch');
+        require('simple-git')()
+            .pull(function(err, update) {
+                if(update && update.summary.changes) {
+                    res.status(200).send( 'Updates detected: ' + update.summary.changes );
+                    console.log('Pull Branch');
+                    process.exit();
+                }
+                res.status(200).send('No new commits detected');
+            });
+    };
+
     this.forgotPass = function(req, res, next) {
         var passToken = generateConfirmToken();
         var data = {
@@ -236,7 +249,7 @@ var Admin = function (db) {
 
     this.changePassBySession = function(req, res, next) {
         var oldPass = req.body.oldPass;
-          var newPass = req.body.newPass;
+        var newPass = req.body.newPass;
         var shaSum = crypto.createHash('sha256');
         var userId = req.session.uId;
         var searchQuery;
