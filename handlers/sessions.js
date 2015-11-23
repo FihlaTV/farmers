@@ -17,17 +17,17 @@ var Session = function (db) {
         res.status(200).send({success: RESPONSE.AUTH.LOG_OUT});
     };
 
-    this.authenticatedUser = function (req, res, next) {
-        var err;
-
-        if (req.session && req.session.uId && req.session.loggedIn) {
-            next();
-        } else {
-            err = new Error('UnAuthorized');
-            err.status = 401;
-            next(err);
-        }
-    };
+    //this.authenticatedUser = function (req, res, next) {
+    //    var err;
+    //
+    //    if (req.session && req.session.uId && req.session.loggedIn) {
+    //        next();
+    //    } else {
+    //        err = new Error('UnAuthorized');
+    //        err.status = 401;
+    //        next(err);
+    //    }
+    //};
 
     this.isAdmin = function (req, res, next) {
         var err;
@@ -38,7 +38,6 @@ var Session = function (db) {
 
         err = new Error('Permission denied');
         err.status = 403;
-
         next (err);
     };
 

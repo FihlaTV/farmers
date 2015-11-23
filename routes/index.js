@@ -26,7 +26,7 @@ module.exports = function(app, db){
     app.use('/marketeers',session.isAuthenticatedUser, marketeersRouter);
     app.use('/admin', adminRouter);
     app.use('/prices',session.isAuthenticatedUser,pricesRouter);
-    app.use('/statistics', statisticsRouter);
+    app.use('/statistics',session.isAuthenticatedUser, statisticsRouter);
     app.use('/importFromCsv', importRouter);
 
     function notFound(req, res, next){
