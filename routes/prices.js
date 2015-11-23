@@ -91,10 +91,16 @@ module.exports = function(db){
      *
      * __URI:__ ___`prices/getCropPricesForPeriod`___
      *
-     * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
+     * __METHOD:__ ___`GET`___ with
+     *
+     * Query: <br>
+     *      cropName, <br>
+     *      startDate,<br>
+     *      endDate,<br>
+     *      isScroll // option //if == true -find price While find any result until 2012
      *
      * __Request:__
-     * ___`prices/getCropPricesForPeriod?cropName=שום&startDate=2016-10-27T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     * ___`prices/getCropPricesForPeriod?cropName=ליצ'י&startDate=2015-06-20T23:09:12.000Z&endDate=2015-04-20T12:09:12.000Z&isScroll=true`___
      *
      *
      *
@@ -192,10 +198,16 @@ module.exports = function(db){
      *
      * __URI:__ ___`prices/getMarketeerCropPricesForPeriod`___
      *
-     * __METHOD:__ ___`GET`___ with query: cropName, startDate, endDate
+     * __METHOD:__ ___`GET`___ with
+     *
+     * Query: <br>
+     *      cropName, <br>
+     *      startDate,<br>
+     *      endDate,<br>
+     *      isScroll // option //if == true - find price While find any result until 2012
      *
      * __Request:__
-     * ___`prices/getMarketeerCropPricesForPeriod?cropName=שום&startDate=2015-11-16T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z`___
+     * ___`prices/getMarketeerCropPricesForPeriod?cropName=שום&startDate=2015-11-16T12:09:12.000Z&endDate=2014-10-24T12:09:12.000Z&isScroll=true`___
      *
      *
      *

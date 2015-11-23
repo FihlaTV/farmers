@@ -169,20 +169,20 @@ var Price = function (db) {
             );
             agregation.options = {allowDiskUse: true};
 
-                // with sort time=600? without sort used  time=400
-                // with price pus and sort time=1725  without sort used  time=1460
+            // with sort time=600? without sort used  time=400
+            // with price pus and sort time=1725  without sort used  time=1460
             agregation.exec(function (err, results) {
-                    if (err) {
-                        cb(err);
-                    } else {
+                if (err) {
+                    cb(err);
+                } else {
 
-                        console.log('Spend time for GeCropsAndLastDate: ', (new Date() - startTime) /1000);
+                    console.log('Spend time for GeCropsAndLastDate: ', (new Date() - startTime) /1000);
 
-                        receivedPrices = results;
-                            return cb();
+                    receivedPrices = results;
+                    return cb();
 
-                    }
-                });
+                }
+            });
         }
 
         function GetPricesByLastDate(cb) {
@@ -244,7 +244,7 @@ var Price = function (db) {
                     {
                         $group: {
                             '_id': { cropListName:'$_id',
-                            'lastDate': "$lastDate"},
+                                'lastDate': "$lastDate"},
 
                             prices: {
                                 $push: {  $cond : [ { $eq : ['$prices.date', '$lastDate' ]}, {
@@ -285,13 +285,13 @@ var Price = function (db) {
 
                 ]
             ).allowDiskUse(true)
-            //agregation.options = {allowDiskUse: true};
+                //agregation.options = {allowDiskUse: true};
 
 
                 .exec(function (err, results) {
-                if (err) {
-                    return cb(err);
-                }
+                    if (err) {
+                        return cb(err);
+                    }
 
 
                     lastTime =  (new Date() - startTime) /1000;
@@ -324,7 +324,7 @@ var Price = function (db) {
                     //console.log('Spend time: ', new Date - startTime);
                     cb();
 
-            });
+                });
         }
 
         function syncPricesAndCropList(cb) {
@@ -537,8 +537,8 @@ var Price = function (db) {
             for (var j = 0; j <= pricedLen; j++) {
                 receivedPriceArray = receivedPrices[j].prices;
 
-                console.log('receivedPrices: ', receivedPrices[j]._id);
-                console.dir(receivedPrices[j].prices);
+                //console.log('receivedPrices: ', receivedPrices[j]._id);
+                //console.dir(receivedPrices[j].prices);
 
                 wholesalePrices = {};
                 plantsCouncilPrices = {};
@@ -877,14 +877,15 @@ var Price = function (db) {
                         cb(err);
                     } else {
                         receivedPrices = results;
-                        console.log('receivedPrices: ', receivedPrices);
+                        //console.log('receivedPrices: ', receivedPrices);
                         cb(err, results);
                     }
                 });
         }
 
-        function createFnGetPricesForCropByPeriod(cropName, startDate, endDate) {
+        function createFnGetPricesForCropByPeriod(cropName, startDate, endDate, isScroll) {
             return function (cb) {
+                var newEndDate;
 
                 Price
                     .aggregate([
@@ -922,19 +923,28 @@ var Price = function (db) {
                     ])
                     .exec(function (err, results) {
                         if (err) {
-                            cb(err);
-                        } else {
-                            receivedPrices = results;
-                            console.log('receivedPrices: ', receivedPrices);
-                            //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
-                            cb(err, results);
+                            return  cb(err);
                         }
+
+                        if (! results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))){
+                        //if (! results.length && endDate > new Date('2012-01-01 01:00:00.000Z')){
+                            newEndDate =   new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
+                            console.log('endDate: ',endDate,'  newEndDate: ',newEndDate);
+                            return createFnGetPricesForCropByPeriod(cropName, startDate, newEndDate, isScroll)(cb)
+                        }
+                        receivedPrices = results;
+                        //console.log('receivedPrices: ', receivedPrices);
+                        console.log('receivedPrices.length: ', receivedPrices.length);
+                        //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
+                        cb(err, results);
+
                     });
             }
         }
 
-        function createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate) {
+        function createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate, isScroll) {
             return function (cb) {
+                var newEndDate;
 
                 Price
                     .aggregate([
@@ -970,13 +980,21 @@ var Price = function (db) {
                     ])
                     .exec(function (err, results) {
                         if (err) {
-                            cb(err);
-                        } else {
+                            return cb(err);
+                        }
+
+                        if (! results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))){
+                            //if (! results.length && endDate > new Date('2012-01-01 01:00:00.000Z')){
+                            newEndDate =   new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
+                            console.log('endDate: ',endDate,'  newEndDate: ',newEndDate);
+                            return createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, newEndDate, isScroll)(cb)
+                        }
+
                             receivedPrices = results;
                             //console.log('receivedPrices: ', receivedPrices);
                             //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
                             cb(err, results);
-                        }
+
                     });
             }
         }
@@ -1120,6 +1138,9 @@ var Price = function (db) {
             var startDate = req.query.startDate || today;
             var endDate = req.query.endDate || new Date(lastWeekDate);
             var cropName = req.query.cropName;
+            var isScroll = (req.query.isScroll === 'true');
+
+            var startTime = new Date();
 
             UserId = req.session.uId;
 
@@ -1146,7 +1167,7 @@ var Price = function (db) {
             tasks.push(getCropList);
             tasks.push(getMarketeerList);
             tasks.push(getUserFavoritesAndMarketeerById);
-            tasks.push(createFnGetPricesForCropByPeriod(cropName, startDate, endDate));
+            tasks.push(createFnGetPricesForCropByPeriod(cropName, startDate, endDate, isScroll));
             tasks.push(mergeCropPricesByDate);
 
             async.series(tasks, function (err, results) {
@@ -1157,6 +1178,8 @@ var Price = function (db) {
                 //return res.status(200).send({success: receivedPrices});
                 console.log('resultPriceList Len: ', receivedPrices.length);
                 console.log('resultPriceList Len: ', resultPriceList.length);
+                console.log(' spend time: ', (new Date() - startTime) /1000);
+
                 return res.status(200).send(resultPriceList);
                 //return res.status(200).send(receivedPrices);
 
@@ -1170,6 +1193,7 @@ var Price = function (db) {
             var startDate = req.query.startDate || today;
             var endDate = req.query.endDate || new Date(lastWeekDate);
             var cropName = req.query.cropName;
+            var isScroll = (req.query.isScroll === 'true');
 
             UserId = req.session.uId;
 
@@ -1194,7 +1218,7 @@ var Price = function (db) {
             tasks.push(getCropList);
             tasks.push(getMarketeerList);
             tasks.push(getUserFavoritesAndMarketeerById);
-            tasks.push(createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate));
+            tasks.push(createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, endDate, isScroll));
             tasks.push(mergeMarketeerCropPricesByDate);
 
             async.series(tasks, function (err, results) {

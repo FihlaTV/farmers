@@ -146,18 +146,21 @@ var Admin = function (db) {
         return session.kill(req, res, next);
     };
 
-    this.pullBranch = function (req, res, next) {
-        console.log('Pull Branch');
-        require('simple-git')()
-            .pull(function(err, update) {
-                if(update && update.summary.changes) {
-                    res.status(200).send( 'Updates detected: ' + update.summary.changes );
-                    console.log('Pull Branch');
-                    process.exit();
-                }
-                res.status(200).send('No new commits detected');
-            });
-    };
+    //this.pullBranch = function (req, res, next) {
+    //    console.log('Pull Branch run');
+    //    var pull = require('simple-git')()
+    //        .pull(function(err, update) {
+    //            if(update && update.summary.changes) {
+    //                res.status(200).send( 'Updates detected: ' + update.summary.changes );
+    //                console.log('Pull Branch');
+    //                process.exit();
+    //            }
+    //            res.status(200).send('No new commits detected');
+    //        })
+    //        .then(function() {
+    //            console.log('pull done.');
+    //        });
+    //};
 
     this.forgotPass = function(req, res, next) {
         var passToken = generateConfirmToken();

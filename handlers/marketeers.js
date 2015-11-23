@@ -49,16 +49,17 @@ var Marketeer = function (db) {
                 }
 
                 if (model) {
-                    return cb(null, userProfile, model, {inNewMarketeer: false})
+                    console.log(model);
+                    return cb(null, userProfile, model, {isNewMarketeer: false})
                 }
-                return cb(null, userProfile, model, {inNewMarketeer: true})
+                return cb(null, userProfile, model, {isNewMarketeer: true})
             })
     }
     function updateUserProfileAndCreateNotification (userProfile, marketeerModel, marketeerStatus, cb) {
         var notification;
         var updateOptions ={
-            newMarketeer: marketeerStatus.inNewMarketeer,
-            marketeer: marketeerStatus.inNewMarketeer ? marketeerModel._id : null,
+            newMarketeer: marketeerStatus.isNewMarketeer,
+            marketeer: !marketeerStatus.isNewMarketeer ? marketeerModel._id : null,
             updatedAt: new Date()
         };
 
@@ -69,7 +70,7 @@ var Marketeer = function (db) {
                     return res.status(500).send({error: err});
                 }
 
-                if (marketeerStatus.inNewMarketeer){
+                if (marketeerStatus.isNewMarketeer){
                    //TODO
                    // mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User ' + userProfile.fullName +' add marketeer that is not in Marketeers list. Added name:  ' + inputMarketeerName);
                 } else {
@@ -77,7 +78,7 @@ var Marketeer = function (db) {
                     //mailer.sendEmailNotificationToAdmin('4Farmers. User change marketeer ', 'Hello. User ' + userProfile.fullName +' change marketeer. New name:  ' + inputMarketeerName);
                 }
 
-                notification = new Notification({'user': UserId, 'marketeerName': inputMarketeerName, type: marketeerStatus.inNewMarketeer ? 'newMarketeer' : 'changeMarketeer'});
+                notification = new Notification({'user': UserId, 'marketeerName': inputMarketeerName, type: marketeerStatus.isNewMarketeer ? 'newMarketeer' : 'changeMarketeer'});
                 notification
                     .save(function (err, model) {
                         if (err) {
@@ -178,7 +179,7 @@ var Marketeer = function (db) {
         tasks.push(updateUserProfileAndCreateNotification);
         async.waterfall(tasks,function (err) {
             if(err && err.blocked) {
-                return res.status(400).send(RESPONSE.NOT_ALLOW_CHANGE_MARKETEER);
+                return res.status(400).send({error: RESPONSE.NOT_ALLOW_CHANGE_MARKETEER});
             }
             if(err) {
                 return res.status(500).send(err);
