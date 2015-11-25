@@ -19,6 +19,7 @@ module.exports = function (db) {
         marketeer: {type: ObjectId, ref: CONST.MODELS.MARKETEER, default: null},
         canChangeMarketeer:  {type: Boolean, default: true},
         newMarketeer:  {type: Boolean, default: false},
+        pricesCashTable: [],
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}
     }, {

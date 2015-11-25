@@ -22,7 +22,6 @@ PreparingDb = function (){
     var models = require('../../models/index')(dbConnection);
     var Admin = dbConnection.model(CONST.MODELS.ADMIN);
     var User = dbConnection.model(CONST.MODELS.USER);
-    var Plant = dbConnection.model(CONST.MODELS.PLANT);
 
     this.User = User;
 

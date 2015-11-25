@@ -184,7 +184,7 @@ var Marketeer = function (db) {
             if(err) {
                 return res.status(500).send(err);
             }
-            return res.status(200).send(RESPONSE.ON_ACTION.SUCCESS);
+            return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
         });
     };
 

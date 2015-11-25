@@ -5,10 +5,6 @@ var csv = require('csv');
 var fs = require('fs');
 var async = require('async');
 
-//var PlantsHelper = require("../helpers/plants");
-//var ValidationHelper = require("../helpers/validation");
-
-
 var Crop = function (db) {
     'use strict';
 

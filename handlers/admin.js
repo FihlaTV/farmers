@@ -82,6 +82,7 @@ var Admin = function (db) {
 
                 admin = new Admin({
                     login: CONST.DEFAULT_ADMIN.login,
+                    fullName: 'no name',
                     pass: pass,
                     email:  CONST.DEFAULT_ADMIN.email
                 });
@@ -182,6 +183,22 @@ var Admin = function (db) {
                     }
                     res.status(200).send({success: RESPONSE.AUTH.FORGOT_SEND_EMAIL});
                 });
+            });
+    };
+
+    this.getUiProfile = function(req, res, next) {
+
+        Admin
+            .findOne()
+            .select('-_id login fullName')
+            .lean()
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: model});
+
             });
     };
 

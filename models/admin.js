@@ -8,6 +8,7 @@ module.exports = function (db) {
     var Admin = new Schema({
         email: String,
         pass: String,
+        fullName: String,
         login: String,
         changePassToken: String,
         createdAt: {type: Date, default: Date.now},

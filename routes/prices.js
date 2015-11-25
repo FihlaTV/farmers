@@ -1,4 +1,5 @@
 /**
+/**
  * Provides ability for:
  *  - User GET Prices of crops, with different parameters
  *  - User SET Prices of crop for Marketeer
@@ -86,6 +87,8 @@ module.exports = function(db){
 
         //TODO del "englishName" field from response after testing
     router.get('/getLast', prices.getLast);
+
+
     /**
      * This __method__  for All Crop Prices  Screen. Get all last Crop prices (in Calendar order)
      *
@@ -362,7 +365,7 @@ module.exports = function(db){
     // ws_months11_15.csv
     router.get('/importWsMonthHistoryFromCsv/:filename', dataParser.importWsMonthHistoryFromCsv);
 
-    router.get('/getAveragePriceMonthly/:year', dataParser.getAveragePriceMonthly);
+    router.get('/getPcAveragePriceMonthly/:year', dataParser.getPcAveragePriceMonthly);
 
 
     return router;

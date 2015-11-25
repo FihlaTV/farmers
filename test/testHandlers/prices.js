@@ -75,7 +75,7 @@ describe('Marketeers GET LIST, ADD, CREATE, MERGE, DELETE? ,', function () {
         var loginData = USERS.USER_GOOD_CREDENRIALS;
         var lastUser;
 
-        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {}, {}, function (err, models){
+        preparingDb.getCollectionsByModelNameAndQueryAndSort(CONST.MODELS.USER, {'email': loginData.email}, {}, function (err, models){
             if (err) {
                 return done(err);
             }
@@ -163,11 +163,10 @@ describe('Marketeers GET LIST, ADD, CREATE, MERGE, DELETE? ,', function () {
 
     it('User on mainScreen (.getLast)  ', function (done) {
         agent
-            .post('/prices/getLast/')
+            .get('/prices/getLast/')
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
-
 
                 if (err) {
                     return done(err);
@@ -183,15 +182,15 @@ describe('Marketeers GET LIST, ADD, CREATE, MERGE, DELETE? ,', function () {
 
     it('User select crop (.getCropPricesForPeriod)  ', function (done) {
         agent
-            .post('/prices/getCropPricesForPeriod/?cropName=' + receivedCrops[0].displayName + '&startDate=' + new Date() + '&endDate=2015-04-20T12:09:12.000Z&isScroll=true')
+            .get('/prices/getCropPricesForPeriod/?cropName=' + receivedCrops[0].displayName + '&startDate=' + new Date() + '&endDate=2015-04-20T12:09:12.000Z&isScroll=true')
             .expect(200)
             .end(function (err, res) {
                 console.dir(res.body);
                 if (err) {
                     return done(err);
                 }
-                if (res.body.length < 50) {
-                    return done('response length < 50');
+                if (res.body.length < 10) {
+                    return done('response length < 10');
                 }
                 done();
             });

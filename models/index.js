@@ -2,9 +2,9 @@
 module.exports = function(db){
     "use strict";
 
-    require('./plant')(db);
     require('./crop')(db);
     //require('./sessions')(db);
+    require('./pricesCacheTable')(db);
     require('./monthAveragePrice')(db);
     require('./price')(db);
     require('./parsedBody')(db);

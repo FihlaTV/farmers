@@ -10,7 +10,6 @@ module.exports = function(app, db){
     var adminRouter = require('./admin')(db);
     var pricesRouter = require('./prices')(db);
     var statisticsRouter = require('./statistics')(db);
-    var importRouter = require('./import')(db);
 
     var session = new SessionHandler(db);
 
@@ -27,7 +26,6 @@ module.exports = function(app, db){
     app.use('/admin', adminRouter);
     app.use('/prices',session.isAuthenticatedUser,pricesRouter);
     app.use('/statistics',session.isAuthenticatedUser, statisticsRouter);
-    app.use('/importFromCsv', importRouter);
 
     function notFound(req, res, next){
         next();
