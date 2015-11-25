@@ -11,6 +11,11 @@ module.exports = function (db) {
     var tasks = [];
     var cropList;
 
+    updateSitesCacheTablePrices(function(err,result){
+        if (err){
+            console.log('ERROR:  Main Schedule updateSitesCacheTablePrices with: ', err); }
+    });
+
     //http://www.codexpedia.com/javascript/nodejs-cron-schedule-examples/
 
     //schedule.scheduleJob('*/3 * * * *', function() {
@@ -22,7 +27,7 @@ module.exports = function (db) {
 
         tasks.push(getCropList);
         tasks.push(parseAndStoreDataFromSites);
-        tasks.push(updateLastSitesCropPrices);
+        tasks.push(updateSitesCacheTablePrices);
 
         async.series(tasks, function (err, result) {
             if(err) {
@@ -45,7 +50,7 @@ module.exports = function (db) {
         });
     }
 
-    function updateLastSitesCropPrices (cb){
+    function updateSitesCacheTablePrices (cb){
         dataParser.updateLastSitesCropPrices(function (err, result) {
             if (err) {
                 logWriter.log('scheduleJob -> updateLastSitesCropPrices-> ' + err);
