@@ -1,0 +1,42 @@
+<div>
+    <table>
+        <col width="33%">
+        <col width="33%">
+        <col width="33%">
+        <thead>
+        <tr>
+            <th class="sortable"
+                data-sort="name">
+                Marketeer
+            </th>
+            <th class="sortable"
+                data-sort="location">
+                Location
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <%collection.forEach(function(model){%>
+        <tr id="model._id">
+            <td><%=model.name%></td>
+            <td><%=model.location%></td>
+            <td>
+                <div>
+                    <a class="editMarketeer actionButton"
+                       data-id="model._id">
+                        Edit
+                    </a>
+                    <a class="deleteMarketeer actionButton"
+                       data-id="model._id">
+                        Delete
+                    </a>
+                </div>
+            </td>
+        </tr>
+        <%}%>
+        </tbody>
+    </table>
+</div>

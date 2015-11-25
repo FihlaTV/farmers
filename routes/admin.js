@@ -10,6 +10,7 @@ module.exports = function (db) {
     var session = new SessionHandler(db);
 
     router.post('/signIn', admin.signIn);
+    router.post('/login', admin.login);
     router.post('/signOut', admin.signOut);
     //router.get('/pullBranch', admin.pullBranch);
     router.post('/forgotPass', admin.forgotPass);

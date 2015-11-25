@@ -9,7 +9,6 @@ var crypto = require('crypto');
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
-
 var Admin = function (db) {
     'use strict';
 
@@ -29,12 +28,12 @@ var Admin = function (db) {
     function prepareChangePassEmail(model, confirmToken, callback) {
         var templateName = 'public/templates/mail/changePassword.html';
         var from = 'testFarmer  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
-        var resetUrl = process.env.HOST + ':' + process.env.PORT + '/'  + 'users/changeForgotPass/' + confirmToken;
+        var resetUrl = process.env.HOST + ':' + process.env.PORT + '/' + 'users/changeForgotPass/' + confirmToken;
 
         var mailOptions = {
-            from: from,
-            mailTo: model.email,
-            title: 'Reset password',
+            from        : from,
+            mailTo      : model.email,
+            title       : 'Reset password',
             templateName: templateName,
             templateData: {
                 data: {
@@ -52,13 +51,13 @@ var Admin = function (db) {
         var from = '4Farmers  <' + CONST.FARMER_EMAIL_NOTIFICATION + '>';
 
         var mailOptions = {
-            from: from,
-            mailTo: model.email,
-            title: 'Default admin for Farmers APP created',
+            from        : from,
+            mailTo      : model.email,
+            title       : 'Default admin for Farmers APP created',
             templateName: templateName,
             templateData: {
                 data: {
-                    notification: 'Hi. Default admin for Farmers APP created. Login: ' + model.login + '  \u000A Password: ' +  pass
+                    notification: 'Hi. Default admin for Farmers APP created. Login: ' + model.login + '  \u000A Password: ' + pass
                 }
             }
         };
@@ -82,8 +81,8 @@ var Admin = function (db) {
 
                 admin = new Admin({
                     login: CONST.DEFAULT_ADMIN.login,
-                    pass: pass,
-                    email:  CONST.DEFAULT_ADMIN.email
+                    pass : pass,
+                    email: CONST.DEFAULT_ADMIN.email
                 });
 
                 if (!model) {
@@ -105,11 +104,42 @@ var Admin = function (db) {
             });
     }
 
+    this.login = function (req, res, next) {
+        var body = req.body;
+        var login = body.login;
+        var pass = body.pass;
+        //var shaSum = crypto.createHash('sha256');
+        //shaSum.update(pass);
+        //pass = shaSum.digest('hex');
+        if (!login) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+        Admin
+            .findOne({login: login, pass: pass})
+            .exec(function (err, model) {
+                if (err) {
+                    return next(err);
+                }
+
+                if (!model) {
+                    return res.status(400).send({error: RESPONSE.AUTH.INVALID_CREDENTIALS});
+                }
+                req.session.loggedIn = true;
+                req.session.uId = model._id.toString();
+                req.session.type = 'Admin';
+
+                delete model.pass;
+                return res.status(200).send({data: model});
+            });
+    };
+
     this.signIn = function (req, res, next) {
         var body = req.body;
         var email = body.email;
         var pass = body.pass;
         var shaSum = crypto.createHash('sha256');
+        shaSum.update(pass);
+        pass = shaSum.digest('hex');
 
         if (!body || !email || !pass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
@@ -162,7 +192,7 @@ var Admin = function (db) {
     //        });
     //};
 
-    this.forgotPass = function(req, res, next) {
+    this.forgotPass = function (req, res, next) {
         var passToken = generateConfirmToken();
         var data = {
             changePassToken: passToken
@@ -184,9 +214,9 @@ var Admin = function (db) {
             });
     };
 
-    this.changeForgotPassGetForm = function(req, res, next) {
+    this.changeForgotPassGetForm = function (req, res, next) {
         var token = req.params.token;
-        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+        var tokenRegExpstr = new RegExp('^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
 
         if (token.length < 30 || !tokenRegExpstr.test(token)) {
             return res.status(404).send();
@@ -200,14 +230,13 @@ var Admin = function (db) {
                     return next(err);
                 }
                 if (!model) {
-                    return res.status(404).send({error:  RESPONSE.ON_ACTION.NOT_FOUND});
+                    return res.status(404).send({error: RESPONSE.ON_ACTION.NOT_FOUND});
                 }
                 res.sendFile(path.resolve(__dirname + '/../public/templates/customElements/changePass.html'));
             });
     };
 
-
-    this.changeForgotPass = function(req, res, next) {
+    this.changeForgotPass = function (req, res, next) {
         var newPass = req.body.newPass;
         var confirmPass = req.body.confirmPass;
         var token = req.params.token;
@@ -217,13 +246,13 @@ var Admin = function (db) {
         var shaSum = crypto.createHash('sha256');
         var pass;
         var data;
-        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+        var tokenRegExpstr = new RegExp('^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
 
         shaSum.update(newPass);
         pass = shaSum.digest('hex');
 
         data = {
-            pass: pass,
+            pass           : pass,
             changePassToken: null
         };
 
@@ -239,18 +268,18 @@ var Admin = function (db) {
 
         Admin
             .findOneAndUpdate(searchQuery, data)
-            .exec(function (err, model){
-                if (err){
-                    return res.status(500).send({error: err });
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
                 }
-                if (!model){
+                if (!model) {
                     return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad token'});
                 }
                 return res.send('The password was successfully changed');
             });
     };
 
-    this.changePassBySession = function(req, res, next) {
+    this.changePassBySession = function (req, res, next) {
         var oldPass = req.body.oldPass;
         var newPass = req.body.newPass;
         var shaSum = crypto.createHash('sha256');
@@ -265,7 +294,7 @@ var Admin = function (db) {
 
         searchQuery = {
             "_id": userId,
-            pass: oldPass
+            pass : oldPass
         };
 
         shaSum = crypto.createHash('sha256');
@@ -278,11 +307,11 @@ var Admin = function (db) {
 
         Admin
             .findOneAndUpdate(searchQuery, data)
-            .exec(function (err, model){
-                if (err){
-                    return res.status(500).send({error: err });
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
                 }
-                if (!model){
+                if (!model) {
                     return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS + ': bad old password'});
                 }
                 // SEND to user's web browser

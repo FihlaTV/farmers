@@ -1,0 +1,106 @@
+<div>
+    <div>
+        <table>
+            <caption>User created new marketeer</caption>
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
+            <thead>
+            <tr>
+                <th class="sortable"
+                    data-sort="user">
+                    User
+                </th>
+                <th class="sortable"
+                    data-sort="marketeer">
+                    Marketeer
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Action
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <%newCollection.forEach(function(model){%>
+            <tr>
+                <td><%=model.user.name%></td>
+                <td><%=model.marketeer.name%></td>
+                <td><%=model.date%></td>
+                <td>
+                    <div>
+                        <a class="acceptMarketeer actionButton"
+                           data-id="model.marketeer._id">
+                            Accept
+                        </a>
+                        <a class="linkMarketeer actionButton"
+                           data-id="model.marketeer._id">
+                            Link To
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table>
+            <caption>User changed marketeer</caption>
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+            <col width="20%">
+            <thead>
+            <tr>
+                <th class="sortable"
+                    data-sort="user">
+                    User
+                </th>
+                <th class="sortable"
+                    data-sort="fromMarketeer">
+                    From Marketeer
+                </th>
+                <th class="sortable"
+                    data-sort="toMarketeer">
+                    To Marketeer
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Action
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <%changeCollection.forEach(function(model){%>
+            <tr>
+                <td><%=model.user.name%></td>
+                <td><%=model.fromMarketeer.name%></td>
+                <td><%=model.toMarketeer.name%></td>
+                <td><%=model.date%></td>
+                <td>
+                    <div>
+                        <a class="acceptMarketeer actionButton"
+                           data-id="model.marketeer._id">
+                            Accept
+                        </a>
+                        <a class="denyMarketeer actionButton"
+                           data-id="model.marketeer._id">
+                            Deny
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <%}%>
+            </tbody>
+        </table>
+    </div>
+</div>

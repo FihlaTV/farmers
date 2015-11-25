@@ -10,20 +10,33 @@ define([
 
         },
 
-        render: function (contentView) {
-            var template = this.template();
-            this.$el.html(template);
-            contentView.render(this.$el.find('#contentHolder'));
-            contentView.delegateEvents();
-            // this.setContent(this.contentView);
+        createView:function(View,selector){
+            var view = new View({el:selector});
+            view.render();
+            view.delegateEvents();
+
         },
 
-        setContent: function (view) {
-            //this.contentView.undelegateEvents();
-            //this.contentView = view;
-            //this.contentView.render();
+        render: function (options) {
+
+            var ContentView;
+            var MenuView;
+            var template = this.template();
+            this.$el.html(template);
+
+            MenuView = options.MenuView;
+            ContentView = options.ContentView;
+
+            if (MenuView) {
+                this.createView(MenuView, '#leftMenuHolder')
+            }
+
+            if (ContentView) {
+                this.createView(ContentView, '#contentHolder')
+            }
 
         }
+
 
     });
     return MainView

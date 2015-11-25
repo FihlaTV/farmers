@@ -1,8 +1,7 @@
 define([
-    'text!templates/login/loginTemplate.html',
-    'custom'
-    //'validation'
-], function (LoginTemplate, Custom /*, validation*/) {
+    'text!templates/login/loginTemplate.html'
+
+], function (LoginTemplate) {
 
     var View = Backbone.View.extend({
 
@@ -21,7 +20,7 @@ define([
             var errorHolder = this.$errorHolder;
 
             $.ajax({
-                url     : "/login",
+                url     : "/admin/login",
                 type    : "POST",
                 dataType: 'json',
                 data    : {
@@ -31,6 +30,7 @@ define([
                 success : function (response) {
                     App.authorized = true;
                     App.currentUser = response.data;
+                    Backbone.history.navigate('marketeers')
 
                 },
                 error   : function (err) {
@@ -43,9 +43,9 @@ define([
         },
 
         render: function ($el) {
-            this.$el = $el;
+            //this.$el = $el;
 
-            $el.html(_.template(LoginTemplate));
+            this.$el.html(_.template(LoginTemplate));
             this.$errorHolder = $el.find('#errorHolder');
 
             return this;

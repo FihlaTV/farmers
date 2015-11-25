@@ -2,7 +2,7 @@ define(['text!templates/menu/leftMenuTemplate.html'],
     function (template) {
 
         var LeftMenuView = Backbone.View.extend({
-            el      : '#leftMenuHolder',
+            //el      : '#leftMenuHolder',
             template: _.template(template),
             events  : {
                 'click #profile': "openProfileDialog"
