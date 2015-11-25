@@ -550,7 +550,7 @@ var Price = function (db) {
 
                         resultPriceList.push({
                             _crop: cropListMerged[findIndex]._id,
-                            englishName: cropListMerged[findIndex].englishName,
+                            //englishName: cropListMerged[findIndex].englishName,
                             displayName: cropListMerged[findIndex].displayName,
                             isInFavorites: isInFavorites,
                             image: cropListMerged[findIndex].image,
