@@ -1,4 +1,4 @@
-process.env.HOST = 'http://projects.thinkmobiles.com';
+process.env.HOST = 'http://localhost';
 process.env.PORT = 7792;
 
 process.env.DB_HOST = 'localhost';

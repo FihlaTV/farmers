@@ -4,18 +4,17 @@ define([
     //'validation'
 ], function (LoginTemplate, Custom /*, validation*/) {
 
-    var LoginView = Backbone.View.extend({
-
-        el: '#loginHolder',
+    var View = Backbone.View.extend({
 
         initialize: function () {
         },
 
         events: {
-            "click .login-button": "login"
+            "submit #loginForm": "login"
         },
 
-        login: function (event) {
+        login: function (e) {
+            e.preventDefault();
             var $el = this.$el;
             var username = $el.find("#userName").val().trim();
             var password = $el.find("#pass").val().trim();
@@ -36,15 +35,15 @@ define([
                 },
                 error   : function (err) {
                     App.authorized = false;
-                    errorHolder.text(err);
+                    errorHolder.text(err.responseText);
                 }
             });
 
             return this;
         },
 
-        render: function () {
-            var $el = this.$el;
+        render: function ($el) {
+            this.$el = $el;
 
             $el.html(_.template(LoginTemplate));
             this.$errorHolder = $el.find('#errorHolder');

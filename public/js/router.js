@@ -1,33 +1,34 @@
 define([
     'views/menu/leftMenu',
-    'views/login/loginView',
-    'views/main/main'
-], function (LeftMenuView, LoginView, MainView) {
+    'views/main/main',
+    'views/login/loginView'
+], function (LeftMenuView, MainView, LoginView) {
 
     var appRouter;
     appRouter = Backbone.Router.extend({
 
         routes: {
             "login"         : "login",
+            "login?":"signUp",
             "cropList"      : "cropList",
             "marketeersList": "marketeersList",
             "*any"          : "any"
         },
 
         initialize: function () {
-            this.view = App.authorized ? new MainView() : new LoginView();
-            this.setView()
+            //this.view = new MainView(App.authorized?'':new LoginView())
+        },
+
+        signUp:function(data){
+            alert(data);
         },
 
         setView: function (path) {
             var self = this;
-
+            self.view = new MainView();
             require([path], function (View) {
                 var view = new View();
-                self.view.undelegateEvents();
-                self.view = view;
-                $('#wrapper').html(view.render().el);
-                view.delegateEvents();
+                self.view.render(view);
             });
         },
 
@@ -40,7 +41,7 @@ define([
         },
 
         any: function () {
-            this.setView('views/marketeers/list')
+            Backbone.history.navigate(App.authorized ? 'marketeers' : 'login', {trigger: true});
         },
 
         login: function () {

@@ -1,21 +1,25 @@
-<form>
-    <label for="userName">Username:</label>
-    <input type="text"
-           id="userName"
-           placeholder="Enter username"
-           required
-           maxlength="16"/>
-    <label for="pass">Password:</label>
-    <input type="password"
-           id="pass"
-           placeholder="Enter password"
-            required
-            maxlength="16"/>
+<div id="login">
+    <form id="loginForm">
+        <fieldset>
+            <label for="userName">Username:</label>
+            <input type="text"
+                   id="userName"
+                   placeholder="Enter username"
+                   required
+                   maxlength="16"/>
+            <label for="pass">Password:</label>
+            <input type="password"
+                   id="pass"
+                   placeholder="Enter password"
+                   required
+                   maxlength="16"/>
 
-    <div>
-        <span id="errorHolder"></span>
-    </div>
-    <input type="submit"
-           value="Login" />
+            <div>
+                <span id="errorHolder"></span>
+            </div>
+            <input type="submit"
+                   value="Login"/>
+        </fieldset>
+    </form>
 
-</form>
+</div>

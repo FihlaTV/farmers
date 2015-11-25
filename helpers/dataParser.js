@@ -154,7 +154,7 @@ module.exports = function (db) {
             } else {
                 cb(null, {
                     newPlantsPrice: results[0],
-                    plants: results[1]
+                    plants        : results[1]
                 });
             }
         });
@@ -240,7 +240,6 @@ module.exports = function (db) {
     //    });
     //};
 
-
     // process getting date is different for sites that is why need different function
 
     this.syncPlantCouncilCropPrices = function (cropList, cb) {
@@ -272,23 +271,22 @@ module.exports = function (db) {
                 return cb(err + ' or now results');
             }
 
-            priceDate =  getTransformedDateObject(results.results.priceDate[0].date);
-            source =  results.results.priceDate[0].url;
+            priceDate = getTransformedDateObject(results.results.priceDate[0].date);
+            source = results.results.priceDate[0].url;
             tempArray = results.results.prices;
 
             console.log('received price date: ', results.results.priceDate[0].date);
             console.log('received price transformed date: ', priceDate);
             console.log('received price url: ', source);
 
-
             // prepare received array, separate on excellent quality and class A quality
-            for (var i = 0, len = tempArray.length - 1; i <= len; i++){
+            for (var i = 0, len = tempArray.length - 1; i <= len; i++) {
                 if (tempArray[i].maxPrice) {
                     resultPricesArray.push(
                         {
-                            price: tempArray[i].maxPrice,
-                            name: tempArray[i].name,
-                            url: source,
+                            price    : tempArray[i].maxPrice,
+                            name     : tempArray[i].name,
+                            url      : source,
                             excellent: true
                         }
                     )
@@ -296,8 +294,8 @@ module.exports = function (db) {
                 resultPricesArray.push(
                     {
                         price: tempArray[i].minPrice,
-                        name: tempArray[i].name,
-                        url: source
+                        name : tempArray[i].name,
+                        url  : source
                     }
                 )
             }
@@ -315,17 +313,17 @@ module.exports = function (db) {
         var startTime = new Date();
 
         parallelTasks.push({
-            url: CONST.URL_APIS.MOAG_URL.SOURCE_1,
+            url    : CONST.URL_APIS.MOAG_URL.SOURCE_1,
             results: []
         });
 
         parallelTasks.push({
-            url: CONST.URL_APIS.MOAG_URL.SOURCE_2,
+            url    : CONST.URL_APIS.MOAG_URL.SOURCE_2,
             results: []
         });
 
         parallelTasks.push({
-            url: CONST.URL_APIS.MOAG_URL.SOURCE_3,
+            url    : CONST.URL_APIS.MOAG_URL.SOURCE_3,
             //url: 'http://www.prices.moag.gov.il/prices/citrrr_1.htm', // test bad link
             results: []
         });
@@ -340,7 +338,7 @@ module.exports = function (db) {
             // prepare received array, separate on excellent quality and class A quality
             // resalt is array of results from 3 sites we need concat it
 
-            resultPricesArray = [].concat(result[0] ? result[0] : [], result[1] ? result[1] : [], result[2] ? result[2] : [] );
+            resultPricesArray = [].concat(result[0] ? result[0] : [], result[1] ? result[1] : [], result[2] ? result[2] : []);
 
             priceDate = getTransformedDateObject(resultPricesArray[0].date);
             source = resultPricesArray[0].url;
@@ -368,7 +366,7 @@ module.exports = function (db) {
             .exec(cb);
     };
 
-    function getAvgPrice (minPrice, maxPrice) {
+    function getAvgPrice(minPrice, maxPrice) {
 
         if ((minPrice === 0) || (maxPrice === 0)) {
             return ((minPrice === 0) ? maxPrice : minPrice);
@@ -376,15 +374,14 @@ module.exports = function (db) {
         return ((minPrice * 100 + maxPrice * 100) / 200);
     }
 
-
     function createNewCropNotification(model, callback) {
         var notification;
         var saveOptions = {
             newCropPriceId: model._id,
-            type: 'newCrop',
-            source: model.source,
-            site: model.site,
-            cropName: model.name
+            type          : 'newCrop',
+            source        : model.source,
+            site          : model.site,
+            cropName      : model.name
         };
 
         //TODO switch ON
@@ -407,7 +404,7 @@ module.exports = function (db) {
 
     function checkPlantCouncilDataInDbAndWrite(priceDate, source, cropList, parsedData, cb) {
         var searchQuery = {
-            date: priceDate,
+            date  : priceDate,
             source: source
         };
 
@@ -430,24 +427,24 @@ module.exports = function (db) {
                     var foundPosition = -1;
                     var price = parseFloat(item.price) || 0;
                     var saveOptions;
-                    var nameOptimize = item.name.replace (/ /g,'');
-                    var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
+                    var nameOptimize = item.name.replace(/ /g, '');
+                    var searchQualityFlag = item.excellent ? 'מובחר' : 'סוג א';
 
                     for (var i = cropLen; i >= 0; i--) {
-                        if ( cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcNameOptimize === nameOptimize) {
+                        if (cropList[i].pcNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0 && cropList[i].pcNameOptimize === nameOptimize) {
                             foundPosition = i;
                             i = -1;
                         }
                     }
 
                     saveOptions = {
-                        source: item.url,
-                        price: price,
-                        date: priceDate,
-                        name: item.name,
-                        site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                        year: moment(priceDate).year(),
-                        month: moment(priceDate).month(),
+                        source   : item.url,
+                        price    : price,
+                        date     : priceDate,
+                        name     : item.name,
+                        site     : /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                        year     : moment(priceDate).year(),
+                        month    : moment(priceDate).month(),
                         dayOfYear: moment(priceDate).dayOfYear(),
                         excellent: !!item.excellent
                     };
@@ -460,18 +457,18 @@ module.exports = function (db) {
                         saveOptions.imported = cropList[foundPosition].imported;
 
                     } else {
-                        console. log ('New crop detecdet: ', item.name);
+                        console.log('New crop detecdet: ', item.name);
                     }
 
                     price = new Price(saveOptions);
                     price
                         .save(function (err, model) {
                             if (err) {
-                                return  callback('DB err:' + err);
+                                return callback('DB err:' + err);
                             }
 
                             if (foundPosition < 0) {
-                                return createNewCropNotification (model.toJSON(), callback );
+                                return createNewCropNotification(model.toJSON(), callback);
                             }
 
                             callback();
@@ -487,7 +484,7 @@ module.exports = function (db) {
 
     function checkWholeSaleDataInDbAndWrite(priceDate, source, cropList, parsedData, cb) {
         var searchQuery = {
-            date: priceDate,
+            date  : priceDate,
             source: source
         };
 
@@ -511,23 +508,23 @@ module.exports = function (db) {
                     var foundPosition = -1;
                     var price = parseFloat(item.price) || 0;
                     var saveOptions;
-                    var nameOptimize = item.name.replace (/ /g,'');
+                    var nameOptimize = item.name.replace(/ /g, '');
 
                     for (var i = cropLen; i >= 0; i--) {
-                        if ( cropList[i].wsNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].wsNameOptimize === nameOptimize ) {
+                        if (cropList[i].wsNameOptimize.indexOf(nameOptimize) >= 0 && cropList[i].wsNameOptimize === nameOptimize) {
                             foundPosition = i;
                             i = -1;
                         }
                     }
 
                     saveOptions = {
-                        source: item.url,
-                        price: price,
-                        date: priceDate,
-                        name: item.name,
-                        site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                        year: moment(priceDate).year(),
-                        month: moment(priceDate).month(),
+                        source   : item.url,
+                        price    : price,
+                        date     : priceDate,
+                        name     : item.name,
+                        site     : /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                        year     : moment(priceDate).year(),
+                        month    : moment(priceDate).month(),
                         dayOfYear: moment(priceDate).dayOfYear(),
                         excellent: !!item.excellent
                     };
@@ -541,18 +538,18 @@ module.exports = function (db) {
 
                         // TODO delete this when it will be not need
                     } else {
-                        console. log ('New crop detected: ', item.name);
+                        console.log('New crop detected: ', item.name);
                     }
 
                     price = new Price(saveOptions);
                     price
                         .save(function (err, model) {
                             if (err) {
-                                return  callback('DB err:' + err);
+                                return callback('DB err:' + err);
                             }
 
                             if (foundPosition < 0) {
-                                return createNewCropNotification (model.toJSON(), callback );
+                                return createNewCropNotification(model.toJSON(), callback);
                             }
 
                             callback();
@@ -572,14 +569,16 @@ module.exports = function (db) {
         return parseWholesalesByUrl(item, cb);
     };
 
-    function  parseWholesalesByUrl(item, cb) {
+    function parseWholesalesByUrl(item, cb) {
         var self = this;
         var url = item.url;
         var results = item.results;
 
-        request({url : url, encoding: null, headers: {
-            'User-Agent': 'request'
-        }}, function (err, response, body) {
+        request({
+            url: url, encoding: null, headers: {
+                'User-Agent': 'request'
+            }
+        }, function (err, response, body) {
             var date;
             var nextPage;
             var dateRegExp = /(0[1-9]|[12][0-9]|3[01])[- \/.](0[1-9]|1[012])[- \/.](19|20)\d\d/g;
@@ -601,7 +600,7 @@ module.exports = function (db) {
             body = translator;
 
             date = body.match(dateRegExp)[0];
-            nextPage = body.match(nextPageRegExp) ? (body.match(nextPageRegExp)[1]).replace(/\\/g,"/") : '';
+            nextPage = body.match(nextPageRegExp) ? (body.match(nextPageRegExp)[1]).replace(/\\/g, "/") : '';
 
             console.log('data: ', date);
             console.log('current URL: ', url);
@@ -615,9 +614,9 @@ module.exports = function (db) {
 
                 results.push({
                     price: price,
-                    name: name,
-                    url: url,
-                    date: date
+                    name : name,
+                    url  : url,
+                    date : date
                 });
 
                 console.log('price: ', price, ' name: ', name);
@@ -625,10 +624,10 @@ module.exports = function (db) {
             }
 
             if (!nextPage) {
-                console.log('parsing ', results.length ,' crops');
+                console.log('parsing ', results.length, ' crops');
                 return cb(err, results);
             }
-            return parseWholesalesByUrl ({url: nextPage, results: results}, cb);
+            return parseWholesalesByUrl({url: nextPage, results: results}, cb);
         });
     }
 
@@ -636,9 +635,11 @@ module.exports = function (db) {
         var url = item.url;
         var results = item.results;
 
-        request({url : url,  headers: {
-            'User-Agent': 'request'
-        }}, function (err, response, body) {
+        request({
+            url: url, headers: {
+                'User-Agent': 'request'
+            }
+        }, function (err, response, body) {
             var data;
             var dateRegExp = /(0[1-9]|[12][0-9]|3[01])[- \/.](0[1-9]|1[012])[- \/.](19|20)\d\d/g;
             var trTagsArray;
@@ -657,7 +658,7 @@ module.exports = function (db) {
             //body = encoding.convert(body, "UTF-8", "Windows1255");
 
             data = body.match(dateRegExp)[0];
-            match =  body.match(p1P2NameRegExp);
+            match = body.match(p1P2NameRegExp);
 
             console.log('data: ', data);
             console.log('current URL: ', url);
@@ -672,8 +673,8 @@ module.exports = function (db) {
 
                 results.push({
                     minPrice: price,
-                    name: name,
-                    url: url
+                    name    : name,
+                    url     : url
                 });
 
                 console.log('price: ', price, ' name: ', name);
@@ -701,12 +702,12 @@ module.exports = function (db) {
         tasks.push(filterByCropListAndSaveImportedPCData);
 
         async.waterfall(tasks, function (err, result) {
-            if(err) {
+            if (err) {
                 console.log('ERROR:  Import PcHistory Error: ', err);
                 return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
             } else {
-                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
-                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+                console.log('Import PcHistory ended with: ', result, ' spend time (sec): ', (new Date() - startTime) / 1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime) / 1000);
             }
         });
 
@@ -723,7 +724,7 @@ module.exports = function (db) {
     //        cb(null, result);
     //    });
     //}
-    function createFnReadPcHistoryFromCsv(csvFileName){
+    function createFnReadPcHistoryFromCsv(csvFileName) {
         return function readPcHistoryFromCsv(cropList, cb) {
 
             var source = CONST.URL_APIS.PLANTS_URL.SOURCE;
@@ -745,10 +746,10 @@ module.exports = function (db) {
                         if (parsedData[i][3].trim()) {
                             importedData.push(
                                 {
-                                    price: parsedData[i][3].trim(),
-                                    name: parsedData[i][1].trim(),
-                                    url: source,
-                                    date: parsedData[i][0].trim(),
+                                    price    : parsedData[i][3].trim(),
+                                    name     : parsedData[i][1].trim(),
+                                    url      : source,
+                                    date     : parsedData[i][0].trim(),
                                     excellent: true
                                 }
                             )
@@ -757,9 +758,9 @@ module.exports = function (db) {
                         importedData.push(
                             {
                                 price: parsedData[i][2].trim(),
-                                name: parsedData[i][1].trim(),
-                                date: parsedData[i][0].trim(),
-                                url: source
+                                name : parsedData[i][1].trim(),
+                                date : parsedData[i][0].trim(),
+                                url  : source
                             }
                         );
                     }
@@ -773,7 +774,7 @@ module.exports = function (db) {
         }
     };
 
-    function createFnReadWsHistoryFromCsv(csvFileName){
+    function createFnReadWsHistoryFromCsv(csvFileName) {
         return function readWsHistoryFromCsv(cropList, cb) {
 
             var source = CONST.URL_APIS.MOAG_URL.SOURCE_1;
@@ -793,14 +794,14 @@ module.exports = function (db) {
 
                     for (var i = parsedData.length - 1; i >= 1; i--) {
                         name = (parsedData[i][1] ? parsedData[i][1] : '') + (parsedData[i][2] ? ' ' + parsedData[i][2] : '') + (parsedData[i][3] ? ' ' + parsedData[i][3] : '');
-                        name = name.replace(/\.$/g,'');
+                        name = name.replace(/\.$/g, '');
 
                         importedData.push(
                             {
                                 price: parsedData[i][4].trim(),
-                                name: name.trim(),
-                                url: source,
-                                date: parsedData[i][0].trim()
+                                name : name.trim(),
+                                url  : source,
+                                date : parsedData[i][0].trim()
                             }
                         )
                     }
@@ -826,8 +827,8 @@ module.exports = function (db) {
             var saveOptions;
             var date = getTransformedDateObject(item.date);
             //console.log(date);
-            var nameOptimize = item.name.replace (/ /g,'');
-            var searchQualityFlag =  item.excellent ? 'מובחר' : 'סוג א';
+            var nameOptimize = item.name.replace(/ /g, '');
+            var searchQualityFlag = item.excellent ? 'מובחר' : 'סוג א';
 
             for (var i = cropLen; i >= 0; i--) {
                 if (cropList[i].pcNameOptimize === nameOptimize && cropList[i].pcQuality.indexOf(searchQualityFlag) >= 0) {
@@ -837,13 +838,13 @@ module.exports = function (db) {
             }
 
             saveOptions = {
-                source: item.url,
-                price: price,
-                date: date,
-                name: item.name,
-                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                year: moment(date).year(),
-                month: moment(date).month(),
+                source   : item.url,
+                price    : price,
+                date     : date,
+                name     : item.name,
+                site     : /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year     : moment(date).year(),
+                month    : moment(date).month(),
                 dayOfYear: moment(date).dayOfYear(),
                 excellent: !!item.excellent
             };
@@ -856,18 +857,18 @@ module.exports = function (db) {
                 saveOptions.imported = cropList[foundPosition].imported;
 
             } else {
-                console. log ('New crop detecdet: ', item.name);
+                console.log('New crop detecdet: ', item.name);
             }
 
             price = new Price(saveOptions);
             price
                 .save(function (err, model) {
                     if (err) {
-                        return  callback('DB err:' + err);
+                        return callback('DB err:' + err);
                     }
 
                     if (foundPosition < 0) {
-                        return createNewCropNotification (model.toJSON(), callback );
+                        return createNewCropNotification(model.toJSON(), callback);
                     }
 
                     callback();
@@ -877,7 +878,7 @@ module.exports = function (db) {
                 return cb(err);
             }
             //console.log('CALLBACK _________________checkWholeSaleDataInDbAndWrite');
-            cb(null, 'Success' );
+            cb(null, 'Success');
         });
     }
 
@@ -892,23 +893,23 @@ module.exports = function (db) {
             var saveOptions;
             var date = getTransformedDateObjectForWsDayli(item.date);
             //console.log(date);
-            var nameOptimize = item.name.replace (/ /g,'');
+            var nameOptimize = item.name.replace(/ /g, '');
 
             for (var i = cropLen; i >= 0; i--) {
-                if ( cropList[i].wsNameOptimize === nameOptimize) {
+                if (cropList[i].wsNameOptimize === nameOptimize) {
                     foundPosition = i;
                     i = -1;
                 }
             }
 
             saveOptions = {
-                source: item.url,
-                price: price,
-                date: date,
-                name: item.name,
-                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                year: moment(date).year(),
-                month: moment(date).month(),
+                source   : item.url,
+                price    : price,
+                date     : date,
+                name     : item.name,
+                site     : /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year     : moment(date).year(),
+                month    : moment(date).month(),
                 dayOfYear: moment(date).dayOfYear()
             };
 
@@ -920,19 +921,19 @@ module.exports = function (db) {
                 saveOptions.imported = cropList[foundPosition].imported;
 
             } else {
-                console. log ('New crop detecdet: ', item.name);
+                console.log('New crop detecdet: ', item.name);
             }
 
             // for Month Average prices
-            price = new Price (saveOptions);
+            price = new Price(saveOptions);
             price
                 .save(function (err, model) {
                     if (err) {
-                        return  callback('DB err:' + err);
+                        return callback('DB err:' + err);
                     }
 
                     if (foundPosition < 0) {
-                        return createNewCropNotification (model.toJSON(), callback );
+                        return createNewCropNotification(model.toJSON(), callback);
                     }
 
                     callback();
@@ -957,23 +958,23 @@ module.exports = function (db) {
             var saveOptions;
             var date = getTransformedDateObjectForMonthWs(item.date);
             //console.log(date);
-            var nameOptimize = item.name.replace (/ /g,'');
+            var nameOptimize = item.name.replace(/ /g, '');
 
             for (var i = cropLen; i >= 0; i--) {
-                if ( cropList[i].wsNameOptimize === nameOptimize) {
+                if (cropList[i].wsNameOptimize === nameOptimize) {
                     foundPosition = i;
                     i = -1;
                 }
             }
 
             saveOptions = {
-                source: item.url,
-                price: price,
-                date: date,
-                name: item.name,
-                site: /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
-                year: moment(date).year(),
-                month: moment(date).month(),
+                source   : item.url,
+                price    : price,
+                date     : date,
+                name     : item.name,
+                site     : /moag/.test(item.url) ? CONST.WHOLE_SALE_MARKET : CONST.PLANT_COUNCIL,
+                year     : moment(date).year(),
+                month    : moment(date).month(),
                 dayOfYear: moment(date).dayOfYear()
             };
 
@@ -985,20 +986,19 @@ module.exports = function (db) {
                 saveOptions.imported = cropList[foundPosition].imported;
 
             } else {
-                console. log ('New crop detecdet: ', item.name);
+                console.log('New crop detecdet: ', item.name);
             }
 
-
             // for Month Average prices
-            price = new MonthAveragePrice (saveOptions);
+            price = new MonthAveragePrice(saveOptions);
             price
                 .save(function (err, model) {
                     if (err) {
-                        return  callback('DB err:' + err);
+                        return callback('DB err:' + err);
                     }
 
                     if (foundPosition < 0) {
-                        return createNewCropNotification (model.toJSON(), callback );
+                        return createNewCropNotification(model.toJSON(), callback);
                     }
 
                     callback();
@@ -1028,12 +1028,12 @@ module.exports = function (db) {
         tasks.push(filterByCropListAndSaveMonthImportedWsData);
 
         async.waterfall(tasks, function (err, cropList, result) {
-            if(err) {
+            if (err) {
                 console.log('ERROR:  Import PcHistory Error: ', err);
                 return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
             } else {
-                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
-                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+                console.log('Import PcHistory ended with: ', result, ' spend time (sec): ', (new Date() - startTime) / 1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime) / 1000);
             }
         });
 
@@ -1055,91 +1055,88 @@ module.exports = function (db) {
         tasks.push(filterByCropListAndSaveImportedWsData);
 
         async.waterfall(tasks, function (err, cropList, result) {
-            if(err) {
+            if (err) {
                 console.log('ERROR:  Import PcHistory Error: ', err);
                 return res.status(500).send('ERROR:  Import PcHistory Error: ', err);
             } else {
-                console.log('Import PcHistory ended with: ', result ,' spend time (sec): ', (new Date() - startTime)/1000);
-                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime)/1000);
+                console.log('Import PcHistory ended with: ', result, ' spend time (sec): ', (new Date() - startTime) / 1000);
+                return res.status(200).send('Import PcHistory ended with: ' + result + ' spend time (sec): ' + (new Date() - startTime) / 1000);
             }
         });
 
     };
 
-
-
-
-
     this.getAveragePriceMonthly = function (req, res, next) {
         var yearUrlParam = req.params.year;
         var avaragePriceList = [];
         Price.aggregate(
-            [ {
-                $match : {year : parseInt(yearUrlParam),site:"PlantCouncil"}
+            [{
+                $match: {year: parseInt(yearUrlParam), site: "PlantCouncil"}
             },
                 {
                     $group: {
-                        _id: {
-                            month: {$month: "$date"},
-                            year: {$year: "$date"},
-                            source:"$source",
-                            crop:"$_crop",
-                            pcQuality:"$pcQuality",
-                            name: "$name",
-                            site:"$site",
-                            imported:"$imported",
-                            cropListName:"$cropListName",
-                            wsQuality:"$wsQuality",
-                            excellent: "$excellent"},
+                        _id         : {
+                            month       : {$month: "$date"},
+                            year        : {$year: "$date"},
+                            source      : "$source",
+                            crop        : "$_crop",
+                            pcQuality   : "$pcQuality",
+                            name        : "$name",
+                            site        : "$site",
+                            imported    : "$imported",
+                            cropListName: "$cropListName",
+                            wsQuality   : "$wsQuality",
+                            excellent   : "$excellent"
+                        },
                         averagePrice: {$avg: "$price"},
                     },
                 },
                 {$sort: {"_id.year": 1, "_id.month": 1}}
 
             ]
-        ). exec(function (err, list) {
-            if (err) {
-              return  res.status(500).send({error:err });
-            }
-            var arrLen = list.length;
-            for(var i=0; i < arrLen; i++) {
-                var date = moment.utc([list[i]._id.year, list[i]._id.month - 1, 1]).hour(12);
-
-
-                var saveOptions = {
-                    source: list[i]._id.source,
-                    price: list[i].averagePrice,
-                    date: date.toDate(),
-                    cropListName:list[i]._id.cropListName,
-                    name: list[i]._id.name,
-                    site: list[i]._id.site,
-                    year: date.year(),
-                    month: date.month(),
-                    dayOfYear: date.dayOfYear(),
-                    pcQuality: list[i]._id.pcQuality,
-                    wsQuality: list[i]._id.wsQuality,
-                    imported: list[i]._id.imported,
-                    excellent:list[i]._id.excellent,
-                    _crop:  list[i]._id.crop
-                };
-                avaragePriceList.push(saveOptions);
-            }
-
-            MonthAveragePrice.collection.insert(avaragePriceList,{}, onInsert);
-            function onInsert(err, docs) {
+        ).exec(function (err, list) {
                 if (err) {
-                    res.status(500).send({error:err });
-
-                } else {
-                    console.info('%d objects successfully stored.', docs.length);
-                    res.status(200).send(
-                        {
-                             avaregePriceList:avaragePriceList ,
-                            avaregePriceListTotal:avaragePriceList.length});
-
+                    return res.status(500).send({error: err});
                 }
-            }
-        });
+                var arrLen = list.length;
+                for (var i = 0; i < arrLen; i++) {
+                    var date = moment.utc([list[i]._id.year, list[i]._id.month - 1, 1]).hour(12);
+
+                    var saveOptions = {
+                        source      : list[i]._id.source,
+                        price       : list[i].averagePrice,
+                        date        : date.toDate(),
+                        cropListName: list[i]._id.cropListName,
+                        name        : list[i]._id.name,
+                        site        : list[i]._id.site,
+                        year        : date.year(),
+                        month       : date.month(),
+                        dayOfYear   : date.dayOfYear(),
+                        pcQuality   : list[i]._id.pcQuality,
+                        wsQuality   : list[i]._id.wsQuality,
+                        imported    : list[i]._id.imported,
+                        excellent   : list[i]._id.excellent,
+                        _crop       : list[i]._id.crop
+                    };
+                    avaragePriceList.push(saveOptions);
+                }
+
+                MonthAveragePrice.collection.insert(avaragePriceList, {}, onInsert);
+                function onInsert(err, docs) {
+                    if (err) {
+                        res.status(500).send({error: err});
+
+                    } else {
+                        console.info('%d objects successfully stored.', docs.length);
+                        res.status(200).send(
+                            {
+                                avaregePriceList     : avaragePriceList,
+                                avaregePriceListTotal: avaragePriceList.length
+                            });
+
+                    }
+                }
+            });
     };
 
 };
