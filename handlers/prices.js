@@ -437,7 +437,7 @@ var Price = function (db) {
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
                         //more: more
-                        more: null
+                        more: []
                     };
 
                     // TODO calculate plantsCouncil Price
@@ -478,7 +478,7 @@ var Price = function (db) {
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
                         //more: more
-                        more: null
+                        more: []
                     };
 
                     // TODO calculate Wholesale Price
@@ -527,7 +527,7 @@ var Price = function (db) {
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
                         //more: more
-                        more: null
+                        more: []
                     };
 
 
