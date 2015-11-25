@@ -3,8 +3,8 @@ define([],function () {
         var url;
         url =  Backbone.history.fragment || Backbone.history.getFragment();
 
-        if ((url === "")) {
-            url = 'taxonomy';
+        if (url === "") {
+            url = 'marketeers';
         }
 
         if (Backbone.history.fragment) {
@@ -13,6 +13,7 @@ define([],function () {
 
         if (!err) {
             App.authorized = true;
+            App.currentUser=data;
             return Backbone.history.navigate(url, {trigger: true});
         } else {
             App.authorized = false;

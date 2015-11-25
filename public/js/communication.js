@@ -3,13 +3,13 @@ define(function () {
     // check authorization
     var checkLogin = function (callback) {
         $.ajax({
-            url: "/admin/currentAdmin",
+            url: "/authorized",
             type: "GET",
             success: function (data) {
                 return callback(null, data);
             },
-            error: function (data) {
-                return callback(data);
+            error: function (err) {
+                return callback(err);
             }
         });
     };

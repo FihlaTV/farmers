@@ -1,93 +1,54 @@
-/**
- * Created by andrey on 02.06.15.
- */
-
 define([
     'text!templates/login/loginTemplate.html',
     'custom'
     //'validation'
 ], function (LoginTemplate, Custom /*, validation*/) {
 
-    var View;
-    View = Backbone.View.extend({
+    var LoginView = Backbone.View.extend({
 
-        id: 'login',
+        el: '#loginHolder',
 
         initialize: function () {
-            this.setDefaultData();
-
-            this.listenTo(this.stateModel, 'change', this.render);
-
-            this.render();
         },
 
         events: {
             "click .login-button": "login"
         },
 
-        //reset the data
-        setDefaultData: function () {
-            var defaultData = {
-                password    :   '',
-                user        :   '',
-                message     :   false
-
-            };
-
-            if (this.stateModel) {
-                this.stateModel.set(defaultData);
-            } else {
-                this.stateModel = new Backbone.Model(defaultData);
-            }
-        },
-
-        afterUpend: function () {
-            this.setDefaultData();
-            this.render();
-        },
-
         login: function (event) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-
-            var self = this;
-
-            var stateModelUpdate = {
-                user: this.$el.find("#userName").val().trim(),
-                password: this.$el.find("#pass").val().trim()
-            };
-
-            this.stateModel.set(stateModelUpdate);
+            var $el = this.$el;
+            var username = $el.find("#userName").val().trim();
+            var password = $el.find("#pass").val().trim();
+            var errorHolder = this.$errorHolder;
 
             $.ajax({
-                url: "/admin/logIn",
-                type: "POST",
+                url     : "/login",
+                type    : "POST",
                 dataType: 'json',
-                data: {
-                    login: stateModelUpdate.user,
-                    pass: stateModelUpdate.password
+                data    : {
+                    login: username,
+                    pass : password
                 },
-                success: function (response) {
+                success : function (response) {
                     App.authorized = true;
-                    App.router.navigate("taxonomy", {trigger: true});
-                    self.stateModel.set({
-                        password: ''
-                    });
+                    App.currentUser = response.data;
+
                 },
-                error: function (err) {
+                error   : function (err) {
                     App.authorized = false;
-                    self.stateModel.set({
-                        password: null,
-                        authorized: false,
-                        message: 'Wrong login or password'
-                    });
+                    errorHolder.text(err);
                 }
             });
+
             return this;
         },
 
         render: function () {
-            this.$el.html(_.template(LoginTemplate, this.stateModel.toJSON()));
+            var $el = this.$el;
+
+            $el.html(_.template(LoginTemplate));
+            this.$errorHolder = $el.find('#errorHolder');
+
             return this;
         }
 
