@@ -108,18 +108,19 @@ var Admin = function (db) {
     this.signIn = function (req, res, next) {
         var body = req.body;
         var email = body.email;
+        var login = body.login;
         var pass = body.pass;
         var shaSum = crypto.createHash('sha256');
 
-        if (!body || !email || !pass) {
+        if (!body || !login || !pass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
 
-        email = email.toLowerCase();
-
-        if (!emailRegExp.test(email)) {
-            return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});
-        }
+        //email = email.toLowerCase();
+        //
+        //if (!emailRegExp.test(email)) {
+        //    return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});
+        //}
 
         if (!passRegExp.test(pass)) {
             return res.status(400).send({error: RESPONSE.NOT_VALID_PASS});
@@ -129,7 +130,7 @@ var Admin = function (db) {
         pass = shaSum.digest('hex');
 
         Admin
-            .findOne({email: email, pass: pass})
+            .findOne({login: login, pass: pass})
             .exec(function (err, model) {
                 if (err) {
                     return next(err);
@@ -186,9 +187,9 @@ var Admin = function (db) {
 
     this.changeForgotPassGetForm = function(req, res, next) {
         var token = req.params.token;
-        var tokenRegExpstr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+        var tokenRegExpStr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
 
-        if (token.length < 30 || !tokenRegExpstr.test(token)) {
+        if (token.length < 30 || !tokenRegExpStr.test(token)) {
             return res.status(404).send();
         }
 
