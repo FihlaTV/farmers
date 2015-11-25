@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Farmer Class: users</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Farmer</a>
+	</div>
+	<div class="navbar-collapse">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="crops.html">crops</a></li><li><a href="marketeer.html">marketeer</a></li><li><a href="prices.html">prices</a></li><li><a href="statistics.html">statistics</a></li><li><a href="users.html">users</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+	</div>
+</div>
+</div>
+
+
+<div class="container">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+    		<h1 class="page-title">Class: users</h1>
+			
+
+	<h1 class="page-title">Class: users</h1>
+<section>
+
+<header>
+    
+        <h2>
+        users
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<dt>
+    <h4 class="name" id="users"><span class="type-signature"></span>new users<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Provides ability for:</p>
+<ul>
+<li>User: Register/ SignIn /SignOut / ChangePassowr / ForgotPassword</li>
+<li>CRUD Users Favorites Services</li>
+</ul>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="addCropsToFavorites"><span class="type-signature"></span>addCropsToFavorites<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user add crop (id of crop) to Favorites</p>
+<p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ favorites // String or [String, String, ...]</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         favorites: &#x27;אבטיחים סידלס&#x27;,     }     OR     {         favorites: [&#x27;אגסים ספדונה&#x27;, &#x27;אגסים ג&#x27;נטיל&#x27; ],     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="changePassBySession"><span class="type-signature"></span>changePassBySession<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user to reset password. After used route, will send email to user with link: http:\ + token for reseting password</p>
+<p><strong>URI:</strong> <strong><em><code>/users/changePass</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ oldPass
+ newPass</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         &quot;oldPass&quot;: &quot;123456&quot;,         &quot;newPass&quot;: &quot;123456789&quot;,     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="deleteCropsFromFavorites"><span class="type-signature"></span>deleteCropsFromFavorites<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user delete crop (id of crop) from Favorites</p>
+<p><strong>URI:</strong> <strong><em><code>/users/favorites/:cropName</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
+<p><strong>Request:</strong>/users/favorites/אבוקדו פנקילטון</p>
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dellAccountByEmail"><span class="type-signature"></span>dellAccountByEmail<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for Developer or Tester to delete account by email and make logOut for kill session</p>
+<p><strong>URI:</strong> <strong><em><code>/users/dellAccountByEmail/</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
+<p><strong>Request:</strong>
+<strong><em><code>/users/dellAccountByEmail/mail@mail.ru</code></em></strong></p>
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: {&quot;success&quot;: &quot;success&quot;}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="dellAccountBySession"><span class="type-signature"></span>dellAccountBySession<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for Developer or Tester to delete account by email and make logOut for kill session</p>
+<p><strong>URI:</strong> <strong><em><code>/users/dellAccountBySession/</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>DELETE</code></em></strong></p>
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: {&quot;success&quot;: &quot;Logout successful&quot;}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="forgotPass"><span class="type-signature"></span>forgotPass<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user to reset password. After used route, will send to user mail with link: http:\ + token for reseting password</p>
+<p><strong>URI:</strong> <strong><em><code>/users/forgotPass</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email //</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         email: &#x27;client777@gmail.com&#x27;     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getFavoritesCrops"><span class="type-signature"></span>getFavoritesCrops<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user add crop (id of crop) to Favorites</p>
+<p><strong>URI:</strong> <strong><em><code>/users/favorites</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON Array of string: {[String, String, ...]}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         [ &#x27;אשכוליות לבנות&#x27;,         &#x27;בטטות&#x27;,         &#x27;דלעת&#x27;,         &#x27;חבושים&#x27; ]     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="getUserProfileBySession"><span class="type-signature"></span>getUserProfileBySession<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user get profile by session. At now (wile not strong DB structure)  it take all field's</p>
+<p><strong>URI:</strong> <strong><em><code>/users/profile</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>GET</code></em></strong></p>
+<p><strong>Responses:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: {}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{     &quot;_id&quot;: &quot;560e4f45899308c80d294e34&quot;,     &quot;email&quot;: &quot;smsspam@ukr.net&quot;,     &quot;pass&quot;: &quot;a552b653b9434e5abd7ba559d1a07cb9b6d9386cf9a07b38b6bd27e0ebd479fd&quot;,     &quot;fullName&quot;: &quot;Roberto Edinburg&quot;,     &quot;confirmToken&quot;: null,     &quot;fbId&quot;: &quot;1899544646937849&quot;,     &quot;avatar&quot;: &quot;https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&amp;oe=5692005F&quot;,     &quot;__v&quot;: 0,     &quot;updatedAt&quot;: &quot;2015-10-02T09:32:53.979Z&quot;,     &quot;createdAt&quot;: &quot;2015-10-02T09:32:53.979Z&quot;,     &quot;marketeer&quot;: null,     &quot;favorites&quot;: [],     &quot;canChangeMarketeer&quot;: true // if true - &gt; show Change Marketeer Button     &quot;newMarketeer&quot;: false, // if true - don&#x27;t show ADD  marketeer screen, marketeer is added but NOT approved     &quot;marketeer&quot;: &quot;561270af9c8fd4643656abd2&quot;, // or null if user not select marketeer.  If (marketeer == null) AND (newMarketeer == false) SHOW ADD  marketeer screen     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong> for user registration in App</p>
+<p><strong>URI:</strong> <strong><em><code>/users/register</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email,
+ pass,
+ fullName</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'Send confirmation on email. Check Email'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         email: &#x27;client777@gmail.com&#x27;,         pass: &#x27;pass1234&#x27;,         fullName: &#x27;Avraam Rozenberg&#x27;     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="signIn"><span class="type-signature"></span>signIn<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user sign in App</p>
+<p><strong>URI:</strong> <strong><em><code>/users/signIn</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email,
+ pass,</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'}, {error: 'Registration not confirmed. Check Email'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{         email: &#x27;client777@gmail.com&#x27;,         pass: &#x27;pass1234&#x27;,     }</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="signOut"><span class="type-signature"></span>signOut<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong>  for user sign out from App</p>
+<p><strong>URI:</strong> <strong><em><code>/users/signOut</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'success'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="signUpFb"><span class="type-signature"></span>signUpFb<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>This <strong>method</strong> for user registration in App via Facebook account</p>
+<p><strong>URI:</strong> <strong><em><code>/users/signUpFb</code></em></strong></p>
+<p><strong>METHOD:</strong> <strong><em><code>POST</code></em></strong></p>
+<p><strong>Request:</strong></p>
+<pre class="prettyprint source"><code> Body:
+ email, // or null, if not exist
+ fbId,  // String
+ fullName, // String
+ avatar, // String or null, if not exist
+ fbAccessToken // String</code></pre><p><strong>Response:</strong></p>
+<pre class="prettyprint source"><code> status (200) JSON object: { success: 'Login successful'}
+ status (400, 500) JSON object: {error: 'Text about error'} or {error: object}</code></pre>
+    </div>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">{     &quot;email&quot;: &quot;232323@ukr.net&quot;,     &quot;fullName&quot;: &quot;Serj Brin&quot;,     &quot;avatar&quot;: &quot;https://scontent.xx.fbcdn.net/hprofile-xfp1/v/t1.0-1/c0.0.50.50/p50x50/10505612_1625178507707799_8991354025924380315_n.jpg?oh=a5e8a4333818c8ccfb7958d4b37725cc&amp;oe=5692005F&quot;,     &quot;fbId&quot;: &quot;889106887840848&quot;     &quot;fbAccessToken&quot;: &quot;CAAMoo1Q3lFABACrZATmqZAQFZA18m40VSN4sjNYgyPVZB1DWXdp2ZBrzlznNBx6NVe2qfwj23Psh6IorastLhMy6zUXk176qKcmFC1sNtwJMZBAKPQLXZCO96XRg9jzBc5OBl7PKFUKo8rzHzbbMCoZCosg4SkXk8gHk2DLeRg6Np5Y9x4t94ZABSZCipjZBAKEwGQZD&quot;     }</pre>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Thinkmobiles Copyright � 2014-2015 The contributors to the JSDoc3 and DocStrap projects.
+	</span>
+	<br />
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a>
+	on Mon Nov 23rd 2015 using the <a
+	href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<!--<script src="scripts/sunlight.js"></script>-->
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/bootstrap-dropdown.js"></script>
+<script src="scripts/toc.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "h1,h2,h3,h4",
+		showAndHide : false,
+		scrollTo    : "100px"
+	} );
+
+	$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+	//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			lang = "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+</body>
+</html>

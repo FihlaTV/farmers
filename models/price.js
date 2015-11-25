@@ -1,3 +1,5 @@
+var CONST = require('../constants/constants');
+
 module.exports = function (db) {
     'use strict';
 
@@ -6,29 +8,31 @@ module.exports = function (db) {
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var Price = new Schema({
-        _plant: {
-            type: ObjectId,
-            ref: 'Plant'
-        },
+        _crop: { type: ObjectId, ref: CONST.MODELS.CROP, default: null },
         date: Date,
         year: Number,
+        month: Number,
         dayOfYear: Number,
         source: String,
-        minPrice: {
-            type: Number,
-            default: 0
-        },
-        maxPrice: {
-            type: Number,
-            default: 0
-        },
-        avgPrice: {
-            type: Number,
-            default: 0
-        }
+        name: String,
+        price: Number,
+        pcQuality: String,
+        wsQuality: String,
+        userQuality: String,
+        cropListName: String,
+        _marketeer: { type: ObjectId, ref: CONST.MODELS.CROP, default: null },
+        _user: String,
+        site: String,
+        excellent: {type: Boolean, default: false},
+        imported: {type: Boolean, default: false},
+        minPrice: {type: Number, default: 0 },
+        maxPrice: {type: Number, default: 0 },
+        avgPrice: {type: Number, default: 0 },
+        createdAt: {type: Date, default: Date.now},
+        updatedAt: {type: Date, default: Date.now}
     }, {
-        collection: 'Prices'
+        collection: CONST.MODELS.PRICE + 's'
     });
 
-    db.model('Price', Price);
+    db.model(CONST.MODELS.PRICE, Price);
 };

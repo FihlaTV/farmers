@@ -1,6 +1,3 @@
-/**
- * Created by kille on 12.08.2015.
- */
 module.exports = function (db) {
     'use strict';
 
@@ -11,8 +8,9 @@ module.exports = function (db) {
     var Plant = new Schema({
         englishName: String,
         jewishNames: Array,
+        image: String,
         isNewPlant: {
-            type:Boolean,
+            type:  Boolean,
             default: false
         }
     }, {

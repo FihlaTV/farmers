@@ -1,62 +1,60 @@
-/**
- * Created by User on 28.04.2015.
- */
+var RESPONSE = require('../constants/response');
 
-var Session = function ( db ) {
+var Session = function (db) {
+    'use strict';
 
-    this.register = function ( req, res, userId, isAdmin ) {
+    this.register = function (req, res, userId, userType) {
         req.session.loggedIn = true;
         req.session.uId = userId;
-        req.session.admin = isAdmin ? true : false;
-        res.status( 200 ).send( { success: "Login successful" } );
+        req.session.type = userType;
+        res.status(200).send({success: RESPONSE.AUTH.LOG_IN});
     };
 
     this.kill = function ( req, res, next ) {
         if(req.session) {
             req.session.destroy();
         }
-        res.status(200).send({ success: "Logout successful" });
+        res.status(200).send({success: RESPONSE.AUTH.LOG_OUT});
     };
 
-    this.authenticatedUser = function ( req, res, next ) {
+    this.authenticatedUser = function (req, res, next) {
+        var err;
 
-        if( req.session && req.session.uId && req.session.loggedIn ) {
+        if (req.session && req.session.uId && req.session.loggedIn) {
+            next();
+        } else {
+            err = new Error('UnAuthorized');
+            err.status = 401;
+            next(err);
+        }
+    };
+
+    this.isAdmin = function (req, res, next) {
+        var err;
+
+        if (req.session && req.session.type == 'Admin') {
+            return next()
+        }
+
+        err = new Error('Permission denied');
+        err.status = 403;
+
+        next (err);
+    };
+
+    this.isAdminApi = function (req, res, next ) {
+        res.status(403).send({error: "unauthorized"});
+    };
+
+    this.isAuthenticatedUser = function (req, res, next) {
+        if (req.session && req.session.uId && req.session.loggedIn) {
             next();
         } else {
             var err = new Error('UnAuthorized');
             err.status = 401;
             next(err);
         }
-
     };
-
-    this.isAdmin = function ( req, res, next ) {
-        var err;
-
-        if ( req.session && req.session.admin ) {
-            return next()
-        }
-
-        err = new Error('permission denied');
-        err.status = 403;
-
-        next( err );
-    };
-
-    this.isAdminApi = function( req, res, next ) {
-        res.status( 403).send({ error: "unauthorized"});
-    };
-
-    this.isAuthenticatedUser = function ( req, res, next ) {
-        if( req.session && req.session.uId && req.session.loggedIn ) {
-            res.status( 200 ).send( { success: "Is authenticated", uId: req.session.uId } );
-        } else {
-            var err = new Error('UnAuthorized');
-            err.status = 401;
-            next(err);
-        }
-    };
-
 };
 
 module.exports = Session;
