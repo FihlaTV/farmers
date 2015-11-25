@@ -1177,7 +1177,7 @@ var Price = function (db) {
                             return cb(err)
                         }
                         if (!result) {
-                            User.findOneAndUpdate(searchQuery._id, {$push: {'pricesCashTable': maxPrice}}, cb);
+                            User.findOneAndUpdate({_id: searchQuery._id}, {$push: {'pricesCashTable': maxPrice}}, cb);
 
                         } else {
 
