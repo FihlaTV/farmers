@@ -20,7 +20,7 @@ define([
             var errorHolder = this.$errorHolder;
 
             $.ajax({
-                url     : "/admin/login",
+                url     : "/admin/signIn",
                 type    : "POST",
                 dataType: 'json',
                 data    : {
