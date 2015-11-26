@@ -1,4 +1,4 @@
-<div>
+<div id="dialogContent">
     <div class="dialogHeader">
         <span><%=title%></span>
 
@@ -7,17 +7,26 @@
         <label for="name">Name</label>
         <input id="name"
                type="text"
-               value="<%=name%>"
-               <%nameReadonly?'readonly':''%>
+               value="<%=model.name%>"
+               <%readonly.name?'readonly':''%>
                required
                maxlength="16"/>
         <label for="location">Name</label>
         <input id="location"
                type="text"
-               value="<%=location%>"
+               value="<%=model.location%>"
+               <%readonly.name?'readonly':''%>
                required
                maxlength="16"/>
 
+    </div>
+    <div class="buttonsHolder">
+        <a id="cancelButton">
+            Cancel
+        </a>
+        <a id="saveButton">
+            Save
+        </a>
     </div>
 
 

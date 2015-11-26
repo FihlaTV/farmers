@@ -1,13 +1,10 @@
-define([], function () {
-
+define(['models/base'], function (BaseModel) {
     var Collection = Backbone.Collection.extend({
 
-        parse      : function (response) {
-            //for debug
+        model: BaseModel,
+        parse: function (response) {
             return response.data;
-        },
-        idAttribute: "_id"
-
+        }
     });
 
     return Collection;

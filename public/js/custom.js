@@ -22,7 +22,6 @@ define([],function () {
 
     };
 
-
     return {
         runApplication: runApplication
     };

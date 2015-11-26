@@ -5,6 +5,7 @@ define(['collections/base'], function (BaseCollection) {
             var collection = new BaseCollection();
 
             collection.url = '/marketeers/marketeersList';
+
             return collection;
         },
 

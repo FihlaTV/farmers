@@ -80,9 +80,9 @@ define([
             }
         },
 
-        openMarketeersDetailsDialog: function (marketeer) {
+        openMarketeersDetailsDialog: function (jsonMarketeer) {
             var self = this;
-            var detailsView = new DetailsView(marketeer);
+            var detailsView = new DetailsView();
 
             detailsView.onSave = function (data) {
                 var marketeersModel = data.id ? self.marketeersCollection.get(data.id) : modelsFactory.createMarketeer(data);
@@ -98,7 +98,8 @@ define([
                         alert(err);
                     }
                 });
-            }
+            };
+            detailsView.render({jsonModel:jsonMarketeer,title:'Edit Marketeer'});
         },
 
         //endregion
