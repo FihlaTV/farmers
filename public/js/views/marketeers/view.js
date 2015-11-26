@@ -9,8 +9,7 @@ define([
     var View = Backbone.View.extend({
         //region Initialization
 
-        template   : _.template(template),
-        dataContent: "marketeers",
+        template: _.template(template),
 
         initialize: function () {
             var self = this;
@@ -25,7 +24,8 @@ define([
         //region Ui Events
 
         events: {
-            'click .tabButton': "changeTab"
+            'click .tabButton': "changeTab",
+            'click #addButton': "addMarketeer"
         },
 
         changeTab: function (e) {
@@ -44,6 +44,11 @@ define([
 
         },
 
+        addMarketeer: function (e) {
+            e.preventDefault();
+            this.openMarketeersDetailsDialog({title: 'Add Marketeer'})
+        },
+
         //endregion
 
         //region Methods
@@ -60,7 +65,7 @@ define([
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
-                self.openMarketeersDetailsDialog(marketeer.toJSON());
+                self.openMarketeersDetailsDialog({jsonModel: marketeer.toJSON(), title: 'Edit Marketeer'});
             };
 
             this.marketeersListView.onDeleteMarketeer = function (args) {
@@ -80,7 +85,7 @@ define([
             }
         },
 
-        openMarketeersDetailsDialog: function (jsonMarketeer) {
+        openMarketeersDetailsDialog: function (options) {
             var self = this;
             var detailsView = new DetailsView();
 
@@ -99,7 +104,7 @@ define([
                     }
                 });
             };
-            detailsView.render({jsonModel:jsonMarketeer,title:'Edit Marketeer'});
+            detailsView.render(options);
         },
 
         //endregion
