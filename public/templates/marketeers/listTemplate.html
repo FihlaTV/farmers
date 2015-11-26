@@ -20,17 +20,17 @@
         </thead>
         <tbody>
         <%collection.forEach(function(model){%>
-        <tr id="model._id">
-            <td><%=model.name%></td>
+        <tr id="<%=model._id%>">
+            <td><%=model.fullName%></td>
             <td><%=model.location%></td>
             <td>
                 <div>
                     <a class="editMarketeer actionButton"
-                       data-id="model._id">
+                       data-id="<%=model._id%>">
                         Edit
                     </a>
                     <a class="deleteMarketeer actionButton"
-                       data-id="model._id">
+                       data-id="<%=model._id%>">
                         Delete
                     </a>
                 </div>

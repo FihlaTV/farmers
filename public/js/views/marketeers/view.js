@@ -13,11 +13,11 @@ define([
         dataContent: "marketeers",
 
         initialize: function () {
+            var self = this;
             this.marketeersCollection = collectionsFactory.createMarketeersCollection();
-            this.marketeersListView = new MarketeersListView();
+
             //  this.activityListView = new ActivityListView()
 
-            this.initializeMarketeersListAndCollection();
         },
 
         //endregion
@@ -48,7 +48,7 @@ define([
 
         //region Methods
 
-        initializeMarketeersListAndCollection: function () {
+        initializeMarketeersListAndCollection: function (collectionData) {
             var self = this;
 
             this.marketeersCollection.on('reset', this.marketeersCollectionReseted, this);
@@ -56,6 +56,7 @@ define([
             this.marketeersCollection.on('remove', this.marketeersCollectionModelRemoved, this);
             this.marketeersCollection.on('change', this.marketeersCollectionChanged, this);
 
+            this.marketeersListView.render(collectionData ? collectionData : this.marketeersCollection.toJSON());
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
@@ -67,11 +68,11 @@ define([
                 var marketeer = self.marketeersCollection.get(id);
 
                 marketeer.destroy({
-                    success:function(){
+                    success: function () {
                         self.marketeersCollection.remove(id);
                         self.marketeersListView.removeMarketeerRow(id);
                     },
-                    err:function(err){
+                    err    : function (err) {
                         alert(err);
                     }
                 });
@@ -117,7 +118,7 @@ define([
             this.marketeersListView.removeMarketeerRow(args.model.id);
         },
 
-        marketeersCollectionChanged:function(args){
+        marketeersCollectionChanged: function (args) {
 
         },
 
@@ -127,14 +128,19 @@ define([
 
         render: function () {
             var data;
-
+            var self = this;
             this.$el.html(this.template());
+            this.marketeersListView = new MarketeersListView({el: '#marketeers'});
+            this.marketeersCollection.fetch({
+                success: function (data) {
+                    self.initializeMarketeersListAndCollection(data.toJSON());
+                }
+            });
+
             this.$previousTab = this.$el.find('.tabButton.selected');
             data = this.$previousTab.attr('data-content');
             this.$previousContent = this.$el.find('#' + data);
             this.$previousContent.show();
-            this.marketeersCollection.fetch();
-
 
         }
 

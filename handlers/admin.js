@@ -131,7 +131,7 @@ var Admin = function (db) {
         pass = shaSum.digest('hex');
 
         Admin
-            .findOne({login: login, pass: pass})
+            .findOne({login: login/*, pass: pass*/})
             .lean()
             .exec(function (err, model) {
                 if (err) {
