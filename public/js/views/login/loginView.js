@@ -42,11 +42,11 @@ define([
             return this;
         },
 
-        render: function ($el) {
+        render: function () {
             //this.$el = $el;
 
             this.$el.html(_.template(LoginTemplate));
-            this.$errorHolder = $el.find('#errorHolder');
+            this.$errorHolder = this.$el.find('#errorHolder');
 
             return this;
         }

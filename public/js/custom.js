@@ -17,7 +17,7 @@ define([],function () {
             return Backbone.history.navigate(url, {trigger: true});
         } else {
             App.authorized = false;
-            return Backbone.history.navigate(url, {trigger: true});
+            return Backbone.history.navigate('login', {trigger: true});
         }
 
     };

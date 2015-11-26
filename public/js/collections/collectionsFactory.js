@@ -2,11 +2,17 @@ define(['collections/base'], function (BaseCollection) {
 
     return {
         createMarketeersCollection: function () {
-            return new BaseCollection('/marketeers')
+            var collection = new Backbone.Collection();
+            collection.parse=function(data){
+                //for debug
+                return data;
+            };
+            collection.url = '/marketeers';
+            return collection;
         },
 
         createCropCollection: function () {
-            return new BaseCollection('/cropList');
+            return new BaseCollection({url:'/cropList'});
         }
     }
 

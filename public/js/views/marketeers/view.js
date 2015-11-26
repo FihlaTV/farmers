@@ -1,11 +1,11 @@
 define([
     'text!templates/marketeers/marketeersTemplate.html',
-    'collections/collectionFactory',
+    'collections/collectionsFactory',
     'models/modelsFactory',
     'views/marketeers/list',
     'views/marketeers/activityList',
     'views/marketeers/details'
-], function (template, collectionFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView) {
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView) {
     var View = Backbone.View.extend({
         //region Initialization
 
@@ -13,7 +13,7 @@ define([
         dataContent: "marketeers",
 
         initialize: function () {
-            this.marketeersCollection = collectionFactory.createMarketeersCollection();
+            this.marketeersCollection = collectionsFactory.createMarketeersCollection();
             this.marketeersListView = new MarketeersListView();
             //  this.activityListView = new ActivityListView()
 
@@ -133,6 +133,8 @@ define([
             data = this.$previousTab.attr('data-content');
             this.$previousContent = this.$el.find('#' + data);
             this.$previousContent.show();
+            this.marketeersCollection.fetch();
+
 
         }
 

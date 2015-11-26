@@ -2,8 +2,8 @@ define([], function () {
 
     var Collection = Backbone.Collection.extend({
 
-        initialize:function(url){
-            this.url = function(){return url};
+        initialize:function(options){
+            this.url = function(){return options.url};
         }
 
     });

@@ -1,6 +1,6 @@
 define([
-        'text!templates/marketeers/listTemplate',
-        'text!templates/marketeers/listItemTemplate'
+        'text!templates/marketeers/listTemplate.html',
+        'text!templates/marketeers/listItemTemplate.html'
 
     ],
     function (listTemplate, listItemTemplate) {

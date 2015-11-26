@@ -31,7 +31,7 @@ define([
         },
 
         goToMarketeers: function () {
-            this.setView(['views/marketeers/tab', 'views/menu/leftMenu'])
+            this.setView(['views/marketeers/view', 'views/menu/leftMenu'])
         },
 
         any: function () {
