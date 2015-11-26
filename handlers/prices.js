@@ -13,6 +13,7 @@ var Price = function (db) {
         var Crop = db.model(CONST.MODELS.CROP);
         var User = db.model(CONST.MODELS.USER);
         var Marketeer = db.model(CONST.MODELS.MARKETEER);
+        var PricesCacheTable = db.model(CONST.MODELS.PRICES_CACHE_TABLE);
         var session = new SessionHandler(db);
         var dataParser = new DataParser(db);
         var cropList;
@@ -24,6 +25,7 @@ var Price = function (db) {
         var userMarketeer;
         var receivedPrices = [];
         var resultPriceList = [];
+        var userPricesCashTable = [];
 
         function getUserFavoritesAndMarketeerById(callback) {
             User
@@ -38,6 +40,7 @@ var Price = function (db) {
                     if (model) {
                         userFavorites = model.favorites;
                         userMarketeer = model.marketeer;
+                        userPricesCashTable =  model.pricesCashTable || [];
                         return callback();
                     } else {
                         return callback(RESPONSE.ON_ACTION.NOT_FOUND + ' user with such _id ');
@@ -176,7 +179,7 @@ var Price = function (db) {
                     cb(err);
                 } else {
 
-                    console.log('Spend time for GeCropsAndLastDate: ', (new Date() - startTime) /1000);
+                    console.log('Spend time for GeCropsAndLastDate: ', (new Date() - startTime) / 1000);
 
                     receivedPrices = results;
                     return cb();
@@ -240,25 +243,29 @@ var Price = function (db) {
                         }
                     },
 
-                    { $unwind: '$prices'},
+                    {$unwind: '$prices'},
                     {
                         $group: {
-                            '_id': { cropListName:'$_id',
-                                'lastDate': "$lastDate"},
+                            '_id': {
+                                cropListName: '$_id',
+                                'lastDate': "$lastDate"
+                            },
 
                             prices: {
-                                $push: {  $cond : [ { $eq : ['$prices.date', '$lastDate' ]}, {
-                                    'price': '$prices.price',
-                                    'site': '$prices.site',
-                                    'cropListName': '$prices.cropListName',
-                                    'date': '$prices.date',
-                                    'pcQuality': '$prices.pcQuality',
-                                    'wsQuality': '$prices.wsQuality',
-                                    'userQuality': '$prices.userQuality',
-                                    '_marketeer': '$prices._marketeer',
-                                    '_user': '$prices._user',
-                                    'imported': '$prices.imported'
-                                }, null]}
+                                $push: {
+                                    $cond: [{$eq: ['$prices.date', '$lastDate']}, {
+                                        'price': '$prices.price',
+                                        'site': '$prices.site',
+                                        'cropListName': '$prices.cropListName',
+                                        'date': '$prices.date',
+                                        'pcQuality': '$prices.pcQuality',
+                                        'wsQuality': '$prices.wsQuality',
+                                        'userQuality': '$prices.userQuality',
+                                        '_marketeer': '$prices._marketeer',
+                                        '_user': '$prices._user',
+                                        'imported': '$prices.imported'
+                                    }, null]
+                                }
                             }
                         }
                     },
@@ -268,7 +275,6 @@ var Price = function (db) {
                             '_id.cropListName': 1
                         }
                     },
-
                     {
                         "$project": {
                             'lastDate': '$_id.lastDate',
@@ -276,55 +282,93 @@ var Price = function (db) {
                             prices: '$prices'
                         }
 
-                    },
-
-                    //{
-                    //    $out : "randomAggregates"
-                    //}
-
-
+                    }
                 ]
             ).allowDiskUse(true)
                 //agregation.options = {allowDiskUse: true};
-
 
                 .exec(function (err, results) {
                     if (err) {
                         return cb(err);
                     }
 
-
-                    lastTime =  (new Date() - startTime) /1000;
+                    lastTime = (new Date() - startTime) / 1000;
                     console.log('Spend time for GetPricesByLastDate: ', lastTime);
 
                     //Filter empty
-                    for (var i = 0, len = results.length - 1; i <= len; i++){
+                    for (var i = 0, len = results.length - 1; i <= len; i++) {
                         tempArray = [];
-                        for (var j =  results[i].prices.length - 1; j >= 0; j--){
+                        for (var j = results[i].prices.length - 1; j >= 0; j--) {
                             if (results[i].prices[j]) {
                                 tempArray.push(results[i].prices[j]);
                             }
                         }
                         results[i].prices = tempArray;
                     }
-
-
                     receivedPrices = results;
 
-                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime ) /1000);
-
-
+                    console.log('Spend time for Filter empty elements: ', (new Date() - startTime ) / 1000);
                     //TODO when optimize agregation > dell this
-
                     // get no lastDate information
-
-
                     //receivedPrices = results;
+
                     console.log('Main screen unique Crop: ', receivedPrices.length);
                     //console.log('Spend time: ', new Date - startTime);
                     cb();
-
                 });
+        }
+
+        function GetPricesCacheTables(cb) {
+            var startTime = new Date();
+            var lastTime;
+
+            PricesCacheTable
+                .find()
+                .sort({lastDate: -1, _id: 1 })
+                .lean()
+                .exec(function (err, results) {
+                    if (err) {
+                        return cb(err);
+                    }
+
+                    lastTime = (new Date() - startTime) / 1000;
+                    console.log('Spend time for GetPricesByLastDate: ', lastTime);
+
+                    receivedPrices = results;
+
+                    console.log('Main screen unique Crop: ', receivedPrices.length);
+                    cb();
+                });
+        }
+
+        function syncPricesCacheTablesAndUserPricesCache(cb) {
+
+            for (var i = userPricesCashTable.length - 1; i >= 0; i -- ){
+                for (var j = receivedPrices.length - 1; j >= 0; j --){
+
+                    if (userPricesCashTable[i].cropListName == receivedPrices[j]._id && userPricesCashTable[i].date.valueOf() == receivedPrices[j].lastDate.valueOf()){
+                        receivedPrices[j].prices.push(userPricesCashTable[i]);
+                        j = -1;
+                    } else {
+
+                        if (userPricesCashTable[i].cropListName == receivedPrices[j]._id && userPricesCashTable[i].date.valueOf() > receivedPrices[j].lastDate.valueOf()) {
+                            receivedPrices[j].prices = [userPricesCashTable[i]];
+                            receivedPrices[j].lastDate = userPricesCashTable[i].date;
+                            j = -1;
+                        }
+                    }
+                }
+            }
+
+            receivedPrices.sort(function compare(a, b) {
+                if (a.lastDate < b.lastDate) return 1;
+                if (a.lastDate.valueOf() === b.lastDate.valueOf() && (a._id > b._id))  return 1;
+                if (a.lastDate.valueOf() === b.lastDate.valueOf() && (a._id < b._id))  return -1;
+                if (a.lastDate > b.lastDate) return -1;
+                return 0;
+            });
+
+            cb();
         }
 
         function syncPricesAndCropList(cb) {
@@ -350,10 +394,7 @@ var Price = function (db) {
                 if (receivedPrices[j]._id) {
                     receivedPriceArray = receivedPrices[j].prices;
 
-                    //console.log('receivedPrices: ', receivedPrices[j]._id);
-                    //console.dir(receivedPrices[j].prices);
-
-                    wholesalePrices = {};
+                      wholesalePrices = {};
                     plantsCouncilPrices = {};
                     marketeerPrices = {};
                     prices = [];
@@ -395,7 +436,8 @@ var Price = function (db) {
                         price: maxPrice,
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
-                        more: more
+                        //more: more
+                        more: []
                     };
 
                     // TODO calculate plantsCouncil Price
@@ -435,7 +477,8 @@ var Price = function (db) {
                         price: maxPrice > 0 ? maxPrice : 0,
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
-                        more: more
+                        //more: more
+                        more: []
                     };
 
                     // TODO calculate Wholesale Price
@@ -483,7 +526,8 @@ var Price = function (db) {
                         price: maxPrice > 0 ? maxPrice : 0,
                         quality: maxQuality,
                         data: receivedPrices[j].lastDate,
-                        more: more
+                        //more: more
+                        more: []
                     };
 
 
@@ -506,7 +550,7 @@ var Price = function (db) {
 
                         resultPriceList.push({
                             _crop: cropListMerged[findIndex]._id,
-                            englishName: cropListMerged[findIndex].englishName,
+                            //englishName: cropListMerged[findIndex].englishName,
                             displayName: cropListMerged[findIndex].displayName,
                             isInFavorites: isInFavorites,
                             image: cropListMerged[findIndex].image,
@@ -923,13 +967,13 @@ var Price = function (db) {
                     ])
                     .exec(function (err, results) {
                         if (err) {
-                            return  cb(err);
+                            return cb(err);
                         }
 
-                        if (! results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))){
-                        //if (! results.length && endDate > new Date('2012-01-01 01:00:00.000Z')){
-                            newEndDate =   new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
-                            console.log('endDate: ',endDate,'  newEndDate: ',newEndDate);
+                        if (!results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))) {
+                            //if (! results.length && endDate > new Date('2012-01-01 01:00:00.000Z')){
+                            newEndDate = new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
+                            console.log('endDate: ', endDate, '  newEndDate: ', newEndDate);
                             return createFnGetPricesForCropByPeriod(cropName, startDate, newEndDate, isScroll)(cb)
                         }
                         receivedPrices = results;
@@ -983,17 +1027,17 @@ var Price = function (db) {
                             return cb(err);
                         }
 
-                        if (! results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))){
+                        if (!results.length && isScroll && (endDate > new Date('2012-01-01 01:00:00.000Z'))) {
                             //if (! results.length && endDate > new Date('2012-01-01 01:00:00.000Z')){
-                            newEndDate =   new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
-                            console.log('endDate: ',endDate,'  newEndDate: ',newEndDate);
+                            newEndDate = new Date(new Date(endDate).setMonth(endDate.getMonth() - 2));
+                            console.log('endDate: ', endDate, '  newEndDate: ', newEndDate);
                             return createFnGetMarketeerPricesForCropByPeriod(cropName, startDate, newEndDate, isScroll)(cb)
                         }
 
-                            receivedPrices = results;
-                            //console.log('receivedPrices: ', receivedPrices);
-                            //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
-                            cb(err, results);
+                        receivedPrices = results;
+                        //console.log('receivedPrices: ', receivedPrices);
+                        //console.log('receivedPrices[0]: ', receivedPrices[0].prices);
+                        cb(err, results);
 
                     });
             }
@@ -1103,18 +1147,104 @@ var Price = function (db) {
             }
         }
 
+        function createFnSaveFarmerPricesCashTable(prices, checkOptions) {
+            return function (cb) {
+
+                var maxPrice;
+                var searchQuery;
+
+                prices.sort(function compare(a, b) {
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    return 0;
+                });
+
+                maxPrice = prices[0];
+                maxPrice._marketeer = userMarketeer._id;
+
+                //console.log('max Price: ', maxPrice);
+
+                searchQuery = {
+                    '_id': checkOptions._user,
+                    'pricesCashTable.cropListName': maxPrice.cropListName
+                };
+                User
+                    .findOne(searchQuery)
+                    .lean()
+                    .exec(function (err, result) {
+                        console.log('result: ',result);
+                        if (err) {
+                            return cb(err)
+                        }
+                        if (!result) {
+                            User.findOneAndUpdate({_id: searchQuery._id}, {$push: {'pricesCashTable': maxPrice}}, cb);
+
+                        } else {
+
+                            for( var i = result.pricesCashTable.length - 1; i >= 0; i --) {
+
+                                if (result.pricesCashTable[i].cropListName ==  maxPrice.cropListName) {
+
+
+                                    if (result.pricesCashTable[i].date.valueOf() < maxPrice.date.valueOf() ){
+
+                                        User.findOneAndUpdate(searchQuery, {$set: {'pricesCashTable.$': maxPrice}}, cb);
+                                        return;
+                                    }
+
+                                    if (result.pricesCashTable[i].date.valueOf() === maxPrice.date.valueOf() && result.pricesCashTable[i].price <  maxPrice.price ){
+
+                                        User.findOneAndUpdate(searchQuery, {$set: {'pricesCashTable.$': maxPrice}}, cb);
+                                        return;
+                                    }
+
+                                    return cb()
+                                }
+                            }
+                        }
+                    })
+            }
+        }
+
+        //this.getLastOld = function (req, res, next) {
+        //    var tasks = [];
+        //    var startTime = new Date();
+        //
+        //    UserId = req.session.uId;
+        //
+        //    tasks.push(getCropList);
+        //    tasks.push(getMarketeerList);
+        //    tasks.push(getUserFavoritesAndMarketeerById);
+        //    //tasks.push(getLastPriceDate);
+        //    //tasks.push(GeCropsAndLastDate);
+        //    tasks.push(GetPricesByLastDate);
+        //    tasks.push(syncPricesAndCropList);
+        //
+        //    async.series(tasks, function (err, results) {
+        //        if (err) {
+        //            return res.status(500).send({error: err});
+        //        }
+        //
+        //        //return res.status(200).send({success: receivedPrices});
+        //        console.log('resultPriceList Len: ', resultPriceList.length,' Spend time: ', (new Date() - startTime) /1000);
+        //        return res.status(200).send(resultPriceList);
+        //        //return res.status(200).send(marketeerList);
+        //        //return res.status(200).send(receivedPrices);
+        //
+        //    });
+        //};
 
         this.getLast = function (req, res, next) {
             var tasks = [];
+            var startTime = new Date();
 
             UserId = req.session.uId;
 
             tasks.push(getCropList);
             tasks.push(getMarketeerList);
             tasks.push(getUserFavoritesAndMarketeerById);
-            //tasks.push(getLastPriceDate);
-            //tasks.push(GeCropsAndLastDate);
-            tasks.push(GetPricesByLastDate);
+            tasks.push(GetPricesCacheTables);
+            tasks.push(syncPricesCacheTablesAndUserPricesCache);
             tasks.push(syncPricesAndCropList);
 
             async.series(tasks, function (err, results) {
@@ -1123,7 +1253,8 @@ var Price = function (db) {
                 }
 
                 //return res.status(200).send({success: receivedPrices});
-                //console.log('resultPriceList Len: ', resultPriceList.length);
+
+                console.log('With Catche Table resultPriceList Len: ', resultPriceList.length,' Spend time: ', (new Date() - startTime) /1000);
                 return res.status(200).send(resultPriceList);
                 //return res.status(200).send(marketeerList);
                 //return res.status(200).send(receivedPrices);
@@ -1308,6 +1439,7 @@ var Price = function (db) {
             tasks.push(createFnCheckOtherUsersMarketeerPriceOnDate(checkOptions));
             tasks.push(createFnCheckCountOfUsersPriceOnDate(checkOptions));
             tasks.push(createFnSaveFarmerPrices(prices));
+            tasks.push(createFnSaveFarmerPricesCashTable(prices, checkOptions));
 
             async.series(tasks, function (err, results) {
                 console.log(startTime);

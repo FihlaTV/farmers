@@ -9,6 +9,7 @@ var crypto = require('crypto');
 //var PlantsHelper = require("../helpers/plants");
 //var ValidationHelper = require("../helpers/validation");
 
+
 var Admin = function (db) {
     'use strict';
 
@@ -81,8 +82,9 @@ var Admin = function (db) {
 
                 admin = new Admin({
                     login: CONST.DEFAULT_ADMIN.login,
-                    pass : pass,
-                    email: CONST.DEFAULT_ADMIN.email
+                    fullName: 'no name',
+                    pass: pass,
+                    email:  CONST.DEFAULT_ADMIN.email
                 });
 
                 if (!model) {
@@ -104,52 +106,22 @@ var Admin = function (db) {
             });
     }
 
-    this.login = function (req, res, next) {
-        var body = req.body;
-        var login = body.login;
-        var pass = body.pass;
-        //var shaSum = crypto.createHash('sha256');
-        //shaSum.update(pass);
-        //pass = shaSum.digest('hex');
-        if (!login) {
-            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
-        }
-        Admin
-            .findOne({login: login, pass: pass})
-            .exec(function (err, model) {
-                if (err) {
-                    return next(err);
-                }
-
-                if (!model) {
-                    return res.status(400).send({error: RESPONSE.AUTH.INVALID_CREDENTIALS});
-                }
-                req.session.loggedIn = true;
-                req.session.uId = model._id.toString();
-                req.session.type = 'Admin';
-
-                delete model.pass;
-                return res.status(200).send({data: model});
-            });
-    };
-
     this.signIn = function (req, res, next) {
         var body = req.body;
         var email = body.email;
+        var login = body.login;
         var pass = body.pass;
         var shaSum = crypto.createHash('sha256');
-        shaSum.update(pass);
-        pass = shaSum.digest('hex');
 
-        if (!body || !email || !pass) {
+        if (!body || !login || !pass) {
             return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
         }
 
-        email = email.toLowerCase();
-
-        if (!emailRegExp.test(email)) {
-            return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});
-        }
+        //email = email.toLowerCase();
+        //
+        //if (!emailRegExp.test(email)) {
+        //    return res.status(400).send({error: RESPONSE.NOT_VALID_EMAIL});
+        //}
 
         if (!passRegExp.test(pass)) {
             return res.status(400).send({error: RESPONSE.NOT_VALID_PASS});
@@ -159,7 +131,7 @@ var Admin = function (db) {
         pass = shaSum.digest('hex');
 
         Admin
-            .findOne({email: email, pass: pass})
+            .findOne({login: login, pass: pass})
             .exec(function (err, model) {
                 if (err) {
                     return next(err);
@@ -214,11 +186,27 @@ var Admin = function (db) {
             });
     };
 
-    this.changeForgotPassGetForm = function (req, res, next) {
-        var token = req.params.token;
-        var tokenRegExpstr = new RegExp('^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+    this.getUiProfile = function(req, res, next) {
 
-        if (token.length < 30 || !tokenRegExpstr.test(token)) {
+        Admin
+            .findOne()
+            .select('-_id login fullName')
+            .lean()
+            .exec(function (err, model) {
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: model});
+
+            });
+    };
+
+    this.changeForgotPassGetForm = function(req, res, next) {
+        var token = req.params.token;
+        var tokenRegExpStr = new RegExp( '^[' + CONST.ALPHABETICAL_FOR_TOKEN + ']+$');
+
+        if (token.length < 30 || !tokenRegExpStr.test(token)) {
             return res.status(404).send();
         }
 

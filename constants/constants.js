@@ -39,12 +39,12 @@ module.exports = {
         USER: 'User',
         MARKETEER: 'Marketeer',
         NOTIFICATION: 'Notification',
-        PLANT: 'Plant',
         PRICE: 'Price',
         MONTH_AVERAGE_PRICE: 'MonthAveragePrice',
         CROP: 'Crop',
         SESSION: 'Session',
         IMAGE: 'Image',
+        PRICES_CACHE_TABLE:'PricesCacheTable',
         //TODO it need  to detect and fix server crash when not JSON data received, and parse crash. Delete this in future
         PARSED_BODY: 'ParsedBody'
     },
