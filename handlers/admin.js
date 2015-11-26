@@ -132,6 +132,7 @@ var Admin = function (db) {
 
         Admin
             .findOne({login: login, pass: pass})
+            .lean()
             .exec(function (err, model) {
                 if (err) {
                     return next(err);
@@ -140,7 +141,7 @@ var Admin = function (db) {
                 if (!model) {
                     return res.status(400).send({error: RESPONSE.AUTH.INVALID_CREDENTIALS});
                 }
-                return session.register(req, res, model._id.toString(), 'Admin');
+                return session.adminRegister(req, res, model._id.toString(), 'Admin', model.login);
             });
     };
 
