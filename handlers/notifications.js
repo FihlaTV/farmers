@@ -49,8 +49,53 @@ var Notification = function (db) {
             });
     };
 
+    this.getMarketeerNotificationCount = function (req, res, next) {
+        Notification
+            .find({$or:[{"type": "changeMarketeer"}, {"type": "newMarketeer"} ]})
+            .count()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
 
+    this.getNewMarketeerNotificationCount = function (req, res, next) {
+        Notification
+            .find({"type": "newMarketeer"})
+            .count()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
 
+    this.getChangeMarketeerMarketeerNotificationCount = function (req, res, next) {
+        Notification
+            .find({"type": "changeMarketeer"})
+            .count()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
+
+    this.getNewCropNotificationCount = function (req, res, next) {
+        Notification
+            .find({"type": "newCrop"})
+            .count()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
 
 };
 
