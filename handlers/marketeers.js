@@ -112,6 +112,22 @@ var Marketeer = function (db) {
             });
     };
 
+    this.adminGetMarketeersList = function (req, res, next) {
+        Marketeer
+            .find()
+            .select('_id fullName location')
+            .lean()
+            .exec( function (err, results) {
+
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: results});
+            });
+    };
+
+
     this.adminAddNewMarketeer = function (req, res, next) {
         return res.status(500).send({error: 'NOT Implemented'});
     };

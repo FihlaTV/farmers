@@ -18,6 +18,7 @@ module.exports = function (db) {
     var marketeers = new MarketeerHandler(db);
     var session = new SessionHandler(db);
 
+
     router.route('/bySession')
 
     /**
@@ -115,6 +116,11 @@ module.exports = function (db) {
 
         .get(session.isAuthenticatedUser, marketeers.getMarketeerList);
 
+
+
+    router.route('/marketeersList')
+        .get(session.isAdmin, marketeers.adminGetMarketeersList);
+    
     router.post('/create', session.isAdmin, marketeers.adminCreateNewMarketeer);
     router.post('/merge', session.isAdmin, marketeers.adminMergeMarketeer);
     router.post('/add', session.isAdmin, marketeers.adminAddNewMarketeer);

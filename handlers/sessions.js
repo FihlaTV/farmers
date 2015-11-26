@@ -10,6 +10,13 @@ var Session = function (db) {
         res.status(200).send({success: RESPONSE.AUTH.LOG_IN});
     };
 
+    this.adminRegister = function (req, res, userId, userType, login) {
+        req.session.loggedIn = true;
+        req.session.uId = userId;
+        req.session.type = userType;
+        res.status(200).send({login: login });
+    };
+
     this.kill = function ( req, res, next ) {
         if(req.session) {
             req.session.destroy();
