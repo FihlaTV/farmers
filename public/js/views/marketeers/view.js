@@ -90,7 +90,6 @@ define([
                 marketeer.destroy({
                     success: function () {
                         self.marketeersCollection.remove(id);
-                        self.marketeersListView.removeMarketeerRow(id);
                     },
                     err    : function (err) {
                         alert(err);
@@ -105,6 +104,7 @@ define([
             var detailsView = new DetailsView();
 
             detailsView.onSave = function (data) {
+                var add = !!data.id;
                 var marketeersModel = data.id ? self.marketeersCollection.get(data.id) : modelsFactory.createMarketeer(data);
 
                 marketeersModel.save(data, {
@@ -135,12 +135,12 @@ define([
             this.marketeersListView.addMarketeerRow(args.model);
         },
 
-        marketeersCollectionModelRemoved: function (args) {
-            this.marketeersListView.removeMarketeerRow(args.model.id);
+        marketeersCollectionModelRemoved: function (model) {
+            this.marketeersListView.removeMarketeerRow(model.id);
         },
 
         marketeersCollectionChanged: function (args) {
-
+            alert(args);
         },
 
         //endregion
