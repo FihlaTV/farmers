@@ -1,0 +1,300 @@
+/*--------- COLOR'S VARIABLES ---------*/
+/***=== FONT COLORS ===***/
+/*--------- VARIABLES ---------*/
+/*--------- FUNCTIONS ---------*/
+/*--------- MIXINS ---------*/
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,cyrillic');
+html {
+  font-family: sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a {
+  background-color: transparent;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0;
+  padding: 0;
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+/*--------- VENDOR ---------*/
+html,
+body {
+  height: 100%;
+}
+/*--------- CONTAINER ---------*/
+/*--------- GRID ---------*/
+/*--------- MEDIA(RESPONSIVE) ---------*/
+/*--------- SEARCH ---------*/
+/*--------- HEADER ---------*/
+/*--------- NAVBARS ---------*/
+/*--------- CONTENT ---------*/
+/*--------- SIDEBARS ---------*/
+/*--------- FOOTER ---------*/
+/******** LOGIN ********/
+.wrapper {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-image: url("../img/background.png");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  height: 100%;
+  width: 100%;
+}
+.login {
+  min-width: 200px;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.login h2 {
+  margin: 0;
+  color: #fff;
+  text-shadow: 1px 1px #888;
+  font-size: 35px;
+}
+.login .loginForm fieldset {
+  display: block;
+  width: 180px;
+  border: 0;
+  margin: 0 auto;
+  padding: 0;
+}
+.login .loginForm fieldset label {
+  display: block;
+  margin-top: 15px;
+  color: #fff;
+  text-shadow: 1px 1px #888;
+  font-size: 17px;
+}
+.login .loginForm fieldset input:not([type="submit"]) {
+  margin-top: 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding-left: 12px;
+}
+.login .loginForm fieldset input:not([type="submit"]):focus,
+.login .loginForm fieldset input:not([type="submit"]):hover {
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+}
+.login .loginForm fieldset input[type="submit"] {
+  border: 1px solid rgba(52, 152, 219, 0.9);
+  background-color: rgba(52, 152, 219, 0.7);
+  color: #fff;
+  margin-top: 20px;
+}
+.login .loginForm fieldset input[type="submit"]:focus,
+.login .loginForm fieldset input[type="submit"]:hover {
+  outline: 0;
+  border: 1px solid rgba(52, 152, 219, 0.9);
+  border-radius: 12px;
+}
+.input {
+  display: block;
+  width: 100%;
+  height: 35px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  outline: 0;
+}
+.forgotPassword {
+  border: 1px solid rgba(52, 152, 219, 0.9);
+  background-color: rgba(52, 152, 219, 0.7);
+  color: #fff;
+  margin-top: 20px;
+  line-height: 33px;
+}
+::-webkit-input-placeholder {
+  color: rgba(52, 152, 219, 0.9);
+}
+::-moz-placeholder {
+  color: rgba(52, 152, 219, 0.9);
+}
+/* Firefox 19+ */
+:-moz-placeholder {
+  color: rgba(52, 152, 219, 0.9);
+}
+/* Firefox 18- */
+:-ms-input-placeholder {
+  color: rgba(52, 152, 219, 0.9);
+}
+/*--------- STATE ---------*/

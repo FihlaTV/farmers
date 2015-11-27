@@ -1,0 +1,91 @@
+/******** LOGIN ********/
+.wrapper{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-image: url("../img/background.png");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  height: 100%;
+  width: 100%;
+}
+.login{
+  min-width: 200px;
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);&
+  h2{
+    margin: 0;
+    color: @fontWhite;
+    text-shadow: 1px 1px @gray;
+    font-size: 35px;
+  }
+  .loginForm {
+    fieldset {
+      display: block;
+      width: 180px;
+      border: 0;
+      margin: 0 auto;
+      padding: 0;
+      label {
+        display: block;
+        margin-top: 15px;
+        color: @fontWhite;
+        text-shadow: 1px 1px @gray;
+        font-size: 17px;
+      }
+      input:not([type="submit"]) {
+        margin-top: 15px;
+        background-color: @transparentWhite;
+        border: 1px solid @transparentBorder;
+        padding-left: 12px;
+        &:focus, &:hover{
+          outline: 0;
+          border: 1px solid @transparentBorder;
+          border-radius: 12px;
+        }
+      }
+      input[type="submit"] {
+        border: 1px solid @transparentDarkBlue;
+        background-color: @transparentBlue;
+        color: @fontWhite;
+        margin-top: 20px;
+        &:focus, &:hover{
+          outline: 0;
+          border: 1px solid @transparentDarkBlue;
+          border-radius: 12px;
+        }
+      }
+    }
+  }
+}
+.input{
+  display: block;
+  width: 100%;
+  height: 35px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  outline: 0;
+}
+.forgotPassword{
+  border: 1px solid @transparentDarkBlue;
+  background-color: @transparentBlue;
+  color: @fontWhite;
+  margin-top: 20px;
+  line-height: 33px;
+}
+
+::-webkit-input-placeholder {color:@transparentDarkBlue;}
+::-moz-placeholder          {color:@transparentDarkBlue;}/* Firefox 19+ */
+:-moz-placeholder           {color:@transparentDarkBlue;}/* Firefox 18- */
+:-ms-input-placeholder      {color:@transparentDarkBlue;}
