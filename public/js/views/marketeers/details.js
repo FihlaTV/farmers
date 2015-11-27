@@ -34,14 +34,16 @@ define(['text!templates/marketeers/detailsTemplate.html'],
                 e.preventDefault();
 
                 var $el = this.$el;
-                var name = $el.find('name').val();
-                var location = $el.find('location').val();
 
-                this.onSave({name: name, location: location});
+                var name = $el.find('#name').val();
+                var location = $el.find('#location').val();
+
+                this.onSave({name: name, location: location, id: this.id});
             },
 
             render: function (options) {
                 var model = options.jsonModel || {};
+
                 var title = options.title;
                 var readonly = options.readonly || {};
                 var formString = this.template({
@@ -50,6 +52,7 @@ define(['text!templates/marketeers/detailsTemplate.html'],
                     title   : title
                 });
 
+                this.id = model._id;
                 this.$el.html(formString);
                 this.$el.addClass('dialog');
 

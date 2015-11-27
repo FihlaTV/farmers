@@ -4,8 +4,9 @@ define([
     'models/modelsFactory',
     'views/marketeers/list',
     'views/marketeers/activityList',
-    'views/marketeers/details'
-], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView) {
+    'views/marketeers/details',
+    'views/search/tableSearchView'
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView) {
     var View = Backbone.View.extend({
         //region Initialization
 
@@ -56,16 +57,26 @@ define([
         initializeMarketeersListAndCollection: function (collectionData) {
             var self = this;
 
+            collectionData = collectionData || this.marketeersCollection.toJSON();
+
             this.marketeersCollection.on('reset', this.marketeersCollectionReseted, this);
             this.marketeersCollection.on('add', this.marketeersCollectionModelAdded, this);
             this.marketeersCollection.on('remove', this.marketeersCollectionModelRemoved, this);
             this.marketeersCollection.on('change', this.marketeersCollectionChanged, this);
 
-            this.marketeersListView.render(collectionData ? collectionData : this.marketeersCollection.toJSON());
+            this.marketeersListView.render(collectionData);
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
                 self.openMarketeersDetailsDialog({jsonModel: marketeer.toJSON(), title: 'Edit Marketeer'});
+            };
+
+            this.marketeersSearch = new TableSearchView({
+                el       : '#marketeersSearchContainer',
+                dataArray: this.marketeersCollection.toJSON()
+            });
+            this.marketeersSearch.onSearchChanged = function (args) {
+                self.marketeersListView.hideRows(args.jquerySearchStringToHide);
             };
 
             this.marketeersListView.onDeleteMarketeer = function (args) {
@@ -92,7 +103,7 @@ define([
             detailsView.onSave = function (data) {
                 var marketeersModel = data.id ? self.marketeersCollection.get(data.id) : modelsFactory.createMarketeer(data);
 
-                marketeersModel.save({
+                marketeersModel.save(data, {
                     wait   : true,
                     success: function (data) {
                         marketeersModel.id = data.id;
@@ -136,7 +147,7 @@ define([
             var data;
             var self = this;
             this.$el.html(this.template());
-            this.marketeersListView = new MarketeersListView({el: '#marketeers'});
+            this.marketeersListView = new MarketeersListView({el: '#marketeersTable'});
             this.marketeersCollection.fetch({
                 success: function (data) {
                     self.initializeMarketeersListAndCollection(data.toJSON());
