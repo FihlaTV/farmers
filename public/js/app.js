@@ -1,7 +1,3 @@
-/**
- * Created by eriy on 08.05.2015.
- */
-
 define([
     'router',
     'communication',
@@ -19,9 +15,7 @@ define([
 
         Backbone.history.start({silent: true});
 
-        Communication.checkLogin(function(err, data){
-            Custom.runApplication(err, data);
-        });
+        Communication.checkLogin(Custom.runApplication);
 
     };
     return {
