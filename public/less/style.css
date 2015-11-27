@@ -190,6 +190,9 @@ html,
 body {
   height: 100%;
 }
+ul {
+  margin: 0;
+}
 .error {
   color: #F44336;
   background: rgba(255, 255, 255, 0.4);
