@@ -10,6 +10,7 @@
 var express = require('express');
 var router = express.Router();
 var UserHandler = require('../handlers/users');
+var mongoose = require('mongoose');
 var SessionHandler = require('../handlers/sessions');
 
 module.exports = function (db) {
@@ -17,6 +18,8 @@ module.exports = function (db) {
 
     var users = new UserHandler(db);
     var session = new SessionHandler(db);
+    var ObjectId = mongoose.Types.ObjectId;
+
 
     /**
      * This __method__ for user registration in App
@@ -343,7 +346,7 @@ module.exports = function (db) {
      */
 
     router.get('/profile', session.isAuthenticatedUser, users.getUserProfileBySession);
-    router.put('/profile', session.isAuthenticatedUser, users.updateUserProfileBySession);
+    //router.put('/profile', session.isAuthenticatedUser, users.updateUserProfileBySession);
 
 
     /**
@@ -372,7 +375,7 @@ module.exports = function (db) {
     //TODO delete route after tests complete
     //TODO Warning only for testers! Check this end Delete
 
-    router.delete('/dellAccountByEmail/:email', users.dellAccountByEmail);
+    //router.delete('/dellAccountByEmail/:email', users.dellAccountByEmail);
     /**
      * This __method__  for Developer or Tester to delete account by email and make logOut for kill session
      *
@@ -393,6 +396,10 @@ module.exports = function (db) {
      * @memberOf users
      */
     router.delete('/dellAccountBySession', users.dellAccountBySession);
+
+    router.put('/blockChangeMarketeer/:id',session.isAdmin, users.blockChangeMarketeer);
+    router.put('/setMarketeer/:id',session.isAdmin, users.setMarketeer);
+
 
     return router;
 };

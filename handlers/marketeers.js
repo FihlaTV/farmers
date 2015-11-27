@@ -90,29 +90,6 @@ var Marketeer = function (db) {
             });
     }
 
-
-
-    this.adminCreateNewMarketeer = function (req, res, next) {
-        var fullName = req.body.fullName;
-        var location = req.body.location;
-        var logo = req.body.logo;
-        var data = {
-            fullName: fullName,
-            location: location
-        };
-        var marketeer = new Marketeer(data);
-
-        marketeer
-            .save(function (err, model) {
-
-                if (err) {
-                    return res.status(500).send({error: err});
-                }
-
-                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
-            });
-    };
-
     this.adminGetMarketeersList = function (req, res, next) {
         Marketeer
             .find()
@@ -219,13 +196,7 @@ var Marketeer = function (db) {
     //};
 
 
-    this.adminAddNewMarketeer = function (req, res, next) {
-        return res.status(500).send({error: 'NOT Implemented'});
-    };
 
-    this.adminMergeMarketeer = function (req, res, next) {
-        return res.status(500).send({error: 'NOT Implemented'});
-    };
 
     this.adminImportFromCsv = function (req, res, next) {
         var csvFileName =  CONST.CSV_FILES.MARKETEER;
