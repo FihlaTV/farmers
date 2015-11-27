@@ -7,11 +7,10 @@ define([
     appRouter = Backbone.Router.extend({
 
         routes: {
-            "login": "login",
-
+            "login"     : "login",
             "cropList"  : "cropList",
             "marketeers": "goToMarketeers",
-            "*any"      : "any"
+            "logout"    : "logout"
         },
 
         initialize: function () {
@@ -31,7 +30,12 @@ define([
         },
 
         goToMarketeers: function () {
-            this.setView(['views/marketeers/view', 'views/menu/leftMenu'])
+            if (App.authorized) {
+                this.setView(['views/marketeers/view', 'views/menu/leftMenu'])
+            }
+            else {
+                Backbone.history.navigate('login', {trigger: true});
+            }
         },
 
         any: function () {
@@ -39,7 +43,21 @@ define([
         },
 
         login: function () {
-            this.setView(['views/login/loginView'])
+            if (App.authorized) {
+                Backbone.history.navigate('marketeers', {trigger: true});
+            } else {
+                this.setView(['views/login/loginView'])
+            }
+        },
+
+        logout: function () {
+            $.post('/admin/signOut', function (data, status) {
+                if (data.success) {
+                    Backbone.history.navigate('login', {trigger: true});
+                } else {
+                    alert(data.error);
+                }
+            })
         }
 
     });
