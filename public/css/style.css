@@ -3,6 +3,8 @@
 /***** ===== MATERIAL COLORS ===== *****/
 /***=== FONT COLORS ===***/
 /***** ===== LOGIN ===== *****/
+/***** ===== BUTTONS ===== *****/
+/***** ===== NAVIGATION ===== *****/
 /*--------- VARIABLES ---------*/
 /*--------- FUNCTIONS ---------*/
 /*--------- MIXINS ---------*/
@@ -192,6 +194,8 @@ body {
 }
 ul {
   margin: 0;
+  list-style-type: none;
+  padding: 0;
 }
 .error {
   color: #f44336;
@@ -205,9 +209,55 @@ ul {
 /*--------- CONTAINER ---------*/
 /*--------- GRID ---------*/
 /*--------- MEDIA(RESPONSIVE) ---------*/
+.menuBtn {
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: rgba(0, 121, 107, 0.47);
+  border: 2px solid #546d57;
+  border-right: 0;
+  border-left: 0;
+  padding: 20px 0;
+  width: 100%;
+  outline: 0;
+  box-sizing: border-box;
+}
+.menuBtn:hover,
+.menuBtn:active,
+.menuBtn:focus {
+  background-color: #009688;
+}
+.logOut {
+  position: absolute;
+  bottom: 0;
+}
 /*--------- SEARCH ---------*/
 /*--------- HEADER ---------*/
 /*--------- NAVBARS ---------*/
+.farmersLogo {
+  padding: 20px;
+  display: block;
+  font-size: 25px;
+  background-color: #546d57;
+  color: #fff;
+  text-shadow: 1px 1px #584C4C;
+  margin: -5px 0;
+}
+.leftMenuHolder {
+  height: 100%;
+  width: 200px;
+  float: left;
+  border-right: 2px solid #546d57;
+  position: relative;
+  background-color: rgba(185, 214, 171, 0.32);
+}
+.leftMenuHolder ul {
+  height: 100%;
+}
+.leftMenuHolder ul li {
+  margin: 5px 0;
+  text-align: center;
+}
 /*--------- CONTENT ---------*/
 /*--------- SIDEBARS ---------*/
 /*--------- FOOTER ---------*/
@@ -312,5 +362,12 @@ ul {
 /* Firefox 18- */
 :-ms-input-placeholder {
   color: rgba(52, 152, 219, 0.7);
+}
+/****/
+#mainHolder {
+  height: 100%;
+}
+.contentHolder {
+  height: 100%;
 }
 /*--------- STATE ---------*/
