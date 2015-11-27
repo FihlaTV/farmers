@@ -15,6 +15,7 @@ var Marketeer = function (db) {
     var Marketeer = db.model(CONST.MODELS.MARKETEER);
     var Notification = db.model(CONST.MODELS.NOTIFICATION);
     var User = db.model(CONST.MODELS.USER);
+    var ObjectId = mongoose.Types.ObjectId;
     var session = new SessionHandler(db);
     var UserId = null;
     var inputMarketeerName = null;
@@ -71,8 +72,8 @@ var Marketeer = function (db) {
                 }
 
                 if (marketeerStatus.isNewMarketeer){
-                   //TODO
-                   // mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User ' + userProfile.fullName +' add marketeer that is not in Marketeers list. Added name:  ' + inputMarketeerName);
+                    //TODO
+                    // mailer.sendEmailNotificationToAdmin('4Farmers. User add new marketeer ', 'Hello. User ' + userProfile.fullName +' add marketeer that is not in Marketeers list. Added name:  ' + inputMarketeerName);
                 } else {
                     //TODO
                     //mailer.sendEmailNotificationToAdmin('4Farmers. User change marketeer ', 'Hello. User ' + userProfile.fullName +' change marketeer. New name:  ' + inputMarketeerName);
@@ -126,6 +127,96 @@ var Marketeer = function (db) {
                 return res.status(200).send({data: results});
             });
     };
+
+    this.adminCreateMarketeer = function (req, res, next) {
+        var newMarketeer = req.body;
+        var marketeer;
+
+        if (!newMarketeer || !newMarketeer.fullName || !newMarketeer.location ){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        marketeer = new Marketeer(newMarketeer);
+        marketeer.save(function(err){
+            if (err) {
+                return res.status(500).send({error: err});
+            }
+
+            return res.status(200).send({data: {_id: marketeer._id, fullName :  marketeer.fullName, location :  marketeer.location }});
+        });
+    };
+
+    this.adminUpdateMarketeer = function (req, res, next) {
+
+        var marketeerId = req.params.id;
+        var newMarketeerData = req.body;
+
+        newMarketeerData.updatedAt = new Date();
+
+        if (!newMarketeerData || !newMarketeerData.fullName || !newMarketeerData.location || !ObjectId.isValid(marketeerId)){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        Marketeer
+            .findByIdAndUpdate(marketeerId,newMarketeerData, { new: true })
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: {_id: result._id, fullName :  result.fullName, location :  result.location }});
+            });
+    };
+
+    this.adminDeleteMarketeer = function (req, res, next) {
+
+        var marketeerId = req.params.id;
+        if ( !ObjectId.isValid(marketeerId)){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        Marketeer
+            .findByIdAndRemove(marketeerId)
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS });
+            });
+    };
+
+
+    //this.adminUpdateMarketeersList = function (req, res, next) {
+    //    var marketeerList = req.body.marketeerList;
+    //    var marketeer;
+    //
+    //    if (!marketeerList || !marketeerList.length){
+    //        return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+    //    }
+    //
+    //    async.each(marketeerList, function (item, callback) {
+    //
+    //        if (item._id) {
+    //    //             Marketeer
+    //                 .findOneAndUpdate({_id: item._id}, item, {upsert: true})
+    //                 .exec(callback)
+    //
+    //         } else {
+    //
+    //            marketeer = new Marketeer (item);
+    //
+    //            marketeer
+    //                .save(callback)
+    //        }
+    //
+    //    }, function (err) {
+    //        if (err) {
+    //            return res.status(500).send({error: err});
+    //        }
+    //        return res.status(200).send({data: RESPONSE.ON_ACTION.SUCCESS});
+    //    });
+    //};
 
 
     this.adminAddNewMarketeer = function (req, res, next) {
