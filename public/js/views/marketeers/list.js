@@ -43,6 +43,10 @@ define([
                 this.$el.find('#' + marketeerId).remove();
             },
 
+            toggleRows:function(selector){
+                this.$el.find(selector).toggle();
+            },
+
             render: function (data) {
                 this.$el.html(this.template({collection: data}))
             }

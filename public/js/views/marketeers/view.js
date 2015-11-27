@@ -76,8 +76,9 @@ define([
                 dataArray: this.marketeersCollection.toJSON()
             });
             this.marketeersSearch.onSearchChanged = function (args) {
-                self.marketeersListView.hideRows(args.jquerySearchStringToHide);
+                self.marketeersListView.toggleRows(args.jquerySearchStringToHide);
             };
+            this.marketeersSearch.render();
 
             this.marketeersListView.onDeleteMarketeer = function (args) {
                 var id = args.id;
