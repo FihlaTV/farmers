@@ -406,7 +406,7 @@ var Price = function (db) {
 
                     for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
                         if (receivedPriceArray[k]._marketeer) {
-                            tempName = marketeerList[(receivedPriceArray[k]._marketeer).toString()].fullName;
+                            tempName = marketeerList[(receivedPriceArray[k]._marketeer).toString()] ? marketeerList[(receivedPriceArray[k]._marketeer).toString()].fullName : null;
                             more.push(
                                 {
                                     price: receivedPriceArray[k].price,
@@ -596,7 +596,7 @@ var Price = function (db) {
 
                 for (var k = receivedPriceArray.length - 1; k >= 0; k--) {
                     if (receivedPriceArray[k]._marketeer) {
-                        tempName = marketeerList[(receivedPriceArray[k]._marketeer).toString()].fullName;
+                        tempName = marketeerList[(receivedPriceArray[k]._marketeer).toString()] ? marketeerList[(receivedPriceArray[k]._marketeer).toString()] .fullName : null;
                         more.push(
                             {
                                 price: receivedPriceArray[k].price,
@@ -816,8 +816,8 @@ var Price = function (db) {
 
 
                         marketeersPrices.push({
-                            name: marketeerList[(receivedPriceArray[i]._marketeer).toString()].fullName,
-                            location: marketeerList[(receivedPriceArray[i]._marketeer).toString()].location,
+                            name: marketeerList[(receivedPriceArray[i]._marketeer).toString()] ? marketeerList[(receivedPriceArray[i]._marketeer).toString()].fullName : null,
+                            location: marketeerList[(receivedPriceArray[i]._marketeer).toString()] ? marketeerList[(receivedPriceArray[i]._marketeer).toString()].location : null,
                             price: more[0].price,
                             data: receivedPrices[j]._id,
                             quality: more[0].quality,

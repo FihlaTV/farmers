@@ -126,9 +126,6 @@ module.exports = function (db) {
         .post(session.isAdmin, marketeers.adminCreateMarketeer);
 
 
-    router.post('/create', session.isAdmin, marketeers.adminCreateNewMarketeer);
-    router.post('/merge', session.isAdmin, marketeers.adminMergeMarketeer);
-    router.post('/add', session.isAdmin, marketeers.adminAddNewMarketeer);
 
     //import "marketeers.csv" from /csv/ folder... TODO it on new server
     router.get('/import', marketeers.adminImportFromCsv);
