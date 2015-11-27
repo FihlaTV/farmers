@@ -9,7 +9,7 @@ define(['text!templates/search/searchTemplate.html'], function (template) {
 
         initialize: function (options) {
             this.initialCollection = this.createSearchCollection(options.dataArray);
-            this.collection=[].concat(this.initialCollection);
+            this.collection = [].concat(this.initialCollection);
             this.previousCollection = [];
         },
 
@@ -35,62 +35,48 @@ define(['text!templates/search/searchTemplate.html'], function (template) {
             return collection;
         },
 
-
-
         searchInputKeyUp: function (e) {
             var arrayElement;
             var i;
-            var searchedElements;
+            var searchedElements = '';
             var resultCollection;
             var searchCollection;
-            var hideValues;
             var value = $(e.target).val();
             var prevValue = this.value;
             if (value === prevValue) {
                 return;
             }
 
-            if (value.isSubstringOf(prevValue)){
-                searchCollection=this.previousCollection;
-                resultCollection=this.collection;
+            if (value.isSubstringOf(prevValue)) {
+                searchCollection = this.previousCollection;
+                resultCollection = this.collection;
             }
-            else if (prevValue.isSubstringOf(value)){
-                searchCollection=this.collection;
-                resultCollection=this.previousCollection;
-            } else{
-                this.collection=[].concat(this.initialCollection);
-                searchCollection=this.collection;
+            else if (prevValue.isSubstringOf(value)) {
+                searchCollection = this.collection;
+                resultCollection = this.previousCollection;
+            } else {
+                this.collection = [].concat(this.initialCollection);
+                searchCollection = this.collection;
 
-                for (i =this.previousCollection.length;i--;){
-                    searchedElements+=', #'+this.previousCollection[i].id;
-                }
-                this.previousCollection=[];
+                this.onSearchChanged({reset:true});
+                this.previousCollection = [];
 
-                resultCollection=[];
+                resultCollection = this.previousCollection;
             }
-
-
 
             this.value = value;
-
-            hideValues = this.length < value.length;
-
-            searchCollection = hideValues ? this.collection : this.previousCollection;
-            resultCollection = hideValues ? this.previousCollection : this.collection;
-            searchedElements = '';
             this.length = value.length;
 
-            for (var i = searchCollection.length; i--;) {
+            for (i = searchCollection.length; i--;) {
                 if (!searchCollection[i].search.contains(value)) {
                     arrayElement = searchCollection.splice(i, 1)[0];
-                    searchedElements += (', #' + arrayElement.id);
+                    searchedElements += (', tr#' + arrayElement.id);
                     resultCollection.push(arrayElement);
                 }
             }
 
             this.onSearchChanged({
-                jquerySearchStringToHide: searchedElements.substring(2),
-                searchLength            : value.length
+                selector: searchedElements.substring(2)
             });
 
         },

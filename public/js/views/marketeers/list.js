@@ -43,6 +43,10 @@ define([
                 this.$el.find('#' + marketeerId).remove();
             },
 
+            showAllRows:function(){
+                this.$el.find('tr').show();
+            },
+
             toggleRows:function(selector){
                 this.$el.find(selector).toggle();
             },
