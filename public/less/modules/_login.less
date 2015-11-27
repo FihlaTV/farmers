@@ -33,7 +33,7 @@
   .loginForm {
     fieldset {
       display: block;
-      width: 180px;
+      width: 220px;
       border: 0;
       margin: 0 auto;
       padding: 0;
@@ -49,6 +49,7 @@
         background-color: @transparentWhite;
         border: 1px solid @transparentBorder;
         padding-left: 12px;
+        color: @loginInput;
         &:focus, &:hover{
           outline: 0;
           border: 1px solid @transparentBorder;
@@ -86,7 +87,7 @@
   text-decoration: none;
 }
 
-::-webkit-input-placeholder {color:@transparentDarkBlue;}
-::-moz-placeholder          {color:@transparentDarkBlue;}/* Firefox 19+ */
-:-moz-placeholder           {color:@transparentDarkBlue;}/* Firefox 18- */
-:-ms-input-placeholder      {color:@transparentDarkBlue;}
+::-webkit-input-placeholder {color:@placeholderColor;}
+::-moz-placeholder          {color:@placeholderColor;}/* Firefox 19+ */
+:-moz-placeholder           {color:@placeholderColor;}/* Firefox 18- */
+:-ms-input-placeholder      {color:@placeholderColor;}
