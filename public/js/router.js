@@ -43,6 +43,7 @@ define([
         },
 
         login: function () {
+
             if (App.authorized) {
                 Backbone.history.navigate('marketeers', {trigger: true});
             } else {
@@ -53,6 +54,8 @@ define([
         logout: function () {
             $.post('/admin/signOut', function (data, status) {
                 if (data.success) {
+                    App.authorized = false;
+                    delete App.currentUser;
                     Backbone.history.navigate('login', {trigger: true});
                 } else {
                     alert(data.error);

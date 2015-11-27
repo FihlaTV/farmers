@@ -28,12 +28,14 @@ define([
                 },
                 success : function (response) {
                     App.authorized = true;
-                    App.currentUser = response.data;
+                    App.currentUser = response;
                     Backbone.history.navigate('marketeers', {trigger: true});
                 },
                 error   : function (err) {
                     App.authorized = false;
                     errorHolder.text(err.responseText);
+                    errorHolder.addClass('error');
+
                 }
             });
 
