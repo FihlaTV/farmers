@@ -4,12 +4,14 @@ var _ = require('lodash');
 var csv = require('csv');
 var fs = require('fs');
 var async = require('async');
+var mongoose = require('mongoose');
 
 var Crop = function (db) {
     'use strict';
 
     var Crop = db.model(CONST.MODELS.CROP);
-    var  cropListMerged = [];
+    var ObjectId = mongoose.Types.ObjectId;
+    var cropListMerged = [];
 
     this.getMergedCropList = function (req, res, next) {
         Crop
@@ -44,6 +46,81 @@ var Crop = function (db) {
                     console.log('cropListMerged.length: ', cropListMerged.length);
                     res.status(200).send(cropListMerged);
                 }
+            });
+    };
+
+    this.adminGetCropList = function (req, res, next) {
+        Crop
+            .find({})
+            .sort({'displayName': 1})
+            .select('_id englishName displayName plantCouncilName pcQuality wholeSaleName wsQuality imported image createdAt updatedAt')
+            .lean()
+            .exec(function (err, docs) {
+                if (err) {
+                    return next(err);
+                } else {
+                    res.status(200).send(docs);
+                }
+            });
+    };
+
+    this.adminUpdateCrop = function (req, res, next) {
+
+        var cropId = req.params.id;
+        var cropData = req.body;
+
+        cropData.updatedAt = new Date();
+
+        if (!cropData || !ObjectId.isValid(cropId)){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        Crop
+            .findByIdAndUpdate(cropId, cropData, { new: true })
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: result});
+            });
+    };
+
+    this.adminCreateCrop = function (req, res, next) {
+
+        var cropData = req.body;
+        var crop;
+
+        if (!cropData || !cropData.displayName || !cropData.englishName || !cropData.image){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        crop = new Crop(cropData);
+        crop
+            .save(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({data: result});
+            });
+    };
+
+    this.adminDeleteCrop = function (req, res, next) {
+
+        var cropId = req.params.id;
+        if ( !ObjectId.isValid(cropId)){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        Crop
+            .findByIdAndRemove(cropId)
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS });
             });
     };
 

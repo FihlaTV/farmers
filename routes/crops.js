@@ -85,6 +85,16 @@ module.exports = function(db){
 
     //router.get('/prices', plants.getPlantsWithPrices);
 
+
+    router.route('/cropList')
+        .get(session.isAdmin, crops.adminGetCropList)
+        .post(session.isAdmin, crops.adminCreateCrop);
+
+    router.route('/cropList/:id')
+        .put(session.isAdmin, crops.adminUpdateCrop)
+        .delete(session.isAdmin, crops.adminDeleteCrop);
+
+
     //import "cropList.csv" from /csv/ folder... TODO it on new server
     //router.get('/import', session.isAdmin, crops.adminImportFromCsv);
     router.get('/import', crops.adminImportFromCsv);

@@ -11,6 +11,7 @@ var User = function (db) {
 
     var User = db.model('User');
     var mongoose = require('mongoose');
+    var ObjectId = mongoose.Types.ObjectId;
     var async = require('async');
     var path = require('path');
     var mailer = require('../helpers/mailer');
@@ -427,7 +428,6 @@ var User = function (db) {
                 });
         };
 
-
     this.getFavoritesCrops = function ( req, res, next ) {
         var userId = req.session.uId;
 
@@ -671,20 +671,46 @@ var User = function (db) {
 
         //TODO save icon img type, in filename
 
-        require("fs").writeFile(newPath, base64Data, 'base64', function(err) {
+        require("fs").writeFile(newPath, base64Data, 'base64', function (err) {
             console.log(err);
         });
 
         return res.status(200).send({succes: RESPONSE.ON_ACTION.SUCCESS});
+    };
 
-        //getUserById(userId, function (err, profile) {
-        //    profile = profile.toJSON();
-        //
-        //    if (err) {
-        //        return next(err);
-        //    }
-        //    return res.status(200).send(profile);
-        //});
+        this.blockChangeMarketeer = function (req, res, next ) {
+            var userId = req.params.id;
+
+            if (!ObjectId.isValid(userId)) {
+                return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+            }
+
+            User
+                .findByIdAndUpdate(userId, {canChangeMarketeer: false}, { new: true })
+                .exec(function(err, result){
+                    if (err) {
+                        return res.status(500).send({error: err});
+                    }
+                    return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+                });
+    };
+
+    this.setMarketeer = function (req, res, next ) {
+        var userId = req.params.id;
+        var marketeerId = req.body.marketeerId;
+
+        if (!ObjectId.isValid(userId) || !ObjectId.isValid(marketeerId) ) {
+            return res.status(400).send({error: RESPONSE.NOT_ENOUGH_PARAMS});
+        }
+
+        User
+            .findByIdAndUpdate(userId, { marketeer: ObjectId(marketeerId), newMarketeer: false}, { new: true })
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS});
+            });
     };
 };
 
