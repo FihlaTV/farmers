@@ -117,10 +117,15 @@ module.exports = function (db) {
         .get(session.isAuthenticatedUser, marketeers.getMarketeerList);
 
 
+    router.route('/marketeersList/:id')
+        .put(session.isAdmin, marketeers.adminUpdateMarketeer)
+        .delete(session.isAdmin, marketeers.adminDeleteMarketeer);
 
     router.route('/marketeersList')
-        .get(session.isAdmin, marketeers.adminGetMarketeersList);
-    
+        .get(session.isAdmin, marketeers.adminGetMarketeersList)
+        .post(session.isAdmin, marketeers.adminCreateMarketeer);
+
+
     router.post('/create', session.isAdmin, marketeers.adminCreateNewMarketeer);
     router.post('/merge', session.isAdmin, marketeers.adminMergeMarketeer);
     router.post('/add', session.isAdmin, marketeers.adminAddNewMarketeer);

@@ -8,9 +8,9 @@ module.exports = function (db) {
     var ObjectId = mongoose.Schema.Types.ObjectId;
 
     var Marketeer = new Schema({
-        fullName: String,
+        fullName: {type: String, index: { unique: true }},
         location: String,
-        mergeNames: [],
+        //mergeNames: [],
         logo: String,
         createdAt: {type: Date, default: Date.now},
         updatedAt: {type: Date, default: Date.now}
