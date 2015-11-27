@@ -1,0 +1,13 @@
+/*--------- VENDOR ---------*/
+html,
+body {
+  height: 100%;
+}
+#errorHolder {
+  color: red;
+  background: rgba(255, 255, 255, 0.55);
+  display: block;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 5px;
+}
