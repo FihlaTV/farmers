@@ -39,39 +39,20 @@ define(['text!templates/search/searchTemplate.html'], function (template) {
             var arrayElement;
             var i;
             var searchedElements = '';
-            var resultCollection;
-            var searchCollection;
+            var searchCollection=this.collection;
             var value = $(e.target).val();
             var prevValue = this.value;
+
             if (value === prevValue) {
                 return;
             }
 
-            if (value.isSubstringOf(prevValue)) {
-                searchCollection = this.previousCollection;
-                resultCollection = this.collection;
-            }
-            else if (prevValue.isSubstringOf(value)) {
-                searchCollection = this.collection;
-                resultCollection = this.previousCollection;
-            } else {
-                this.collection = [].concat(this.initialCollection);
-                searchCollection = this.collection;
-
-                this.onSearchChanged({reset:true});
-                this.previousCollection = [];
-
-                resultCollection = this.previousCollection;
-            }
-
             this.value = value;
-            this.length = value.length;
 
             for (i = searchCollection.length; i--;) {
                 if (!searchCollection[i].search.contains(value)) {
-                    arrayElement = searchCollection.splice(i, 1)[0];
+                    arrayElement = searchCollection[i];
                     searchedElements += (', tr#' + arrayElement.id);
-                    resultCollection.push(arrayElement);
                 }
             }
 

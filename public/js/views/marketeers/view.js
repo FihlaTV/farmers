@@ -76,11 +76,10 @@ define([
                 dataArray: this.marketeersCollection.toJSON()
             });
             this.marketeersSearch.onSearchChanged = function (args) {
-                if (args.reset) {
-                    self.marketeersListView.showAllRows();
-                } else {
-                    self.marketeersListView.toggleRows(args.selector);
-                }
+
+                self.marketeersListView.showAllRows();
+                self.marketeersListView.hideRows(args.selector);
+
             };
             this.marketeersSearch.render();
 

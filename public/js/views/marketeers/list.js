@@ -47,8 +47,8 @@ define([
                 this.$el.find('tr').show();
             },
 
-            toggleRows:function(selector){
-                this.$el.find(selector).toggle();
+           hideRows:function(selector){
+                this.$el.find(selector).hide();
             },
 
             render: function (data) {
