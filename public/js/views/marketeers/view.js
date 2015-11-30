@@ -3,13 +3,12 @@ define([
     'collections/collectionsFactory',
     'models/modelsFactory',
     'views/marketeers/list',
-    'views/marketeers/activityList',
     'views/marketeers/details',
     'views/search/tableSearchView',
     'views/marketeers/addedMarketeers',
     'views/marketeers/changedMarketeers'
 
-], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView, AddedMarketeersView, ChangedMarketeersView) {
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, DetailsView, TableSearchView, AddedMarketeersView, ChangedMarketeersView) {
     var View = Backbone.View.extend({
         //region Initialization
 
