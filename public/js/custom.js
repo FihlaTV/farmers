@@ -13,7 +13,7 @@ define([], function () {
 
         if (!err) {
             App.authorized = true;
-            App.currentUser = data;
+            App.currentUser = data.data;
             return Backbone.history.navigate(url, {trigger: true});
         } else {
             App.authorized = false;

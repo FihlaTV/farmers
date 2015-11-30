@@ -1,6 +1,8 @@
 var CONST = require('../constants/constants');
+var RESPONSE = require('../constants/response');
 var _ = require('lodash');
 var csv = require('csv');
+var mongoose = require('mongoose');
 var fs = require('fs');
 var async = require('async');
 
@@ -9,6 +11,7 @@ var Notification = function (db) {
     'use strict';
 
     var Notification = db.model(CONST.MODELS.NOTIFICATION);
+    var ObjectId = mongoose.Types.ObjectId;
     var mergedNewCrops = [];
 
 
@@ -73,6 +76,34 @@ var Notification = function (db) {
             });
     };
 
+    this.getNewMarketeerNotification = function (req, res, next) {
+        Notification
+            .find({"type": "newMarketeer"})
+            .populate({path: 'user', select: '_id fullName email'})
+            //.select('_id user marketeerName type ')
+            .lean()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
+
+    this.getChangeMarketeerMarketeerNotification = function (req, res, next) {
+        Notification
+            .find({"type": "changeMarketeer"})
+            .populate({path: 'user', select: '_id fullName email'})
+            .lean()
+            .exec(function (err, results) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).send({data: results});
+            });
+    };
+
+
     this.getChangeMarketeerMarketeerNotificationCount = function (req, res, next) {
         Notification
             .find({"type": "changeMarketeer"})
@@ -97,6 +128,21 @@ var Notification = function (db) {
             });
     };
 
+    this.deleteNotification = function (req, res, next) {
+        var notificationId = req.params.id;
+        if ( !ObjectId.isValid(notificationId)){
+            return res.status(400).send({error: RESPONSE.ON_ACTION.BAD_REQUEST});
+        }
+
+        Notification
+            .findByIdAndRemove(notificationId)
+            .exec(function(err, result){
+                if (err) {
+                    return res.status(500).send({error: err});
+                }
+                return res.status(200).send({success: RESPONSE.ON_ACTION.SUCCESS });
+            });
+    };
 };
 
 module.exports = Notification;

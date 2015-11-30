@@ -21,8 +21,8 @@
         <tbody>
         <%collection.forEach(function(model){%>
         <tr id="<%=model._id%>">
-            <td><%=model.fullName%></td>
-            <td><%=model.location%></td>
+            <td class="fullName"><%=model.fullName%></td>
+            <td class="location"><%=model.location%></td>
             <td>
                 <div>
                     <a class="editMarketeer actionButton"

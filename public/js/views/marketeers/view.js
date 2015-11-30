@@ -76,10 +76,8 @@ define([
                 dataArray: this.marketeersCollection.toJSON()
             });
             this.marketeersSearch.onSearchChanged = function (args) {
-
                 self.marketeersListView.showAllRows();
                 self.marketeersListView.hideRows(args.selector);
-
             };
             this.marketeersSearch.render();
 
@@ -90,7 +88,6 @@ define([
                 marketeer.destroy({
                     success: function () {
                         self.marketeersCollection.remove(id);
-                        self.marketeersListView.removeMarketeerRow(id);
                     },
                     err    : function (err) {
                         alert(err);
@@ -107,11 +104,14 @@ define([
             detailsView.onSave = function (data) {
                 var marketeersModel = data.id ? self.marketeersCollection.get(data.id) : modelsFactory.createMarketeer(data);
 
-                marketeersModel.save(data, {
-                    wait   : true,
+                marketeersModel.save({
+                    fullName: data.fullName,
+                    location: data.location
+                }, {
                     success: function (data) {
                         marketeersModel.id = data.id;
                         self.marketeersCollection.add(marketeersModel, {merge: true});
+                        self.marketeersListView.updateRow(data.toJSON());
                         detailsView.hideDialog();
                     },
                     error  : function (err) {
@@ -135,12 +135,8 @@ define([
             this.marketeersListView.addMarketeerRow(args.model);
         },
 
-        marketeersCollectionModelRemoved: function (args) {
-            this.marketeersListView.removeMarketeerRow(args.model.id);
-        },
-
-        marketeersCollectionChanged: function (args) {
-
+        marketeersCollectionModelRemoved: function (model) {
+            this.marketeersListView.removeMarketeerRow(model.id);
         },
 
         //endregion

@@ -38,7 +38,7 @@ define(['text!templates/marketeers/detailsTemplate.html'],
                 var name = $el.find('#name').val();
                 var location = $el.find('#location').val();
 
-                this.onSave({name: name, location: location, id: this.id});
+                this.onSave({fullName: name, location: location, id: this.id});
             },
 
             render: function (options) {

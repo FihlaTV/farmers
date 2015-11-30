@@ -43,11 +43,18 @@ define([
                 this.$el.find('#' + marketeerId).remove();
             },
 
-            showAllRows:function(){
+            showAllRows: function () {
                 this.$el.find('tr').show();
             },
 
-           hideRows:function(selector){
+            updateRow: function (model) {
+                var $row = this.$el.find('tr#' + model._id);
+
+                $row.find('.fullName').html(model.fullName);
+                $row.find('.location').html(model.location);
+            },
+
+            hideRows: function (selector) {
                 this.$el.find(selector).hide();
             },
 

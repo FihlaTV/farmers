@@ -21,6 +21,8 @@ module.exports = function (db) {
         type: String,
         imported: {type: Boolean, default: false},
         order: Number,
+        createdAt: {type: Date, default: Date.now},
+        updatedAt: {type: Date, default: Date.now},
         image: {type: String, default: null}
     }, {
         collection: CONST.MODELS.CROP + 's'
