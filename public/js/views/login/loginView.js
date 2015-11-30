@@ -13,6 +13,7 @@ define([
 
         login: function (e) {
             e.preventDefault();
+
             var $el = this.$el;
             var username = $el.find("#userName").val().trim();
             var password = $el.find("#pass").val().trim();
@@ -35,7 +36,6 @@ define([
                     App.authorized = false;
                     errorHolder.text(err.responseText);
                     errorHolder.addClass('error');
-
                 }
             });
 
@@ -45,6 +45,7 @@ define([
         render: function () {
             this.$el.html(_.template(LoginTemplate));
             this.$errorHolder = this.$el.find('#errorHolder');
+            $('#leftMenuHolder').hide();
 
             return this;
         }

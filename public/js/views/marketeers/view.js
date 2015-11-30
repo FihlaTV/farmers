@@ -84,6 +84,11 @@ define([
             this.marketeersListView.onDeleteMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
+                var cancel = !confirm('Delete marketeer: ' + marketeer.attributes.fullName + '?');
+
+                if (cancel) {
+                    return;
+                }
 
                 marketeer.destroy({
                     success: function () {
@@ -93,7 +98,6 @@ define([
                         alert(err);
                     }
                 });
-
             }
         },
 
@@ -146,6 +150,7 @@ define([
         render: function () {
             var data;
             var self = this;
+            $('#leftMenuHolder').show();
             this.$el.html(this.template());
             this.marketeersListView = new MarketeersListView({el: '#marketeersTable'});
             this.marketeersCollection.fetch({
