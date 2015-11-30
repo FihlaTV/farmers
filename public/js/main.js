@@ -2,20 +2,28 @@ var App = {};
 
 require.config({
     paths: {
-        jQuery: './libs/jquery-2.1.0.min.map',
+        jQuery    : './libs/jquery-2.1.0.min.map',
         Underscore: './libs/underscore-min.map.1.6.0',
-        Backbone: './libs/backbone-min.map.1.1.2',
-        templates: '../templates',
-        text: './libs/text'
+        Backbone  : './libs/backbone-min.map.1.1.2',
+        templates : '../templates',
+        text      : './libs/text'
     },
-    shim: {
+    shim : {
         'Backbone': ['Underscore', 'jQuery'],
-        'app': ['Backbone']
+        'app'     : ['Backbone']
     }
 });
 
 require(['app'], function (app) {
 
     app.initialize();
+
+    String.prototype.contains = function (anotherString) {
+        return !!~this.indexOf(anotherString);
+    };
+
+    String.prototype.isSubstringOf = function (anotherString) {
+        return anotherString.contains(this);
+    }
 
 });

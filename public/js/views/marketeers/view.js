@@ -4,13 +4,13 @@ define([
     'models/modelsFactory',
     'views/marketeers/list',
     'views/marketeers/activityList',
-    'views/marketeers/details'
-], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView) {
+    'views/marketeers/details',
+    'views/search/tableSearchView'
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView) {
     var View = Backbone.View.extend({
         //region Initialization
 
-        template   : _.template(template),
-        dataContent: "marketeers",
+        template: _.template(template),
 
         initialize: function () {
             var self = this;
@@ -25,7 +25,8 @@ define([
         //region Ui Events
 
         events: {
-            'click .tabButton': "changeTab"
+            'click .tabButton': "changeTab",
+            'click #addButton': "addMarketeer"
         },
 
         changeTab: function (e) {
@@ -44,6 +45,11 @@ define([
 
         },
 
+        addMarketeer: function (e) {
+            e.preventDefault();
+            this.openMarketeersDetailsDialog({title: 'Add Marketeer'})
+        },
+
         //endregion
 
         //region Methods
@@ -51,17 +57,29 @@ define([
         initializeMarketeersListAndCollection: function (collectionData) {
             var self = this;
 
+            collectionData = collectionData || this.marketeersCollection.toJSON();
+
             this.marketeersCollection.on('reset', this.marketeersCollectionReseted, this);
             this.marketeersCollection.on('add', this.marketeersCollectionModelAdded, this);
             this.marketeersCollection.on('remove', this.marketeersCollectionModelRemoved, this);
             this.marketeersCollection.on('change', this.marketeersCollectionChanged, this);
 
-            this.marketeersListView.render(collectionData ? collectionData : this.marketeersCollection.toJSON());
+            this.marketeersListView.render(collectionData);
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
-                self.openMarketeersDetailsDialog(marketeer.toJSON());
+                self.openMarketeersDetailsDialog({jsonModel: marketeer.toJSON(), title: 'Edit Marketeer'});
             };
+
+            this.marketeersSearch = new TableSearchView({
+                el       : '#marketeersSearchContainer',
+                dataArray: this.marketeersCollection.toJSON()
+            });
+            this.marketeersSearch.onSearchChanged = function (args) {
+                self.marketeersListView.showAllRows();
+                self.marketeersListView.hideRows(args.selector);
+            };
+            this.marketeersSearch.render();
 
             this.marketeersListView.onDeleteMarketeer = function (args) {
                 var id = args.id;
@@ -70,7 +88,6 @@ define([
                 marketeer.destroy({
                     success: function () {
                         self.marketeersCollection.remove(id);
-                        self.marketeersListView.removeMarketeerRow(id);
                     },
                     err    : function (err) {
                         alert(err);
@@ -80,7 +97,7 @@ define([
             }
         },
 
-        openMarketeersDetailsDialog: function (jsonMarketeer) {
+        openMarketeersDetailsDialog: function (options) {
             var self = this;
             var detailsView = new DetailsView();
 
@@ -88,10 +105,13 @@ define([
                 var marketeersModel = data.id ? self.marketeersCollection.get(data.id) : modelsFactory.createMarketeer(data);
 
                 marketeersModel.save({
-                    wait   : true,
+                    fullName: data.fullName,
+                    location: data.location
+                }, {
                     success: function (data) {
                         marketeersModel.id = data.id;
                         self.marketeersCollection.add(marketeersModel, {merge: true});
+                        self.marketeersListView.updateRow(data.toJSON());
                         detailsView.hideDialog();
                     },
                     error  : function (err) {
@@ -99,7 +119,7 @@ define([
                     }
                 });
             };
-            detailsView.render({jsonModel:jsonMarketeer,title:'Edit Marketeer'});
+            detailsView.render(options);
         },
 
         //endregion
@@ -115,12 +135,8 @@ define([
             this.marketeersListView.addMarketeerRow(args.model);
         },
 
-        marketeersCollectionModelRemoved: function (args) {
-            this.marketeersListView.removeMarketeerRow(args.model.id);
-        },
-
-        marketeersCollectionChanged: function (args) {
-
+        marketeersCollectionModelRemoved: function (model) {
+            this.marketeersListView.removeMarketeerRow(model.id);
         },
 
         //endregion
@@ -131,7 +147,7 @@ define([
             var data;
             var self = this;
             this.$el.html(this.template());
-            this.marketeersListView = new MarketeersListView({el: '#marketeers'});
+            this.marketeersListView = new MarketeersListView({el: '#marketeersTable'});
             this.marketeersCollection.fetch({
                 success: function (data) {
                     self.initializeMarketeersListAndCollection(data.toJSON());

@@ -17,7 +17,7 @@ define(['text!templates/menu/leftMenuTemplate.html'],
             },
 
             render: function () {
-                var currentUser = App.user;
+                var currentUser = App.currentUser;
                 this.$el.html(this.template({model: currentUser}));
             }
         });

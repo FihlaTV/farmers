@@ -1,19 +1,24 @@
 <div>
-
     <div class="tabHeader">
-        <a class="tabButton selected"
-           data-content="marketeers">
-            Marketeers
-        </a>
-        <a class="tabButton"
-           data-content="activities">
-            User activities
-        </a>
+        <div>
+            <a class="tabButton selected"
+               data-content="marketeers">
+                Marketeers
+            </a>
+            <a id="addButton">Add</a>
+        </div>
+        <div>
+            <a class="tabButton"
+               data-content="activities">
+                User activities
+            </a>
+        </div>
     </div>
     <div class="tabContent">
         <div id="marketeers"
              style="display: none">
-
+            <div id="marketeersSearchContainer"></div>
+            <div id="marketeersTable"></div>
         </div>
         <div id="activities"
              style="display: none">

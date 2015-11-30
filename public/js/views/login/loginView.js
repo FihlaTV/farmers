@@ -1,6 +1,5 @@
 define([
     'text!templates/login/loginTemplate.html'
-
 ], function (LoginTemplate) {
 
     var View = Backbone.View.extend({
@@ -29,13 +28,14 @@ define([
                 },
                 success : function (response) {
                     App.authorized = true;
-                    App.currentUser = response.data;
-                    Backbone.history.navigate('marketeers')
-
+                    App.currentUser = response;
+                    Backbone.history.navigate('marketeers', {trigger: true});
                 },
                 error   : function (err) {
                     App.authorized = false;
                     errorHolder.text(err.responseText);
+                    errorHolder.addClass('error');
+
                 }
             });
 
@@ -43,8 +43,6 @@ define([
         },
 
         render: function () {
-            //this.$el = $el;
-
             this.$el.html(_.template(LoginTemplate));
             this.$errorHolder = this.$el.find('#errorHolder');
 

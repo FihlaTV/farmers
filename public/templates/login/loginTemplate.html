@@ -1,15 +1,18 @@
-<div id="login">
-    <form id="loginForm">
+<div id="login" class="login">
+    <h2>Farmers App</h2>
+    <form id="loginForm" class="loginForm">
         <fieldset>
             <label for="userName">Username:</label>
             <input type="text"
                    id="userName"
+                   class="input"
                    placeholder="Enter username"
                    required
                    maxlength="16"/>
             <label for="pass">Password:</label>
             <input type="password"
                    id="pass"
+                   class="input"
                    placeholder="Enter password"
 
                    maxlength="16"/>
@@ -18,7 +21,9 @@
                 <span id="errorHolder"></span>
             </div>
             <input type="submit"
-                   value="Login"/>
+                   value="Login"
+                   class="input"/>
+            <a href="#" class="input forgotPassword">Forgot Password?</a>
         </fieldset>
     </form>
 
