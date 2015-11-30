@@ -740,6 +740,8 @@ var Price = function (db) {
             var prices = [];
             var more = [];
             var usersDailyMarketeer; // _marketteer
+            var usersDailyMarketeerPrice = -1; // _marketteer
+            var usersDailyMarketeerQuality = ''; // _marketteer
             var tempObj;
             var tempArray;
             var tempFlag = false;
@@ -773,7 +775,13 @@ var Price = function (db) {
                         for (var k = i; k >= 0; k--) {
                             if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString() && (receivedPriceArray[k]._user).toString() === UserId.toString()) {
                                 usersDailyMarketeer = receivedPriceArray[k]._marketeer;
-                                console.log(j, ' ||| usersDailyMarketeer: ', usersDailyMarketeer);
+
+                                if (usersDailyMarketeerPrice <= receivedPriceArray[k].price) {
+                                    usersDailyMarketeerPrice = receivedPriceArray[k].price;
+                                    usersDailyMarketeerQuality = receivedPriceArray[k].userQuality;
+                                }
+
+                                 console.log(j, ' ||| usersDailyMarketeer: ', usersDailyMarketeer);
                             }
 
                             if ((receivedPriceArray[i]._marketeer).toString() === (receivedPriceArray[k]._marketeer).toString()) {
@@ -818,9 +826,9 @@ var Price = function (db) {
                         marketeersPrices.push({
                             name: marketeerList[(receivedPriceArray[i]._marketeer).toString()] ? marketeerList[(receivedPriceArray[i]._marketeer).toString()].fullName : null,
                             location: marketeerList[(receivedPriceArray[i]._marketeer).toString()] ? marketeerList[(receivedPriceArray[i]._marketeer).toString()].location : null,
-                            price: more[0].price,
+                            price: usersDailyMarketeer ? usersDailyMarketeerPrice : more[0].price,
                             data: receivedPrices[j]._id,
-                            quality: more[0].quality,
+                            quality:  usersDailyMarketeer ? usersDailyMarketeerQuality : more[0].quality,
                             more: more
                         });
                     }

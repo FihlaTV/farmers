@@ -43,7 +43,7 @@ var Session = function (db) {
             return next()
         }
 
-        err = new Error('Permission denied');
+        err = new Error(RESPONSE.AUTH.NO_PERMISSIONS);
         err.status = 403;
         next (err);
     };

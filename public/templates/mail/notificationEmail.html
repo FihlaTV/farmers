@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .pm-text{
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            text-align: right;
+        }
+    </style>
+</head>
+<body style = "direction: rtl; text-align: right">
+<div class="pm-text">
+    <p>שלום, <%= data ? data.fullName : '' %><br>ברוך הבא ל<strong>"העיקר האיכר"</strong> אתה עכשיו רשום</p>
+	<p>
+        <br><strong>"העיקר האיכר"</strong> היא אפליקציה שיתופית לחקלאים.
+        <br>באפליקציה תוכלו למצוא:
+        <br>
+    </p>
+    <ul>
+        <li> מחירי גידולים והשוואה בינם (שוק סיטונאי, מועצת הצמחים)</li>
+        <li> מחירי משווקים שונים- שמוזנים על ידי המשתמשים עצמם</li>
+        <li> השוואה בין מחירי משווקים ודירוג שלהם מהגבוה לנמוך</li>
+        <li> סטטיסטיקות של מחירי עבר שיעזרו לכם החקלאים לקבל החלטות לגבי סוג ומועד</li>
+        <li> <strong style="font-size: 18px; font-weight: 900;">ככל שתשתף יותר ממחירי המשווק שלך- כך תוכל לצפות ביותר מחירי משווקים אחרים!</strong></li>
+    </ul>
+</div>
+</body>
+</html>
