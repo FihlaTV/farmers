@@ -16,6 +16,8 @@ module.exports = function (db) {
             console.log('ERROR:  Main Schedule updateSitesCacheTablePrices with: ', err); }
     });
 
+
+
     //http://www.codexpedia.com/javascript/nodejs-cron-schedule-examples/
 
     //schedule.scheduleJob('*/3 * * * *', function() {

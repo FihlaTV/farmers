@@ -456,10 +456,7 @@ var Crop = function (db) {
 
                 res.status(200).send(outArrayQualitys);
             });
-
     };
-
-
 };
 
 module.exports = Crop;
