@@ -81,6 +81,8 @@ define([
                 self.openMarketeersDetailsDialog({jsonModel: marketeer.toJSON(), title: 'Edit Marketeer'});
             };
 
+            //todo move search to marketeers list view
+
             this.marketeersSearch = new TableSearchView({
                 el       : '#marketeersSearchContainer',
                 dataArray: this.marketeersCollection.toJSON()
@@ -112,10 +114,38 @@ define([
         },
 
         initializeAddedMarketeersView: function (jsonData) {
+            this.newMarketeersCollection.on('remove', this.newMarketeersCollectionModelRemoved, this);
+            this.addedMarketeersView.render(jsonData);
 
+            this.addedMarketeersView.onNewMarketeerAccepted = function (args) {
+                //todo create new marketeer by dialog
+                //todo set marketeer to user
+                //todo remove notification
+            };
+
+            this.changedMarketeersView.onLinkMarketeerSelected = function (args) {
+                //todo open Marketeers dialog
+                //todo set marketeer to uset
+                //todo remove notification
+            };
         },
 
         initializeChangedMarketeersView: function (jsonData) {
+            this.changeMarketeersCollection.on('remove', this.changeMarketeersCollectionModelRemoved, this);
+            this.changedMarketeersView.render(jsonData);
+
+            this.changedMarketeersView.onBlockChangeSelected = function (args) {
+                //todo block user from changing marketeer
+            };
+
+            this.changedMarketeersView.onSetMarketeerSelected = function (args) {
+                //todo open Marketeers dialog
+                //todo set marketeer to uset
+            };
+
+            this.changedMarketeersView.onRemoveNotification = function (args) {
+                //todo remove notification from collection
+            };
         },
 
         openMarketeersDetailsDialog: function (options) {
@@ -159,6 +189,15 @@ define([
         marketeersCollectionModelRemoved: function (model) {
             this.marketeersListView.removeMarketeerRow(model.id);
         },
+
+        newMarketeersCollectionModelRemoved: function (model) {
+            this.addedMarketeersView.removeNotificationRow(model.id);
+        },
+
+        changeMarketeersCollectionModelRemoved: function (model) {
+            this.changedMarketeersView.removeNotificationRow(model.id);
+        },
+
 
         //endregion
 

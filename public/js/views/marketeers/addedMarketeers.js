@@ -6,6 +6,7 @@ define([],
                 'click .acceptMarketeer': 'acceptMarketeer',
                 'click .linkMarketeer'  : 'linkMarketeerToExisting'
             },
+            //todo implement search
 
             acceptMarketeer: function (e) {
                 e.preventDefault();
@@ -41,6 +42,10 @@ define([],
             },
 
             initialize: function () {
+
+            },
+
+            removeNotificationRow:function(notificationId){
 
             },
 

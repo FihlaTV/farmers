@@ -3,9 +3,12 @@ define([],
         var View = Backbone.View.extend({
 
             events: {
-                'click .setMarketeer'   : 'setMarketeer',
-                'click .blockUser'      : 'blockUser'
+                'click .setMarketeer'      : 'setMarketeer',
+                'click .blockUser'         : 'blockUser',
+                'click .removeNotification': 'removeNotification',
             },
+
+            //todo implement search
 
             setMarketeer: function (e) {
                 e.preventDefault();
@@ -25,18 +28,34 @@ define([],
                 this.onBlockChangeSelected({userId: userId});
             },
 
-            onBlockChangeSelected  : function (args) {
+            removeNotification: function (e) {
+                e.preventDefault();
+
+                var $target = $(e.target);
+                var notificationId = $target.attr('data-notificationId');
+
+                this.onRemoveNotification({notificationId: notificationId});
             },
-            onSetMarketeerSelected : function (args) {
+
+            onBlockChangeSelected : function (args) {
+            },
+            onSetMarketeerSelected: function (args) {
+            },
+            onRemoveNotification  : function (args) {
             },
 
             initialize: function () {
 
             },
 
+
+            removeNotificationRow:function(notificationId){
+
+            },
+
             render: function (data) {
                 this.$el.html(this.template({
-                    collection   : data
+                    collection: data
                 }))
             }
         });
