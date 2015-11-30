@@ -1,17 +1,13 @@
 <div>
     <div class="tabHeader">
-        <div>
-            <a class="tabButton selected"
-               data-content="marketeers">
-                Marketeers
-            </a>
-            <a id="addButton">Add</a>
+        <div class="tabButton selected"
+             data-content="marketeers">
+            <a>Marketeers</a>
+            <a id="addButton" class="addButton">Add</a>
         </div>
-        <div>
-            <a class="tabButton"
-               data-content="activities">
-                User activities
-            </a>
+        <div class="tabButton"
+             data-content="activities">
+            <a>User activities</a>
         </div>
     </div>
     <div class="tabContent">
@@ -22,7 +18,12 @@
         </div>
         <div id="activities"
              style="display: none">
-            Activities
+            <div id="addedMarketeers">
+
+            </div>
+            <div id="changedMarketeers">
+
+            </div>
         </div>
     </div>
 

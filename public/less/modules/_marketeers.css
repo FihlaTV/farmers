@@ -4,4 +4,11 @@
 }
 .contentHolder {
   height: 100%;
+  width: 100%;
+}
+.tabHeader {
+  background-color: red;
+  height: 50px;
+  width: 100%;
+  border-bottom: 2px solid ;
 }

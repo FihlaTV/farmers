@@ -1,0 +1,43 @@
+<table id="acceptMarketeerTable">
+    <caption class="tableHeader"
+             data-table="#acceptMarketeerTable">
+        User created new marketeer
+    </caption>
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>Marketeer</th>
+        <th>Date</th>
+        <th>Action</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <%collection.forEach(function(model){%>
+    <tr>
+        <td><%=model.user.fullName%></td>
+        <td><%=model.marketeerName%></td>
+        <td><%=model.date%></td>
+        <td>
+            <div>
+                <a class="acceptMarketeer actionButton"
+                   data-notificationId="model._id"
+                   data-userId="model.user._id"
+                   data-marketeerName="<%=model.marketeerName%>">
+                    Accept
+                </a>
+                <a class="linkMarketeer actionButton"
+                   data-userId="model.user._id"
+                   data-notificationId="model._id">
+                    Link To
+                </a>
+            </div>
+        </td>
+    </tr>
+    <%});%>
+    </tbody>
+</table>

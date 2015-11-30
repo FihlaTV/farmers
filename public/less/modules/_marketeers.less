@@ -4,4 +4,33 @@
 }
 .contentHolder{
   height: 100%;
+  width: 100%;
+}
+.tabHeader{
+  height: 71px;
+  width: 100%;
+  border-bottom: 2px solid @tabBorder;
+  background-color: @tabBg;
+  div{
+    border-right: 2px solid @tabBorder;
+    height: 71px;
+    float: left;
+  }
+  .selected{
+    background-color: @btnMenuBg;
+    border-bottom: 4px solid @tabBorderSelected;
+  }
+}
+
+
+#dialogContent{
+  position: absolute;
+  height: 500px;
+  width: 500px;
+  background-color: red;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+
+  //
 }

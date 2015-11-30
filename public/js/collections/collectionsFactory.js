@@ -9,6 +9,22 @@ define(['collections/base'], function (BaseCollection) {
             return collection;
         },
 
+        createUserActivityNewMarketeersCollection: function () {
+            var collection = new BaseCollection();
+
+            collection.url = '/notifications/newMarketeer';
+
+            return collection;
+        },
+
+        createUserActivityChangeMarketeersCollection: function () {
+            var collection = new BaseCollection();
+
+            collection.url = '/notifications/changeMarketeer';
+
+            return collection;
+        },
+
         createCropCollection: function () {
             return new BaseCollection({url: '/cropList'});
         }

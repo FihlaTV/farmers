@@ -3,10 +3,12 @@ define([
     'collections/collectionsFactory',
     'models/modelsFactory',
     'views/marketeers/list',
-    'views/marketeers/activityList',
     'views/marketeers/details',
-    'views/search/tableSearchView'
-], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView) {
+    'views/search/tableSearchView',
+    'views/marketeers/addedMarketeers',
+    'views/marketeers/changedMarketeers'
+
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, DetailsView, TableSearchView, AddedMarketeersView, ChangedMarketeersView) {
     var View = Backbone.View.extend({
         //region Initialization
 
@@ -14,10 +16,10 @@ define([
 
         initialize: function () {
             var self = this;
+
             this.marketeersCollection = collectionsFactory.createMarketeersCollection();
-
-            //  this.activityListView = new ActivityListView()
-
+            this.changeMarketeersCollection = collectionsFactory.createUserActivityChangeMarketeersCollection();
+            this.newMarketeersCollection = collectionsFactory.createUserActivityNewMarketeersCollection();
         },
 
         //endregion
@@ -33,20 +35,14 @@ define([
             e.preventDefault();
 
             var target = $(e.target);
-            var data = target.attr('data-content');
-
-            this.$previousTab.toggleClass('selected');
-            this.$previousTab = target;
-            this.$previousTab.toggleClass('selected');
-
-            this.$previousContent.hide();
-            this.$previousContent = this.$el.find('#' + data);
-            this.$previousContent.show();
-
+            this.changeTabInternal(target.parent('div'));
         },
 
         addMarketeer: function (e) {
             e.preventDefault();
+            e.stopPropagation();
+
+            this.changeTabInternal($(e.target).parent('div'));
             this.openMarketeersDetailsDialog({title: 'Add Marketeer'})
         },
 
@@ -54,7 +50,19 @@ define([
 
         //region Methods
 
-        initializeMarketeersListAndCollection: function (collectionData) {
+        changeTabInternal: function (element) {
+            var data = element.attr('data-content');
+
+            this.$previousTab.toggleClass('selected');
+            this.$previousTab = element;
+            this.$previousTab.toggleClass('selected');
+
+            this.$previousContent.hide();
+            this.$previousContent = this.$el.find('#' + data);
+            this.$previousContent.show();
+        },
+
+        initializeMarketeersTab: function (collectionData) {
             var self = this;
 
             collectionData = collectionData || this.marketeersCollection.toJSON();
@@ -65,11 +73,14 @@ define([
             this.marketeersCollection.on('change', this.marketeersCollectionChanged, this);
 
             this.marketeersListView.render(collectionData);
+
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
                 self.openMarketeersDetailsDialog({jsonModel: marketeer.toJSON(), title: 'Edit Marketeer'});
             };
+
+            //todo move search to marketeers list view
 
             this.marketeersSearch = new TableSearchView({
                 el       : '#marketeersSearchContainer',
@@ -84,6 +95,11 @@ define([
             this.marketeersListView.onDeleteMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
+                var cancel = !confirm('Delete marketeer: ' + marketeer.attributes.fullName + '?');
+
+                if (cancel) {
+                    return;
+                }
 
                 marketeer.destroy({
                     success: function () {
@@ -93,8 +109,42 @@ define([
                         alert(err);
                     }
                 });
-
             }
+        },
+
+        initializeAddedMarketeersView: function (jsonData) {
+            this.newMarketeersCollection.on('remove', this.newMarketeersCollectionModelRemoved, this);
+            this.addedMarketeersView.render(jsonData);
+
+            this.addedMarketeersView.onNewMarketeerAccepted = function (args) {
+                //todo create new marketeer by dialog
+                //todo set marketeer to user
+                //todo remove notification
+            };
+
+            this.changedMarketeersView.onLinkMarketeerSelected = function (args) {
+                //todo open Marketeers dialog
+                //todo set marketeer to uset
+                //todo remove notification
+            };
+        },
+
+        initializeChangedMarketeersView: function (jsonData) {
+            this.changeMarketeersCollection.on('remove', this.changeMarketeersCollectionModelRemoved, this);
+            this.changedMarketeersView.render(jsonData);
+
+            this.changedMarketeersView.onBlockChangeSelected = function (args) {
+                //todo block user from changing marketeer
+            };
+
+            this.changedMarketeersView.onSetMarketeerSelected = function (args) {
+                //todo open Marketeers dialog
+                //todo set marketeer to uset
+            };
+
+            this.changedMarketeersView.onRemoveNotification = function (args) {
+                //todo remove notification from collection
+            };
         },
 
         openMarketeersDetailsDialog: function (options) {
@@ -139,6 +189,14 @@ define([
             this.marketeersListView.removeMarketeerRow(model.id);
         },
 
+        newMarketeersCollectionModelRemoved: function (model) {
+            this.addedMarketeersView.removeNotificationRow(model.id);
+        },
+
+        changeMarketeersCollectionModelRemoved: function (model) {
+            this.changedMarketeersView.removeNotificationRow(model.id);
+        },
+
         //endregion
 
         //region Render
@@ -146,11 +204,28 @@ define([
         render: function () {
             var data;
             var self = this;
+
+            $('#leftMenuHolder').show();
+
             this.$el.html(this.template());
             this.marketeersListView = new MarketeersListView({el: '#marketeersTable'});
             this.marketeersCollection.fetch({
                 success: function (data) {
-                    self.initializeMarketeersListAndCollection(data.toJSON());
+                    self.initializeMarketeersTab(data.toJSON());
+                }
+            });
+
+            this.addedMarketeersView = new AddedMarketeersView({el: '#addedMarketeers'});
+            this.newMarketeersCollection.fetch({
+                success: function (data) {
+                    self.initializeAddedMarketeersView(data.toJSON());
+                }
+            });
+
+            this.changedMarketeersView = new ChangedMarketeersView({el: '#changedMarketeers'});
+            this.changeMarketeersCollection.fetch({
+                success: function (data) {
+                    self.initializeChangedMarketeersView(data.toJSON());
                 }
             });
 
