@@ -23,3 +23,15 @@ Error: Permission denied
     at next (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:271:10)
     at /home/thor/jsProjects/farmers/node_modules/express-session/index.js:437:7
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 10:45:04 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 11:00:04 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 11:30:04 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------

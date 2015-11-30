@@ -4,6 +4,7 @@
 /***** ===== LOGIN ===== *****/
 /***** ===== BUTTONS ===== *****/
 /***** ===== NAVIGATION ===== *****/
+/***** ===== NAVIGATION ===== *****/
 /*--------- VARIABLES ---------*/
 /*--------- FUNCTIONS ---------*/
 /*--------- MIXINS ---------*/
@@ -192,6 +193,9 @@ html,
 body {
   height: 100%;
 }
+* {
+  box-sizing: border-box;
+}
 ul {
   margin: 0;
   list-style-type: none;
@@ -230,6 +234,36 @@ ul {
 .logOut {
   position: absolute;
   bottom: 0;
+}
+.tabButton {
+  float: left;
+  cursor: pointer;
+  color: #fff;
+  background-color: rgba(0, 121, 107, 0.47);
+  line-height: 70px;
+  position: relative;
+}
+.tabButton:hover,
+.tabButton:active,
+.tabButton:focus {
+  background-color: #009688;
+}
+.tabButton a {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  padding: 0 30px;
+}
+.tabButton a:first-child {
+  padding-right: 50px;
+}
+.tabButton .addButton {
+  width: auto;
+  height: auto;
+  padding: 0 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 /*--------- SEARCH ---------*/
 /*--------- HEADER ---------*/
@@ -369,5 +403,30 @@ ul {
 }
 .contentHolder {
   height: 100%;
+  width: 100%;
+}
+.tabHeader {
+  height: 71px;
+  width: 100%;
+  border-bottom: 2px solid #546D57;
+  background-color: rgba(185, 214, 171, 0.32);
+}
+.tabHeader div {
+  border-right: 2px solid #546D57;
+  height: 71px;
+  float: left;
+}
+.tabHeader .selected {
+  background-color: #009688;
+  border-bottom: 4px solid #0288D1;
+}
+#dialogContent {
+  position: absolute;
+  height: 500px;
+  width: 500px;
+  background-color: red;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /*--------- STATE ---------*/
