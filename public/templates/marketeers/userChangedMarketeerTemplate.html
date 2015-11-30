@@ -1,0 +1,46 @@
+<table id="changeMarketeerTable">
+    <caption class="tableHeader"
+             data-table="#changeMarketeerTable">
+        User changed marketeer
+    </caption>
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>Marketeer</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%collection.forEach(function(model){%>
+    <tr>
+        <td><%=model.user.fullName%></td>
+        <td><%=model.marketeer.name%></td>
+        <td><%=model.date%></td>
+        <td>
+            <div>
+                <a class="setMarketeer actionButton"
+                   data-userId="model.user._id"
+                   data-notificationId="model._id">
+                    Set Marketeer
+                </a>
+                <a class="blockUser actionButton"
+                   data-userId="model.user._id"
+                   data-notificationId="model._id">
+                    Block user
+                </a>
+                <a class="removeNotification actionButton"
+                   data-userId="model.user._id"
+                   data-notificationId="model._id">
+                    Remove notification
+                </a>
+            </div>
+        </td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
