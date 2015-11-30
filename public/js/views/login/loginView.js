@@ -34,7 +34,7 @@ define([
                 },
                 error   : function (err) {
                     App.authorized = false;
-                    errorHolder.text(err.responseText);
+                    errorHolder.text(err.responseJSON.error);
                     errorHolder.addClass('error');
                 }
             });

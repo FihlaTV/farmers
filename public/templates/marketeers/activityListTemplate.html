@@ -1,44 +1,40 @@
 <div>
     <div>
-        <table>
-            <caption>User created new marketeer</caption>
+        <table id="acceptMarketeerTable">
+            <caption class="tableHeader"
+                     data-table="#acceptMarketeerTable">
+                User created new marketeer
+            </caption>
             <col width="25%">
             <col width="25%">
             <col width="25%">
             <col width="25%">
             <thead>
             <tr>
-                <th class="sortable"
-                    data-sort="user">
-                    User
-                </th>
-                <th class="sortable"
-                    data-sort="marketeer">
-                    Marketeer
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Action
-                </th>
+                <th>User</th>
+                <th>Marketeer</th>
+                <th>Date</th>
+                <th>Action</th>
 
             </tr>
             </thead>
             <tbody>
             <%newCollection.forEach(function(model){%>
             <tr>
-                <td><%=model.user.name%></td>
-                <td><%=model.marketeer.name%></td>
+                <td><%=model.user.fullName%></td>
+                <td><%=model.marketeerName%></td>
                 <td><%=model.date%></td>
                 <td>
                     <div>
                         <a class="acceptMarketeer actionButton"
-                           data-id="model.marketeer._id">
+                           data-notificationId="model._id"
+                           data-userId="model.user._id"
+                           data-marketeerName="<%=model.marketeerName%>">
                             Accept
                         </a>
                         <a class="linkMarketeer actionButton"
-                           data-id="model.marketeer._id">
+                           data-userId="model.user._id"
+                           data-notificationId="model._id">
                             Link To
                         </a>
                     </div>
@@ -49,52 +45,45 @@
         </table>
     </div>
     <div>
-        <table>
-            <caption>User changed marketeer</caption>
-            <col width="20%">
-            <col width="20%">
-            <col width="20%">
-            <col width="20%">
-            <col width="20%">
+        <table id="changeMarketeerTable">
+            <caption class="tableHeader"
+                     data-table="#changeMarketeerTable">
+                User changed marketeer
+            </caption>
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
+            <col width="25%">
             <thead>
             <tr>
-                <th class="sortable"
-                    data-sort="user">
-                    User
-                </th>
-                <th class="sortable"
-                    data-sort="fromMarketeer">
-                    From Marketeer
-                </th>
-                <th class="sortable"
-                    data-sort="toMarketeer">
-                    To Marketeer
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
-                    Action
-                </th>
-
+                <th>User</th>
+                <th>Marketeer</th>
+                <th>Date</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <%changeCollection.forEach(function(model){%>
             <tr>
-                <td><%=model.user.name%></td>
-                <td><%=model.fromMarketeer.name%></td>
-                <td><%=model.toMarketeer.name%></td>
+                <td><%=model.user.fullName%></td>
+                <td><%=model.marketeer.name%></td>
                 <td><%=model.date%></td>
                 <td>
                     <div>
-                        <a class="acceptMarketeer actionButton"
-                           data-id="model.marketeer._id">
-                            Accept
+                        <a class="setMarketeer actionButton"
+                           data-userId="model.user._id"
+                           data-notificationId="model._id">
+                            Set Marketeer
                         </a>
-                        <a class="denyMarketeer actionButton"
-                           data-id="model.marketeer._id">
-                            Deny
+                        <a class="blockUser actionButton"
+                           data-userId="model.user._id"
+                           data-notificationId="model._id">
+                            Block user
+                        </a>
+                        <a class="removeNotification actionButton"
+                           data-userId="model.user._id"
+                           data-notificationId="model._id">
+                            Remove notification
                         </a>
                     </div>
                 </td>

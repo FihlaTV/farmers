@@ -54,7 +54,7 @@ define([
 
         //region Methods
 
-        initializeMarketeersListAndCollection: function (collectionData) {
+        initializeMarketeersTab: function (collectionData) {
             var self = this;
 
             collectionData = collectionData || this.marketeersCollection.toJSON();
@@ -65,6 +65,7 @@ define([
             this.marketeersCollection.on('change', this.marketeersCollectionChanged, this);
 
             this.marketeersListView.render(collectionData);
+
             this.marketeersListView.onEditMarketeer = function (args) {
                 var id = args.id;
                 var marketeer = self.marketeersCollection.get(id);
@@ -150,14 +151,18 @@ define([
         render: function () {
             var data;
             var self = this;
+
             $('#leftMenuHolder').show();
+
             this.$el.html(this.template());
             this.marketeersListView = new MarketeersListView({el: '#marketeersTable'});
             this.marketeersCollection.fetch({
                 success: function (data) {
-                    self.initializeMarketeersListAndCollection(data.toJSON());
+                    self.initializeMarketeersTab(data.toJSON());
                 }
             });
+
+            this.userActivitiesView= new UserActivitiesView({el:''})
 
             this.$previousTab = this.$el.find('.tabButton.selected');
             data = this.$previousTab.attr('data-content');
