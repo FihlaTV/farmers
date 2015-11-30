@@ -94,3 +94,27 @@ body is empty (check your connection to internet)
 Mon Nov 30 2015 11:30:04 GMT+0200 (EET)
 body is empty (check your connection to internet)
 ---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:32 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:32 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:32 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:32 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:33 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
+------------------------------scheduleJob -> syncPlantPrices -> http://www.prices.moag.gov.il/prices/veg_1.htm-------------------------------------------------------
+Mon Nov 30 2015 13:44:35 GMT+0200 (EET)
+body is empty (check your connection to internet)
+---------------------------------------------------------------------------------------------------------
