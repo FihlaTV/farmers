@@ -5,8 +5,11 @@ define([
     'views/marketeers/list',
     'views/marketeers/activityList',
     'views/marketeers/details',
-    'views/search/tableSearchView'
-], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView) {
+    'views/search/tableSearchView',
+    'views/marketeers/addedMarketeers',
+    'views/marketeers/changedMarketeers'
+
+], function (template, collectionsFactory, modelsFactory, MarketeersListView, ActivityListView, DetailsView, TableSearchView, AddedMarketeersView, ChangedMarketeersView) {
     var View = Backbone.View.extend({
         //region Initialization
 
@@ -14,10 +17,10 @@ define([
 
         initialize: function () {
             var self = this;
+
             this.marketeersCollection = collectionsFactory.createMarketeersCollection();
-
-            //  this.activityListView = new ActivityListView()
-
+            this.changeMarketeersCollection = collectionsFactory.createUserActivityChangeMarketeersCollection();
+            this.newMarketeersCollection = collectionsFactory.createUserActivityNewMarketeersCollection();
         },
 
         //endregion
@@ -33,26 +36,32 @@ define([
             e.preventDefault();
 
             var target = $(e.target);
-            var data = target.attr('data-content');
-
-            this.$previousTab.toggleClass('selected');
-            this.$previousTab = target;
-            this.$previousTab.toggleClass('selected');
-
-            this.$previousContent.hide();
-            this.$previousContent = this.$el.find('#' + data);
-            this.$previousContent.show();
-
+            this.changeTabInternal(target);
         },
 
         addMarketeer: function (e) {
             e.preventDefault();
+            e.stopPropagation();
+
+            this.changeTabInternal($(e.target).parent('div'));
             this.openMarketeersDetailsDialog({title: 'Add Marketeer'})
         },
 
         //endregion
 
         //region Methods
+
+        changeTabInternal: function (element) {
+            var data = element.attr('data-content');
+
+            this.$previousTab.toggleClass('selected');
+            this.$previousTab = element;
+            this.$previousTab.toggleClass('selected');
+
+            this.$previousContent.hide();
+            this.$previousContent = this.$el.find('#' + data);
+            this.$previousContent.show();
+        },
 
         initializeMarketeersTab: function (collectionData) {
             var self = this;
@@ -100,6 +109,13 @@ define([
                     }
                 });
             }
+        },
+
+        initializeAddedMarketeersView: function (jsonData) {
+
+        },
+
+        initializeChangedMarketeersView: function (jsonData) {
         },
 
         openMarketeersDetailsDialog: function (options) {
@@ -162,7 +178,19 @@ define([
                 }
             });
 
-            this.userActivitiesView= new UserActivitiesView({el:''})
+            this.addedMarketeersView = new AddedMarketeersView({el: '#addedMarketeers'});
+            this.newMarketeersCollection.fetch({
+                success: function (data) {
+                    self.initializeAddedMarketeersView(data.toJSON());
+                }
+            });
+
+            this.changedMarketeersView = new ChangedMarketeersView({el: '#changedMarketeers'});
+            this.changeMarketeersCollection.fetch({
+                success: function (data) {
+                    self.initializeChangedMarketeersView(data.toJSON());
+                }
+            });
 
             this.$previousTab = this.$el.find('.tabButton.selected');
             data = this.$previousTab.attr('data-content');

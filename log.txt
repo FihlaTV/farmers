@@ -35,3 +35,24 @@ body is empty (check your connection to internet)
 Mon Nov 30 2015 11:30:04 GMT+0200 (EET)
 body is empty (check your connection to internet)
 ---------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+Mon Nov 30 2015 12:27:48 GMT+0200 (EET)
+Permission denied
+Error: Permission denied
+    at isAdmin (/home/thor/jsProjects/farmers/handlers/sessions.js:46:15)
+    at Layer.handle [as handle_request] (/home/thor/jsProjects/farmers/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/thor/jsProjects/farmers/node_modules/express/lib/router/route.js:131:13)
+    at Route.dispatch (/home/thor/jsProjects/farmers/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/thor/jsProjects/farmers/node_modules/express/lib/router/layer.js:95:5)
+    at /home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:277:22
+    at Function.process_params (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:330:12)
+    at next (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:271:10)
+    at Function.handle (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:176:3)
+    at router (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:46:12)
+    at Layer.handle [as handle_request] (/home/thor/jsProjects/farmers/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:312:13)
+    at /home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:280:7
+    at Function.process_params (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:330:12)
+    at next (/home/thor/jsProjects/farmers/node_modules/express/lib/router/index.js:271:10)
+    at /home/thor/jsProjects/farmers/node_modules/express-session/index.js:437:7
+---------------------------------------------------------------------------------------------------------
