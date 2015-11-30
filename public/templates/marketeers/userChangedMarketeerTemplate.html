@@ -19,7 +19,7 @@
     <%collection.forEach(function(model){%>
     <tr>
         <td><%=model.user.fullName%></td>
-        <td><%=model.marketeer.name%></td>
+        <td><%=model.marketeerName%></td>
         <td><%=model.date%></td>
         <td>
             <div>
@@ -41,6 +41,6 @@
             </div>
         </td>
     </tr>
-    <%}%>
+    <%});%>
     </tbody>
 </table>

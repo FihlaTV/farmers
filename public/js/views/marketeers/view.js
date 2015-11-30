@@ -35,7 +35,7 @@ define([
             e.preventDefault();
 
             var target = $(e.target);
-            this.changeTabInternal(target);
+            this.changeTabInternal(target.parent('div'));
         },
 
         addMarketeer: function (e) {
@@ -196,7 +196,6 @@ define([
         changeMarketeersCollectionModelRemoved: function (model) {
             this.changedMarketeersView.removeNotificationRow(model.id);
         },
-
 
         //endregion
 

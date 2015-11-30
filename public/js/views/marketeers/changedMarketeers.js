@@ -1,8 +1,10 @@
-define([],
-    function () {
+define([
+        'text!templates/marketeers/userChangedMarketeerTemplate.html'
+    ],
+    function (template) {
         var View = Backbone.View.extend({
-
-            events: {
+            template: _.template(template),
+            events  : {
                 'click .setMarketeer'      : 'setMarketeer',
                 'click .blockUser'         : 'blockUser',
                 'click .removeNotification': 'removeNotification',
@@ -48,8 +50,7 @@ define([],
 
             },
 
-
-            removeNotificationRow:function(notificationId){
+            removeNotificationRow: function (notificationId) {
 
             },
 

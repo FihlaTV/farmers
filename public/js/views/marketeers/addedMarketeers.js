@@ -1,8 +1,10 @@
-define([],
-    function () {
+define([
+        'text!templates/marketeers/userAddedMarketeerTemplate.html'
+    ],
+    function (template) {
         var View = Backbone.View.extend({
-
-            events: {
+            template: _.template(template),
+            events  : {
                 'click .acceptMarketeer': 'acceptMarketeer',
                 'click .linkMarketeer'  : 'linkMarketeerToExisting'
             },
@@ -45,13 +47,13 @@ define([],
 
             },
 
-            removeNotificationRow:function(notificationId){
+            removeNotificationRow: function (notificationId) {
 
             },
 
             render: function (data) {
                 this.$el.html(this.template({
-                    collection   : data
+                    collection: data
                 }))
             }
         });
